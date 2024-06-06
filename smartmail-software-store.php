@@ -26,12 +26,9 @@ class SmartMail_Software_Store {
         add_action( 'wp_enqueue_scripts', array( $this->public, 'enqueue_public_scripts' ) );
         add_shortcode( 'software_store', array( $this->public, 'display_software_store' ) );
         add_shortcode( 'ebook_store', array( $this->public, 'display_ebook_store' ) );
-
-        // Hook into plugin activation
-        register_activation_hook(__FILE__, array($this, 'create_store_pages'));
     }
 
-    public function create_store_pages() {
+    public static function create_store_pages() {
         // Create the software store page
         if (null == get_page_by_title('Software Store')) {
             wp_insert_post(array(
@@ -61,5 +58,8 @@ class SmartMail_Software_Store {
         }
     }
 }
+
+// Register the activation hook
+register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'create_store_pages'));
 
 new SmartMail_Software_Store();
