@@ -29,7 +29,6 @@ class SmartMail_Software_Store {
     }
 
     public static function create_store_pages() {
-        // Create the software store page
         if (null == get_page_by_title('Software Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Software Store',
@@ -43,7 +42,6 @@ class SmartMail_Software_Store {
             ));
         }
 
-        // Create the ebook store page
         if (null == get_page_by_title('Ebook Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Ebook Store',
@@ -59,7 +57,6 @@ class SmartMail_Software_Store {
     }
 }
 
-// Register the activation hook
 register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'create_store_pages'));
 
 new SmartMail_Software_Store();
