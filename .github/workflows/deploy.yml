@@ -1,1 +1,23 @@
+name: Deploy to cPanel
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to cPanel
+        run: |
+          ssh ${{ secrets.CPANEL_USER }}@${{ secrets.CPANEL_HOST }} "cd /home/digistas/public_html/smartmail.store/wp-content/plugins && git pull origin main && cp -R smartmail-software-store /home/digistas/public_html/smartmail.store/wp-content/plugins/smartmail-software-store"
