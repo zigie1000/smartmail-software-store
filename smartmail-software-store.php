@@ -34,11 +34,7 @@ class SmartMail_Software_Store {
         if (null == get_page_by_title('Software Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Software Store',
-                'post_content'  => '<h1>Welcome to Our Software Store</h1>
-                                    <p>Explore our collection of premium software designed to boost your productivity and efficiency. Each product is carefully curated to meet your needs. Shop now and transform your digital experience.</p>
-                                    <h2>Featured Software</h2>
-                                    [software_store]
-                                    <p>Need help? Contact our <a href="mailto:info@smartmail.store">support team</a> for assistance.</p>',
+                'post_content'  => '[software_store]',
                 'post_status'   => 'publish',
                 'post_type'     => 'page'
             ));
@@ -48,11 +44,7 @@ class SmartMail_Software_Store {
         if (null == get_page_by_title('Ebook Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Ebook Store',
-                'post_content'  => '<h1>Discover Our Ebook Collection</h1>
-                                    <p>Dive into our extensive range of ebooks, covering various topics to enrich your knowledge and skills. Whether you\'re looking for professional development or personal growth, we have something for everyone.</p>
-                                    <h2>Featured Ebooks</h2>
-                                    [ebook_store]
-                                    <p>Need help? Contact our <a href="mailto:info@smartmail.store">support team</a> for assistance.</p>',
+                'post_content'  => '[ebook_store]',
                 'post_status'   => 'publish',
                 'post_type'     => 'page'
             ));
@@ -60,7 +52,6 @@ class SmartMail_Software_Store {
     }
 }
 
-// Register the activation hook
 register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'create_store_pages'));
 
 new SmartMail_Software_Store();
