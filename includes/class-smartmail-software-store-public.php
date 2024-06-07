@@ -22,4 +22,3 @@ class SmartMail_Software_Store_Public {
         return ob_get_clean();
     }
 }
-?>
