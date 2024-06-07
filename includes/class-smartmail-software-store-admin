@@ -8,6 +8,8 @@ smartmail_log('Loading SmartMail_Software_Store_Admin class');
 class SmartMail_Software_Store_Admin {
     public function __construct() {
         smartmail_log('Constructing SmartMail_Software_Store_Admin');
+        add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
+        add_action( 'admin_init', array( $this, 'register_settings' ) );
     }
 
     public function create_admin_menu() {
@@ -30,6 +32,21 @@ class SmartMail_Software_Store_Admin {
 
     public function admin_page() {
         smartmail_log('Displaying admin page');
-        echo '<h1>SmartMail Software Store Admin Page</h1>';
+        ?>
+        <div class="wrap">
+            <h1>SmartMail Software Store Settings</h1>
+            <form method="post" action="options.php">
+                <?php settings_fields( 'smartmail-software-store-group' ); ?>
+                <?php do_settings_sections( 'smartmail-software-store-group' ); ?>
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">Some Setting</th>
+                        <td><input type="text" name="some_setting" value="<?php echo esc_attr( get_option('some_setting') ); ?>" /></td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
     }
 }
