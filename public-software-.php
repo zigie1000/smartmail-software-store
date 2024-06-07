@@ -16,3 +16,4 @@ echo '<div class="software-store-item-price">$29.99</div>';
 echo '<div class="software-store-item-description" style="display: none;">This is a description of Example Software 2.</div>';
 echo '</div>';
 echo '</div>';
+?>
