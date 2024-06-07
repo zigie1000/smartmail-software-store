@@ -1,7 +1,7 @@
 <div class="ebook-store">
     <?php
     $data = get_option( 'smartmail_software_store_data' );
-    if ( $data && $data['type'] == 'ebook' ) {
+    if ( $data && isset($data['type']) && $data['type'] == 'ebook' ) {
         ?>
         <div class="ebook-item">
             <img src="<?php echo esc_url( $data['file'] ); ?>" alt="<?php echo esc_attr( $data['name'] ); ?>">
@@ -12,4 +12,7 @@
         </div>
         <?php
     } else {
-        echo '<p>No ebooks available
+        echo '<p>No ebooks available</p>';
+    }
+    ?>
+</div>
