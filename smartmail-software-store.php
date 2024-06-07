@@ -11,6 +11,20 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
+if ( ! function_exists( 'smartmail_log' ) ) {
+    function smartmail_log( $message ) {
+        if ( WP_DEBUG === true ) {
+            if ( is_array( $message ) || is_object( $message ) ) {
+                error_log( print_r( $message, true ) );
+            } else {
+                error_log( $message );
+            }
+        }
+    }
+}
+
+smartmail_log('SmartMail Software Store plugin is loading');
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-public.php';
 
@@ -19,6 +33,7 @@ class SmartMail_Software_Store {
     private $public;
 
     public function __construct() {
+        smartmail_log('Initializing SmartMail Software Store');
         $this->admin = new SmartMail_Software_Store_Admin();
         $this->public = new SmartMail_Software_Store_Public();
 
@@ -30,7 +45,7 @@ class SmartMail_Software_Store {
     }
 
     public static function create_store_pages() {
-        // Create the software store page
+        smartmail_log('Creating store pages');
         if (null == get_page_by_title('Software Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Software Store',
@@ -40,7 +55,6 @@ class SmartMail_Software_Store {
             ));
         }
 
-        // Create the ebook store page
         if (null == get_page_by_title('Ebook Store')) {
             wp_insert_post(array(
                 'post_title'    => 'Ebook Store',
