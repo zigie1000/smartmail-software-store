@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SmartMail Software Store
-Description: A plugin to sell software and ebook downloads on SmartMail Store.
+Description: A plugin to sell software and ebooks downloads on SmartMail Store.
 Version: 1.0
 Author: Marco Zagato
 Author URI: mailto:info@smartmail.store
@@ -64,3 +64,4 @@ class SmartMail_Software_Store {
 register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'create_store_pages'));
 
 new SmartMail_Software_Store();
+?>
