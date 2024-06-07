@@ -20,14 +20,14 @@ class SmartMail_Software_Store_Public {
     public function display_software_store() {
         smartmail_log('Displaying software store');
         ob_start();
-        include plugin_dir_path( dirname(__FILE__) ) . '../public-software.php';
+        include plugin_dir_path( dirname(__FILE__) ) . '/../public-software.php';
         return ob_get_clean();
     }
 
     public function display_ebook_store() {
         smartmail_log('Displaying ebook store');
         ob_start();
-        include plugin_dir_path( dirname(__FILE__) ) . '../public-ebooks.php';
+        include plugin_dir_path( dirname(__FILE__) ) . '/../public-ebooks.php';
         return ob_get_clean();
     }
 }
