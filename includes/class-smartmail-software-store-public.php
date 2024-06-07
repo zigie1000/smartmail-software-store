@@ -3,50 +3,31 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-smartmail_log('Loading SmartMail_Software_Store_Admin class');
+smartmail_log('Loading SmartMail_Software_Store_Public class');
 
-class SmartMail_Software_Store_Admin {
+class SmartMail_Software_Store_Public {
     public function __construct() {
-        smartmail_log('Constructing SmartMail_Software_Store_Admin');
-        add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
-        add_action( 'admin_init', array( $this, 'register_settings' ) );
+        smartmail_log('Constructing SmartMail_Software_Store_Public');
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_scripts' ) );
     }
 
-    public function create_admin_menu() {
-        smartmail_log('Creating admin menu');
-        add_menu_page(
-            'SmartMail Software Store',
-            'Software Store',
-            'manage_options',
-            'smartmail-software-store',
-            array( $this, 'admin_page' ),
-            'dashicons-store',
-            6
-        );
+    public function enqueue_public_scripts() {
+        smartmail_log('Enqueueing public scripts');
+        wp_enqueue_style( 'smartmail-software-store-style', plugin_dir_url( __FILE__ ) . '../css/style.css' );
+        wp_enqueue_script( 'smartmail-software-store-script', plugin_dir_url( __FILE__ ) . '../js/script.js', array('jquery'), null, true );
     }
 
-    public function register_settings() {
-        smartmail_log('Registering settings');
-        register_setting( 'smartmail-software-store-group', 'software_store_settings' );
+    public function display_software_store() {
+        smartmail_log('Displaying software store');
+        ob_start();
+        include plugin_dir_path( dirname(__FILE__) ) . '../public-software.php';
+        return ob_get_clean();
     }
 
-    public function admin_page() {
-        smartmail_log('Displaying admin page');
-        ?>
-        <div class="wrap">
-            <h1>SmartMail Software Store Settings</h1>
-            <form method="post" action="options.php">
-                <?php settings_fields( 'smartmail-software-store-group' ); ?>
-                <?php do_settings_sections( 'smartmail-software-store-group' ); ?>
-                <table class="form-table">
-                    <tr valign="top">
-                        <th scope="row">Some Setting</th>
-                        <td><input type="text" name="some_setting" value="<?php echo esc_attr( get_option('some_setting') ); ?>" /></td>
-                    </tr>
-                </table>
-                <?php submit_button(); ?>
-            </form>
-        </div>
-        <?php
+    public function display_ebook_store() {
+        smartmail_log('Displaying ebook store');
+        ob_start();
+        include plugin_dir_path( dirname(__FILE__) ) . '../public-ebooks.php';
+        return ob_get_clean();
     }
 }
