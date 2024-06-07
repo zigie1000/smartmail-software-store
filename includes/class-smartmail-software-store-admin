@@ -1,4 +1,5 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
@@ -10,50 +11,36 @@ class SmartMail_Software_Store_Admin {
             'Software Store',
             'manage_options',
             'smartmail-software-store',
-            array( $this, 'admin_page' ),
-            'dashicons-store',
-            6
+            array($this, 'admin_page_content'),
+            'dashicons-store'
         );
     }
 
-    public function admin_page() {
+    public function register_settings() {
+        register_setting('smartmail_software_store', 'smartmail_software_store_data');
+    }
+
+    public function admin_page_content() {
         ?>
         <div class="wrap">
             <h1>SmartMail Software Store Settings</h1>
             <form method="post" action="options.php">
                 <?php
-                settings_fields( 'smartmail_software_store_settings_group' );
-                do_settings_sections( 'smartmail-software-store' );
-                submit_button();
+                settings_fields('smartmail_software_store');
+                do_settings_sections('smartmail_software_store');
                 ?>
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">Software/Ebook Data</th>
+                        <td>
+                            <textarea name="smartmail_software_store_data" rows="10" cols="50" class="large-text"><?php echo esc_textarea(get_option('smartmail_software_store_data')); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
             </form>
         </div>
         <?php
     }
-
-    public function register_settings() {
-        register_setting( 'smartmail_software_store_settings_group', 'smartmail_software_store_data' );
-
-        add_settings_section(
-            'smartmail_software_store_section',
-            'Store Settings',
-            null,
-            'smartmail-software-store'
-        );
-
-        add_settings_field(
-            'smartmail_software_store_field',
-            'Store Data',
-            array( $this, 'store_data_field_callback' ),
-            'smartmail-software-store',
-            'smartmail_software_store_section'
-        );
-    }
-
-    public function store_data_field_callback() {
-        $data = get_option( 'smartmail_software_store_data' );
-        ?>
-        <textarea name="smartmail_software_store_data" rows="10" cols="50"><?php echo esc_textarea( $data ); ?></textarea>
-        <?php
-    }
 }
+?>
