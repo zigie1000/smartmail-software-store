@@ -1,4 +1,5 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
@@ -21,3 +22,4 @@ class SmartMail_Software_Store_Public {
         return ob_get_clean();
     }
 }
+?>
