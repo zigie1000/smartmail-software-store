@@ -1,41 +1,38 @@
-.ebook-store {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    background: url('path/to/your/background/image.jpg') no-repeat center center fixed;
-    background-size: cover;
+/* Style for SmartMail Software Store plugin */
+
+.software-store-container {
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
 }
 
-.ebook-item {
-    width: 30%;
-    background: #fff;
-    margin: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.ebook-item img {
-    max-width: 100%;
-    height: auto;
-}
-
-.ebook-item h2 {
+.software-store-title {
     font-size: 24px;
-    margin: 10px 0;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.ebook-item p {
-    font-size: 16px;
+.software-store-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
 }
 
-.buy-now-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #0073aa;
-    color: #fff;
-    text-decoration: none;
-    margin-top: 10px;
-    border-radius: 5px;
+.software-store-item:last-child {
+    border-bottom: none;
+}
+
+.software-store-item-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.software-store-item-price {
+    color: #555;
+}
+
+.software-store-item-description {
+    margin-top: 5px;
+    color: #777;
 }
