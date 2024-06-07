@@ -1,18 +1,18 @@
-<div class="software-store">
-    <?php
-    $data = get_option( 'smartmail_software_store_data' );
-    if ( $data && $data['type'] == 'software' ) {
-        ?>
-        <div class="software-item">
-            <img src="<?php echo esc_url( $data['file'] ); ?>" alt="<?php echo esc_attr( $data['name'] ); ?>">
-            <h2><?php echo esc_html( $data['name'] ); ?></h2>
-            <p><?php echo esc_html( $data['description'] ); ?></p>
-            <p>Price: $<?php echo esc_html( $data['price'] ); ?></p>
-            <a href="<?php echo esc_url( edd_get_checkout_uri( array( 'edd_action' => 'add_to_cart', 'download_id' => 1 ) ) ); ?>" class="buy-now-button">Buy Now</a>
-        </div>
-        <?php
-    } else {
-        echo '<p>No software available at the moment.</p>';
-    }
-    ?>
-</div>
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
+}
+
+echo '<div class="software-store-container">';
+echo '<h1 class="software-store-title">Software Store</h1>';
+echo '<div class="software-store-item">';
+echo '<div class="software-store-item-title">Example Software 1</div>';
+echo '<div class="software-store-item-price">$49.99</div>';
+echo '<div class="software-store-item-description" style="display: none;">This is a description of Example Software 1.</div>';
+echo '</div>';
+echo '<div class="software-store-item">';
+echo '<div class="software-store-item-title">Example Software 2</div>';
+echo '<div class="software-store-item-price">$29.99</div>';
+echo '<div class="software-store-item-description" style="display: none;">This is a description of Example Software 2.</div>';
+echo '</div>';
+echo '</div>';
