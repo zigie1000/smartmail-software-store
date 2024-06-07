@@ -1,38 +1,28 @@
-/* Style for SmartMail Software Store plugin */
-
-.software-store-container {
-    max-width: 800px;
-    margin: 0 auto;
+.software-store, .ebook-store {
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.software-store-title {
+.software-store h2, .ebook-store h2 {
     font-size: 24px;
-    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.software-store ul, .ebook-store ul {
+    list-style: none;
+    padding: 0;
+}
+
+.software-store li, .ebook-store li {
     margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.software-store-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-}
-
-.software-store-item:last-child {
-    border-bottom: none;
-}
-
-.software-store-item-title {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.software-store-item-price {
-    color: #555;
-}
-
-.software-store-item-description {
-    margin-top: 5px;
-    color: #777;
+.software-store li:hover, .ebook-store li:hover {
+    background-color: #f1f1f1;
 }
