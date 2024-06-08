@@ -12,13 +12,13 @@ class SmartMail_Software_Store_Public {
 
     public function display_software_store() {
         ob_start();
-        include plugin_dir_path( __FILE__ ) . '../public/public-software.php';
+        include plugin_dir_path( __FILE__ ) . '../public-software.php';
         return ob_get_clean();
     }
 
     public function display_ebook_store() {
         ob_start();
-        include plugin_dir_path( __FILE__ ) . '../public/public-ebooks.php';
+        include plugin_dir_path( __FILE__ ) . '../public-ebooks.php';
         return ob_get_clean();
     }
 }
