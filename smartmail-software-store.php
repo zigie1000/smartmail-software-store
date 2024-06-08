@@ -4,7 +4,7 @@ Plugin Name: SmartMail Software Store
 Description: A plugin to sell software and ebooks downloads on SmartMail Store.
 Version: 1.0
 Author: Marco Zagato
-Author URI: mailto:info@smartmail.store
+Author Email: info@smartmail.store
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
