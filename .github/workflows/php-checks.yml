@@ -26,4 +26,7 @@ jobs:
         find ./smartmail-software-store -type f -name '*.php' -exec php -l {} \;
 
     - name: Run PHPStan
-      run: vendor/bin/phpstan analyse ./smartmail-software-store
+      run: composer analyse -- ./smartmail-software-store
+
+    - name: Run PHP CodeSniffer
+      run: composer cs -- ./smartmail-software-store
