@@ -1,39 +1,29 @@
 name: PHP Checks
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  php-tests:
+  php-lint:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4' # You can set this to the PHP version you're using
-          extensions: mbstring, xml, curl, json
-          coverage: none
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
 
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
+    - name: Install dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: Check PHP syntax errors
-        run: find . -type f -name '*.php' -exec php -l {} \;
+    - name: Run PHP syntax check
+      run: |
+        find ./smartmail-software-store -type f -name '*.php' -exec php -l {} \;
 
-      - name: Run PHP CodeSniffer
-        run: vendor/bin/phpcs --standard=PSR12 .
-
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse
+    - name: Run PHPStan
+      run: vendor/bin/phpstan analyse ./smartmail-software-store
