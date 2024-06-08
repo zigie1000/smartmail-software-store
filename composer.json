@@ -1,6 +1,11 @@
 {
-  "require-dev": {
-    "phpstan/phpstan": "^1.0",
-    "squizlabs/php_codesniffer": "^3.6"
-  }
+    "require-dev": {
+        "phpstan/phpstan": "^1.0",
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "cs": "phpcs",
+        "cbf": "phpcbf"
+    }
 }
