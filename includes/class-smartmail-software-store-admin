@@ -1,47 +1,36 @@
 <?php
-/**
- * Fired during plugin activation
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Smartmail_Software_Store
- * @subpackage Smartmail_Software_Store/includes
- */
 
-/**
- * Fired during plugin activation.
- *
- * This class defines all code necessary to run during the plugin's activation.
- *
- * @since      1.0.0
- * @package    Smartmail_Software_Store
- * @subpackage Smartmail_Software_Store/includes
- * @author     Your Name <email@example.com>
- */
-class Smartmail_Software_Store_Activator {
+class Smartmail_Software_Store_Admin {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
-		global $wpdb;
-        $table_name = $wpdb->prefix . 'smartmail_ebooks';
-        $charset_collate = $wpdb->get_charset_collate();
+    private $plugin_name;
+    private $version;
 
-        $sql = "CREATE TABLE $table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            title tinytext NOT NULL,
-            description text NOT NULL,
-            price float NOT NULL,
-            PRIMARY KEY  (id)
-        ) $charset_collate;";
+    public function __construct( $plugin_name, $version ) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-	}
+    public function enqueue_styles() {
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all' );
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/smartmail-software-store-admin.js', array( 'jquery' ), $this->version, false );
+    }
+
+    public function add_admin_menu() {
+        add_menu_page(
+            'Smartmail Software Store',
+            'Smartmail Software Store',
+            'manage_options',
+            'smartmail_software_store',
+            array( $this, 'display_admin_page' ),
+            'dashicons-store',
+            6
+        );
+    }
+
+    public function display_admin_page() {
+        include_once 'partials/smartmail-software-store-admin-display.php';
+    }
 }
