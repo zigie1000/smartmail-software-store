@@ -1,45 +1,49 @@
 <?php
-class Smartmail_Software_Store_Public {
-    public function __construct() {
-        add_shortcode('smartmail_ebooks_display', array($this, 'display_ebooks'));
-        add_shortcode('smartmail_software_display', array($this, 'display_software'));
+
+class SmartMail_Software_Store_Public {
+
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/style.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), $this->version, false);
     }
 
     public function display_ebooks() {
+        ob_start();
         global $wpdb;
         $table_name = $wpdb->prefix . 'smartmail_ebooks';
-        $ebooks = $wpdb->get_results("SELECT * FROM $table_name");
+        $results = $wpdb->get_results("SELECT * FROM $table_name");
 
-        ob_start();
-        echo '<div class="smartmail-ebooks">';
-        foreach ($ebooks as $ebook) {
-            echo '<div class="ebook">';
-            echo '<h2>' . esc_html($ebook->title) . '</h2>';
-            echo '<p>' . esc_html($ebook->description) . '</p>';
-            echo '<p>Price: $' . esc_html($ebook->price) . '</p>';
-            echo '</div>';
+        if ($results) {
+            echo '<ul>';
+            foreach ($results as $row) {
+                echo '<li>';
+                echo '<h2>' . esc_html($row->title) . '</h2>';
+                echo '<p>' . esc_html($row->description) . '</p>';
+                echo '<p>Price: ' . esc_html($row->price) . '</p>';
+                echo '</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p>No ebooks found.</p>';
         }
-        echo '</div>';
-        return ob_get_clean();
-    }
 
-    public function display_software() {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'smartmail_software';
-        $software = $wpdb->get_results("SELECT * FROM $table_name");
-
-        ob_start();
-        echo '<div class="smartmail-software">';
-        foreach ($software as $item) {
-            echo '<div class="software-item">';
-            echo '<h2>' . esc_html($item->title) . '</h2>';
-            echo '<p>' . esc_html($item->description) . '</p>';
-            echo '<p>Price: $' . esc_html($item->price) . '</p>';
-            echo '</div>';
-        }
-        echo '</div>';
         return ob_get_clean();
     }
 }
 
-new Smartmail_Software_Store_Public();
+function register_shortcodes() {
+    add_shortcode('smartmail_ebooks_display', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'display_ebooks'));
+}
+add_action('init', 'register_shortcodes');
+?>
