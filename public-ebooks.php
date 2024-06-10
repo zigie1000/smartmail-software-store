@@ -29,7 +29,7 @@ function smartmail_display_ebooks() {
         echo '<div class="ebook">';
         echo '<h2>' . esc_html($ebook->title) . '</h2>';
         echo '<p>' . esc_html($ebook->description) . '</p>';
-        echo '<p>Price: $' . esc_html($ebook->price) . '</p>';
+        echo '<p>Price: ' . esc_html($ebook->price) . '</p>';
         echo '</div>';
     }
     echo '</div>';
