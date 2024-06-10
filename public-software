@@ -1,35 +1,17 @@
 <?php
-// Add this to ensure the table is created upon plugin activation
-function smartmail_create_software_table() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'smartmail_software';
-    $charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        title tinytext NOT NULL,
-        description text NOT NULL,
-        price float NOT NULL,
-        PRIMARY KEY  (id)
-    ) $charset_collate;";
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
-register_activation_hook(__FILE__, 'smartmail_create_software_table');
 
 function smartmail_display_software() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smartmail_software';
-    $software = $wpdb->get_results("SELECT * FROM $table_name");
+    $softwares = $wpdb->get_results("SELECT * FROM $table_name");
 
     ob_start();
     echo '<div class="smartmail-software">';
-    foreach ($software as $item) {
-        echo '<div class="software-item">';
-        echo '<h2>' . esc_html($item->title) . '</h2>';
-        echo '<p>' . esc_html($item->description) . '</p>';
-        echo '<p>Price: $' . esc_html($item->price) . '</p>';
+    foreach ($softwares as $software) {
+        echo '<div class="software">';
+        echo '<h2>' . esc_html($software->title) . '</h2>';
+        echo '<p>' . esc_html($software->description) . '</p>';
+        echo '<p>Price: ' . esc_html($software->price) . '</p>';
         echo '</div>';
     }
     echo '</div>';
