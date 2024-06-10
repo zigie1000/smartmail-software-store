@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 // Shortcode for displaying software items
 function smartmail_software_store_display_software() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'smartmail_software_store_software';
+    $table_name = $wpdb->prefix . 'smartmail_software_store';
     $items = $wpdb->get_results("SELECT * FROM $table_name");
 
     ob_start();
