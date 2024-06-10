@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   php-lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -27,5 +28,5 @@ jobs:
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyze
 
-      - name: Run PHPCS
-        run: ./vendor/bin/phpcs .
+      - name: Run PHP CodeSniffer
+        run: ./vendor/bin/phpcs
