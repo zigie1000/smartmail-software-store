@@ -1,6 +1,6 @@
 {
-    "name": "marcozagato/smartmail-software-store",
-    "description": "A WordPress plugin to manage and sell software",
+    "name": "smartmail/software-store",
+    "description": "A WordPress plugin to manage and sell software.",
     "type": "wordpress-plugin",
     "require-dev": {
         "phpstan/phpstan": "^1.0",
