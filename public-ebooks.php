@@ -26,8 +26,31 @@ function smartmail_create_ebooks_table() {
     }
 }
 
-// Hook to create the table on plugin activation
-register_activation_hook(__FILE__, 'smartmail_create_ebooks_table');
+// Function to create a page for displaying ebooks
+function smartmail_create_ebooks_page() {
+    // Check if the page already exists by searching for its title
+    $page_title = 'Ebooks';
+    $page_check = get_page_by_title($page_title);
+    if (!isset($page_check->ID)) {
+        // Page doesn't exist, create it
+        $page = array(
+            'post_title'    => $page_title,
+            'post_content'  => '[smartmail_ebooks_display]',
+            'post_status'   => 'publish',
+            'post_type'     => 'page',
+        );
+        wp_insert_post($page);
+    }
+}
+
+// Function to run on plugin activation
+function smartmail_activate() {
+    smartmail_create_ebooks_table();
+    smartmail_create_ebooks_page();
+}
+
+// Hook to create the table and page on plugin activation
+register_activation_hook(__FILE__, 'smartmail_activate');
 
 // Shortcode for displaying ebook items
 function smartmail_ebooks_display() {
