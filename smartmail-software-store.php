@@ -1,66 +1,50 @@
 <?php
 /*
 Plugin Name: SmartMail Software Store
-Description: A plugin to sell software and ebooks downloads on SmartMail Store.
+Description: A plugin to manage and sell software.
 Version: 1.0
-Author: Marco Zagato
-Author Email: info@smartmail.store
+Author: Your Name
 */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-admin.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-public.php';
+// Activation Hook
+register_activation_hook(__FILE__, 'smartmail_software_store_activate');
+function smartmail_software_store_activate() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'smartmail_software_store';
+    $charset_collate = $wpdb->get_charset_collate();
 
-class SmartMail_Software_Store {
-    private $admin;
-    private $public;
+    $sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        name tinytext NOT NULL,
+        description text NOT NULL,
+        price float NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
 
-    public function __construct() {
-        $this->admin = new SmartMail_Software_Store_Admin();
-        $this->public = new SmartMail_Software_Store_Public();
-
-        add_action( 'admin_menu', array( $this->admin, 'create_admin_menu' ) );
-        add_action( 'admin_init', array( $this->admin, 'register_settings' ) );
-        add_action( 'wp_enqueue_scripts', array( $this->public, 'enqueue_public_scripts' ) );
-        add_shortcode( 'software_store', array( $this->public, 'display_software_store' ) );
-        add_shortcode( 'ebook_store', array( $this->public, 'display_ebook_store' ) );
-    }
-
-    public static function create_store_pages() {
-        // Create the software store page
-        if (null == get_page_by_title('Software Store')) {
-            wp_insert_post(array(
-                'post_title'    => 'Software Store',
-                'post_content'  => '<h1>Welcome to Our Software Store</h1>
-                                    <p>Explore our collection of premium software designed to boost your productivity and efficiency. Each product is carefully curated to meet your needs. Shop now and transform your digital experience.</p>
-                                    <h2>Featured Software</h2>
-                                    [software_store]
-                                    <p>Need help? Contact our <a href="mailto:support@smartcom.store">support team</a> for assistance.</p>',
-                'post_status'   => 'publish',
-                'post_type'     => 'page'
-            ));
-        }
-
-        // Create the ebook store page
-        if (null == get_page_by_title('Ebook Store')) {
-            wp_insert_post(array(
-                'post_title'    => 'Ebook Store',
-                'post_content'  => '<h1>Discover Our Ebook Collection</h1>
-                                    <p>Dive into our extensive range of ebooks, covering various topics to enrich your knowledge and skills. Whether you\'re looking for professional development or personal growth, we have something for everyone.</p>
-                                    <h2>Featured Ebooks</h2>
-                                    [ebook_store]
-                                    <p>Need help? Contact our <a href="mailto:support@smartcom.store">support team</a> for assistance.</p>',
-                'post_status'   => 'publish',
-                'post_type'     => 'page'
-            ));
-        }
-    }
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
 }
 
-// Register the activation hook
-register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'create_store_pages'));
+// Deactivation Hook
+register_deactivation_hook(__FILE__, 'smartmail_software_store_deactivate');
+function smartmail_software_store_deactivate() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'smartmail_software_store';
+    $sql = "DROP TABLE IF EXISTS $table_name;";
+    $wpdb->query($sql);
+}
 
-new SmartMail_Software_Store();
+// Include necessary files
+require_once plugin_dir_path(__FILE__) . 'includes/admin.php';
+require_once plugin_dir_path(__FILE__) . 'includes/public.php';
+
+// Enqueue Scripts and Styles
+function smartmail_software_store_enqueue_scripts() {
+    wp_enqueue_style('smartmail-software-store-style', plugin_dir_url(__FILE__) . 'css/style.css');
+    wp_enqueue_script('smartmail-software-store-script', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'smartmail_software_store_enqueue_scripts');
