@@ -1,18 +1,26 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-echo '<div class="software-store-container">';
-echo '<h1 class="software-store-title">Software Store</h1>';
-echo '<div class="software-store-item">';
-echo '<div class="software-store-item-title">Example Software 1</div>';
-echo '<div class="software-store-item-price">$49.99</div>';
-echo '<div class="software-store-item-description" style="display: none;">This is a description of Example Software 1.</div>';
-echo '</div>';
-echo '<div class="software-store-item">';
-echo '<div class="software-store-item-title">Example Software 2</div>';
-echo '<div class="software-store-item-price">$29.99</div>';
-echo '<div class="software-store-item-description" style="display: none;">This is a description of Example Software 2.</div>';
-echo '</div>';
-echo '</div>';
+// Shortcode for displaying software items
+function smartmail_software_store_display_software() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'smartmail_software_store_software';
+    $items = $wpdb->get_results("SELECT * FROM $table_name");
+
+    ob_start();
+    ?>
+    <div class="software-store-items">
+        <?php foreach ($items as $item) { ?>
+            <div class="software-store-item">
+                <div class="software-store-item-title"><?php echo esc_html($item->name); ?></div>
+                <div class="software-store-item-description"><?php echo esc_html($item->description); ?></div>
+                <div class="software-store-item-price"><?php echo esc_html($item->price); ?></div>
+            </div>
+        <?php } ?>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('smartmail_software_store_software', 'smartmail_software_store_display_software');
