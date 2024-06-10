@@ -3,81 +3,86 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-// Admin Menu
-function smartmail_software_store_admin_menu() {
-    add_menu_page(
-        'SmartMail Software Store',
-        'Software Store',
-        'manage_options',
-        'smartmail-software-store',
-        'smartmail_software_store_admin_page',
-        'dashicons-store',
-        6
-    );
-}
-add_action('admin_menu', 'smartmail_software_store_admin_menu');
+class SmartMail_Software_Store_Admin {
+    public function __construct() {
+        add_action('admin_menu', array($this, 'admin_menu'));
+    }
 
-// Admin Page
-function smartmail_software_store_admin_page() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'smartmail_software_store';
-
-    if (isset($_POST['action']) && $_POST['action'] == 'add') {
-        $name = sanitize_text_field($_POST['name']);
-        $description = sanitize_textarea_field($_POST['description']);
-        $price = floatval($_POST['price']);
-        $wpdb->insert(
-            $table_name,
-            array(
-                'name' => $name,
-                'description' => $description,
-                'price' => $price,
-            )
+    public function admin_menu() {
+        add_menu_page(
+            'SmartMail Software Store',
+            'Software Store',
+            'manage_options',
+            'smartmail-software-store',
+            array($this, 'admin_page'),
+            'dashicons-store',
+            6
         );
     }
 
-    $items = $wpdb->get_results("SELECT * FROM $table_name");
+    public function admin_page() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_software_store';
 
-    ?>
-    <div class="wrap">
-        <h1>SmartMail Software Store</h1>
-        <form method="post">
-            <input type="hidden" name="action" value="add">
-            <table class="form-table">
-                <tr valign="top">
-                    <th scope="row">Name</th>
-                    <td><input type="text" name="name" value="" required /></td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row">Description</th>
-                    <td><textarea name="description" required></textarea></td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row">Price</th>
-                    <td><input type="number" name="price" value="" required /></td>
-                </tr>
-            </table>
-            <p><input type="submit" class="button-primary" value="Add Item" /></p>
-        </form>
-        <h2>Available Software</h2>
-        <table class="widefat">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($items as $item) { ?>
-                    <tr>
-                        <td><?php echo esc_html($item->name); ?></td>
-                        <td><?php echo esc_html($item->description); ?></td>
-                        <td><?php echo esc_html($item->price); ?></td>
+        if (isset($_POST['action']) && $_POST['action'] == 'add') {
+            $name = sanitize_text_field($_POST['name']);
+            $description = sanitize_textarea_field($_POST['description']);
+            $price = floatval($_POST['price']);
+            $wpdb->insert(
+                $table_name,
+                array(
+                    'name' => $name,
+                    'description' => $description,
+                    'price' => $price,
+                )
+            );
+        }
+
+        $items = $wpdb->get_results("SELECT * FROM $table_name");
+
+        ?>
+        <div class="wrap">
+            <h1>SmartMail Software Store</h1>
+            <form method="post">
+                <input type="hidden" name="action" value="add">
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row">Name</th>
+                        <td><input type="text" name="name" value="" required /></td>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-    </div>
-    <?php
+                    <tr valign="top">
+                        <th scope="row">Description</th>
+                        <td><textarea name="description" required></textarea></td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">Price</th>
+                        <td><input type="number" name="price" value="" required /></td>
+                    </tr>
+                </table>
+                <p><input type="submit" class="button-primary" value="Add Item" /></p>
+            </form>
+            <h2>Available Software</h2>
+            <table class="widefat">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($items as $item) { ?>
+                        <tr>
+                            <td><?php echo esc_html($item->name); ?></td>
+                            <td><?php echo esc_html($item->description); ?></td>
+                            <td><?php echo esc_html($item->price); ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
 }
+
+new SmartMail_Software_Store_Admin();
