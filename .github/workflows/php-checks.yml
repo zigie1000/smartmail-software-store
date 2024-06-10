@@ -5,27 +5,28 @@ on: [push, pull_request]
 jobs:
   php-lint:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
 
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+    - name: Install dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: Run PHP syntax check
-        run: |
-          find ./smartmail-software-store -type f -name '*.php' -exec php -l {} \;
+    - name: Run PHP syntax check
+      run: |
+        find . -type f -name '*.php' -exec php -l {} \;
 
-      - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse ./smartmail-software-store
+    - name: Run PHPStan
+      run: ./vendor/bin/phpstan analyse
 
-      - name: Run PHP CodeSniffer
-        run: ./vendor/bin/phpcs ./smartmail-software-store
+    - name: Run PHP CodeSniffer
+      run: ./vendor/bin/phpcs
