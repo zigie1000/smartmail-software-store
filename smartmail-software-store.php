@@ -34,13 +34,12 @@ register_deactivation_hook(__FILE__, 'smartmail_software_store_deactivate');
 function smartmail_software_store_deactivate() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smartmail_software_store';
-    $sql = "DROP TABLE IF EXISTS $table_name;";
-    $wpdb->query($sql);
+    $wpdb->query("DROP TABLE IF EXISTS $table_name");
 }
 
 // Include necessary files
-require_once plugin_dir_path(__FILE__) . 'includes/admin.php';
-require_once plugin_dir_path(__FILE__) . 'includes/public.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
 
 // Enqueue Scripts and Styles
 function smartmail_software_store_enqueue_scripts() {
