@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ruleset name="SmartMail Software Store Coding Standards">
+    <description>Coding standards for the SmartMail Software Store plugin.</description>
+    <rule ref="PSR2"/>
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <file>./includes</file>
+    <file>./public-ebooks.php</file>
+    <file>./public-software.php</file>
+    <file>./smartmail-software-store.php</file>
+</ruleset>
