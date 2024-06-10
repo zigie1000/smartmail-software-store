@@ -1,50 +1,45 @@
 <?php
-/**
- * Plugin Name: SmartMail Software Store
- * Description: A WordPress plugin to manage and sell software.
- * Version: 1.0.0
- * Author: Marco Zagato
- * Author URI: https://smartmail.store
- */
+class Smartmail_Software_Store_Public {
+    public function __construct() {
+        add_shortcode('smartmail_ebooks_display', array($this, 'display_ebooks'));
+        add_shortcode('smartmail_software_display', array($this, 'display_software'));
+    }
 
-// Ensure the plugin is being called within WordPress
-if (!defined('ABSPATH')) {
-    exit;
+    public function display_ebooks() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_ebooks';
+        $ebooks = $wpdb->get_results("SELECT * FROM $table_name");
+
+        ob_start();
+        echo '<div class="smartmail-ebooks">';
+        foreach ($ebooks as $ebook) {
+            echo '<div class="ebook">';
+            echo '<h2>' . esc_html($ebook->title) . '</h2>';
+            echo '<p>' . esc_html($ebook->description) . '</p>';
+            echo '<p>Price: $' . esc_html($ebook->price) . '</p>';
+            echo '</div>';
+        }
+        echo '</div>';
+        return ob_get_clean();
+    }
+
+    public function display_software() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_software';
+        $software = $wpdb->get_results("SELECT * FROM $table_name");
+
+        ob_start();
+        echo '<div class="smartmail-software">';
+        foreach ($software as $item) {
+            echo '<div class="software-item">';
+            echo '<h2>' . esc_html($item->title) . '</h2>';
+            echo '<p>' . esc_html($item->description) . '</p>';
+            echo '<p>Price: $' . esc_html($item->price) . '</p>';
+            echo '</div>';
+        }
+        echo '</div>';
+        return ob_get_clean();
+    }
 }
 
-// Includes
-include_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-include_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-
-// Activation and Deactivation Hooks
-function smartmail_software_store_activate() {
-    smartmail_create_ebooks_table();
-    smartmail_create_software_table();
-}
-register_activation_hook(__FILE__, 'smartmail_software_store_activate');
-
-// Enqueue Scripts and Styles
-function smartmail_software_store_scripts() {
-    wp_enqueue_style('smartmail-software-store-style', plugin_dir_url(__FILE__) . 'css/style.css');
-    wp_enqueue_script('smartmail-software-store-script', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), null, true);
-}
-add_action('wp_enqueue_scripts', 'smartmail_software_store_scripts');
-
-// Create Admin Menu
-function smartmail_software_store_admin_menu() {
-    add_menu_page(
-        'SmartMail Software Store',
-        'SmartMail Software Store',
-        'manage_options',
-        'smartmail-software-store',
-        'smartmail_software_store_admin_page',
-        'dashicons-store',
-        6
-    );
-}
-add_action('admin_menu', 'smartmail_software_store_admin_menu');
-
-// Admin Page
-function smartmail_software_store_admin_page() {
-    include plugin_dir_path(__FILE__) . 'admin/admin-page.php';
-}
+new Smartmail_Software_Store_Public();
