@@ -1,24 +1,32 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
 class SmartMail_Software_Store_Public {
-    public function enqueue_public_scripts() {
-        wp_enqueue_style( 'smartmail-software-store-style', plugin_dir_url( __FILE__ ) . '../css/style.css' );
-        wp_enqueue_script( 'smartmail-software-store-script', plugin_dir_url( __FILE__ ) . '../js/script.js', array('jquery'), null, true );
+    public function __construct() {
+        add_shortcode('smartmail_software_store_items', array($this, 'display_items'));
     }
 
-    public function display_software_store() {
-        ob_start();
-        include plugin_dir_path( __FILE__ ) . '../public-software.php';
-        return ob_get_clean();
-    }
+    public function display_items() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_software_store';
+        $items = $wpdb->get_results("SELECT * FROM $table_name");
 
-    public function display_ebook_store() {
         ob_start();
-        include plugin_dir_path( __FILE__ ) . '../public-ebooks.php';
+        ?>
+        <div class="software-store-items">
+            <?php foreach ($items as $item) { ?>
+                <div class="software-store-item">
+                    <div class="software-store-item-title"><?php echo esc_html($item->name); ?></div>
+                    <div class="software-store-item-description"><?php echo esc_html($item->description); ?></div>
+                    <div class="software-store-item-price"><?php echo esc_html($item->price); ?></div>
+                </div>
+            <?php } ?>
+        </div>
+        <?php
         return ob_get_clean();
     }
 }
+
+new SmartMail_Software_Store_Public();
