@@ -62,4 +62,5 @@ add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks');
 require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
 require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
 require plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
+
 ?>
