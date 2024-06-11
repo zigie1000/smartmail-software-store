@@ -26,6 +26,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             sku varchar(50) DEFAULT '',
             barcode varchar(50) DEFAULT '',
             quantity int DEFAULT 0,
+            file_url varchar(255) NOT NULL,
             wc_product_id bigint(20) NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";
@@ -209,12 +210,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 <p>
                     <label for="phone">Phone Number</label>
                     <input type="tel" name="phone">
-                </p>
+                </
+
+p>
                 <p>
                     <label for="address">Address</label>
-                    <textarea name="address
-
-"></textarea>
+                    <textarea name="address"></textarea>
                 </p>
                 <p>
                     <label for="newsletter">Subscribe to Newsletter</label>
@@ -273,49 +274,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 submit_button();
                 ?>
             </form>
-        </div>
-        <?php
-    }
-
-    // Register settings
-    function smartmail_register_settings() {
-        register_setting('smartmail-settings-group', 'smartmail_settings');
-        add_settings_section('smartmail-settings-section', 'Settings', null, 'smartmail-software-store');
-        add_settings_field('smartmail-setting-field', 'Setting', 'smartmail_setting_field_callback', 'smartmail-software-store', 'smartmail-settings-section');
-    }
-    add_action('admin_init', 'smartmail_register_settings');
-
-    function smartmail_setting_field_callback() {
-        $options = get_option('smartmail_settings');
-        ?>
-        <input type="text" name="smartmail_settings[setting]" value="<?php echo esc_attr($options['setting']); ?>">
-        <?php
-    }
-
-    // Add ebook product
-    function smartmail_add_ebook($title, $description, $price, $rrp, $image_url, $sku, $barcode, $quantity, $file_url) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'smartmail_ebooks';
-        $wc_product_id = smartmail_create_or_update_wc_product(compact('title', 'description', 'price', 'rrp', 'image_url', 'sku', 'barcode', 'quantity', 'file_url'));
-        $wpdb->insert($table_name, array(
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'rrp' => $rrp,
-            'image_url' => $image_url,
-            'sku' => $sku,
-            'barcode' => $barcode,
-            'quantity' => $quantity,
-            'wc_product_id' => $wc_product_id
-        ));
-    }
-
-    // Admin page content for managing ebooks
-    function smartmail_admin_page_content() {
-        ?>
-        <div class="wrap">
-            <h1>Manage Ebooks</h1>
-            <form method="post" action="">
+            <h2>Add New Ebook</h2>
+            <form method="post" action="" enctype="multipart/form-data">
                 <table class="form-table">
                     <tr valign="top">
                         <th scope="row">Title</th>
@@ -334,8 +294,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                         <td><input type="number" name="rrp" step="0.01" required></td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row">Image URL</th>
-                        <td><input type="url" name="image_url" required></td>
+                        <th scope="row">Image</th>
+                        <td><input type="file" name="image" required></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">SKU</th>
@@ -350,13 +310,57 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                         <td><input type="number" name="quantity" required></td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row">File URL</th>
-                        <td><input type="url" name="file_url" required></td>
+                        <th scope="row">File</th>
+                        <td><input type="file" name="file" required></td>
                     </tr>
                 </table>
                 <input type="submit" name="add_ebook" value="Add Ebook" class="button button-primary">
             </form>
         </div>
+        <?php
+        smartmail_admin_page_content();
+    }
+
+    // Admin page content for managing ebooks
+    function smartmail_admin_page_content() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_ebooks';
+        $ebooks = $wpdb->get_results("SELECT * FROM $table_name");
+        ?>
+        <h2>Manage Ebooks</h2>
+        <table class="wp-list-table widefat fixed striped table-view-list posts">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>RRP</th>
+                    <th>SKU</th>
+                    <th>Barcode</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($ebooks as $ebook) : ?>
+                    <tr>
+                        <td><?php echo $ebook->id; ?></td>
+                        <td><?php echo $ebook->title; ?></td>
+                        <td><?php echo $ebook->description; ?></td>
+                        <td><?php echo $ebook->price; ?></td>
+                        <td><?php echo $ebook->rrp; ?></td>
+                        <td><?php echo $ebook->sku; ?></td>
+                        <td><?php echo $ebook->barcode; ?></td>
+                        <td><?php echo $ebook->quantity; ?></td>
+                        <td>
+                            <a href="<?php echo admin_url('admin.php?page=smartmail-software-store&edit_ebook=' . $ebook->id); ?>">Edit</a> |
+                            <a href="<?php echo admin_url('admin-post.php?action=delete_ebook&id=' . $ebook->id); ?>" onclick="return confirm('Are you sure you want to delete this ebook?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
         <?php
     }
 
@@ -367,14 +371,166 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             $description = sanitize_textarea_field($_POST['description']);
             $price = floatval($_POST['price']);
             $rrp = floatval($_POST['rrp']);
-            $image_url = esc_url_raw($_POST['image_url']);
+            if ($rrp < $price) {
+                wp_die('RRP cannot be less than the price.');
+            }
+            $image = smartmail_handle_file_upload($_FILES['image']);
             $sku = sanitize_text_field($_POST['sku']);
             $barcode = sanitize_text_field($_POST['barcode']);
             $quantity = intval($_POST['quantity']);
-            $file_url = esc_url_raw($_POST['file_url']);
-            smartmail_add_ebook($title, $description, $price, $rrp, $image_url, $sku, $barcode, $quantity, $file_url);
+            $file_url = smartmail_handle_file_upload($_FILES['file']);
+            smartmail_add_ebook($title, $description, $price, $rrp, $image, $sku, $barcode, $quantity, $file_url);
+            wp_redirect(admin_url('admin.php?page=smartmail-software-store'));
+            exit;
         }
     }
     add_action('admin_post_add_ebook', 'smartmail_handle_admin_page_form');
+
+    // Add ebook product
+    function smartmail_add_ebook($title, $description, $price, $rrp, $image_url, $sku, $barcode, $quantity, $file_url) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'smartmail_ebooks';
+        $wc_product_id = smartmail_create_or_update_wc_product(compact('title', 'description', 'price', 'rrp', 'image_url', 'sku', 'barcode', 'quantity', 'file_url'));
+        $wpdb->insert($table_name, array(
+            'title' => $title,
+            'description' => $description,
+            'price' => $price,
+            'rrp' => $rrp,
+            'image_url' => $image_url,
+            'sku' => $sku,
+            'barcode' => $barcode,
+            'quantity' => $quantity,
+            'file_url' => $file_url,
+            'wc_product_id' => $wc_product_id
+        ));
+    }
+
+    // Handle ebook deletion
+    function smartmail_delete_ebook() {
+        if (isset($_GET['action']) && $_GET['action'] == 'delete_ebook' && isset($_GET['id'])) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'smartmail_ebooks';
+            $wpdb->delete($table_name, array('id' => intval($_GET['id'])));
+            wp_redirect(admin_url('admin.php?page=smartmail-software-store'));
+            exit;
+        }
+    }
+    add_action('admin_post_delete_ebook', 'smartmail_delete_ebook');
+
+    // Handle ebook editing
+    function smartmail_edit_ebook() {
+        if (isset($_GET['page']) && $_GET['page'] == 'smartmail-software-store' && isset($_GET['edit_ebook'])) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'smartmail_ebooks';
+            $ebook = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", intval($_GET['edit_ebook'])));
+            if ($ebook) {
+                ?>
+                <div class="wrap">
+                    <h1>Edit Ebook</h1>
+                    <form method="post" action="<?php echo admin_url('admin-post.php?action=update_ebook
+
+'); ?>" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="<?php echo $ebook->id; ?>">
+                        <table class="form-table">
+                            <tr valign="top">
+                                <th scope="row">Title</th>
+                                <td><input type="text" name="title" value="<?php echo esc_attr($ebook->title); ?>" required></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">Description</th>
+                                <td><textarea name="description" required><?php echo esc_textarea($ebook->description); ?></textarea></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">Price</th>
+                                <td><input type="number" name="price" step="0.01" value="<?php echo esc_attr($ebook->price); ?>" required></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">RRP</th>
+                                <td><input type="number" name="rrp" step="0.01" value="<?php echo esc_attr($ebook->rrp); ?>" required></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">Image</th>
+                                <td><input type="file" name="image"></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">SKU</th>
+                                <td><input type="text" name="sku" value="<?php echo esc_attr($ebook->sku); ?>"></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">Barcode</th>
+                                <td><input type="text" name="barcode" value="<?php echo esc_attr($ebook->barcode); ?>"></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">Quantity</th>
+                                <td><input type="number" name="quantity" value="<?php echo esc_attr($ebook->quantity); ?>" required></td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">File</th>
+                                <td><input type="file" name="file"></td>
+                            </tr>
+                        </table>
+                        <input type="submit" name="update_ebook" value="Update Ebook" class="button button-primary">
+                    </form>
+                </div>
+                <?php
+            }
+        }
+    }
+    add_action('admin_init', 'smartmail_edit_ebook');
+
+    // Handle ebook update
+    function smartmail_update_ebook() {
+        if (isset($_POST['update_ebook'])) {
+            $id = intval($_POST['id']);
+            $title = sanitize_text_field($_POST['title']);
+            $description = sanitize_textarea_field($_POST['description']);
+            $price = floatval($_POST['price']);
+            $rrp = floatval($_POST['rrp']);
+            if ($rrp < $price) {
+                wp_die('RRP cannot be less than the price.');
+            }
+            $image = !empty($_FILES['image']['name']) ? smartmail_handle_file_upload($_FILES['image']) : '';
+            $sku = sanitize_text_field($_POST['sku']);
+            $barcode = sanitize_text_field($_POST['barcode']);
+            $quantity = intval($_POST['quantity']);
+            $file_url = !empty($_FILES['file']['name']) ? smartmail_handle_file_upload($_FILES['file']) : '';
+
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'smartmail_ebooks';
+            $data = array(
+                'title' => $title,
+                'description' => $description,
+                'price' => $price,
+                'rrp' => $rrp,
+                'sku' => $sku,
+                'barcode' => $barcode,
+                'quantity' => $quantity
+            );
+            if ($image) {
+                $data['image_url'] = $image;
+            }
+            if ($file_url) {
+                $data['file_url'] = $file_url;
+            }
+            $wpdb->update($table_name, $data, array('id' => $id));
+
+            $product_data = array(
+                'title' => $title,
+                'description' => $description,
+                'price' => $price,
+                'rrp' => $rrp,
+                'image_url' => $image,
+                'sku' => $sku,
+                'barcode' => $barcode,
+                'quantity' => $quantity,
+                'file_url' => $file_url
+            );
+            smartmail_create_or_update_wc_product($product_data, $wpdb->get_var($wpdb->prepare("SELECT wc_product_id FROM $table_name WHERE id = %d", $id)));
+
+            wp_redirect(admin_url('admin.php?page=smartmail-software-store'));
+            exit;
+        }
+    }
+    add_action('admin_post_update_ebook', 'smartmail_update_ebook');
 }
 ?>
