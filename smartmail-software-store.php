@@ -13,6 +13,39 @@ function smartmail_store_enqueue_scripts() {
 }
 add_action('wp_enqueue_scripts', 'smartmail_store_enqueue_scripts');
 
+// Add this to the top of your file or wherever you want to place the button
+function display_subscription_button() {
+    ?>
+    <button id="subscribeButton" class="subscribe-button">Subscribe for Offers</button>
+
+    <div id="subscribeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Subscribe to Our Newsletter</h2>
+            <form action="" method="post" id="subscriptionForm">
+                <label for="full_name">Full Name*</label>
+                <input type="text" id="full_name" name="full_name" required>
+
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone_number">Phone Number</label>
+                <input type="tel" id="phone_number" name="phone_number">
+
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address">
+
+                <label for="newsletter_optin">Subscribe to Newsletter</label>
+                <input type="checkbox" id="newsletter_optin" name="newsletter_optin">
+
+                <input type="submit" value="Subscribe">
+            </form>
+        </div>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'display_subscription_button');
+
 // Check if WooCommerce is active
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
