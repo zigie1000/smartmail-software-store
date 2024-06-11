@@ -1,5 +1,5 @@
 <?php
-// Add this to ensure the table is created upon plugin activation
+// Ensure the table is created upon plugin activation
 function smartmail_create_ebooks_table() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smartmail_ebooks';
@@ -10,7 +10,7 @@ function smartmail_create_ebooks_table() {
         title tinytext NOT NULL,
         description text NOT NULL,
         price float NOT NULL,
-        PRIMARY KEY  (id)
+        PRIMARY KEY (id)
     ) $charset_collate;";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -18,6 +18,7 @@ function smartmail_create_ebooks_table() {
 }
 register_activation_hook(__FILE__, 'smartmail_create_ebooks_table');
 
+// Shortcode to display ebooks
 function smartmail_display_ebooks() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smartmail_ebooks';
