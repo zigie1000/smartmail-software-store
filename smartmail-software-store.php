@@ -23,6 +23,21 @@ function smartmail_create_tables() {
     ) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+
+    // Create the page and insert the shortcode
+    $page_title = 'SmartMail Ebooks';
+    $page_content = '[smartmail_ebooks_display]';
+    $page = array(
+        'post_title'    => $page_title,
+        'post_content'  => $page_content,
+        'post_status'   => 'publish',
+        'post_type'     => 'page',
+    );
+
+    // Check if the page already exists
+    if (!get_page_by_title($page_title)) {
+        wp_insert_post($page);
+    }
 }
 register_activation_hook(__FILE__, 'smartmail_create_tables');
 
