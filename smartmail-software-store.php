@@ -7,6 +7,12 @@
  * Author URI: https://smartmail.store
  */
 
+function smartmail_store_enqueue_scripts() {
+    wp_enqueue_style('smartmail-store-style', plugins_url('/css/style.css', __FILE__));
+    wp_enqueue_script('smartmail-store-script', plugins_url('/js/script.js', __FILE__), array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'smartmail_store_enqueue_scripts');
+
 // Check if WooCommerce is active
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
@@ -91,7 +97,52 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         if (!get_page_by_title($software_page_title)) {
             wp_insert_post($software_page);
         }
+// Shortcode function to display software and ebooks
+function smartmail_display_items() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'smartmail_items';
+    $items = $wpdb->get_results("SELECT * FROM $table_name");
 
+    ob_start();
+    echo '<div class="software-store-items">';
+    foreach ($items as $item) {
+        echo '<div class="software-store-item">';
+        echo '<h2 class="software-store-item-title">' . esc_html($item->title) . '</h2>';
+        echo '<div class="software-store-item-description">';
+        echo '<p>' . esc_html($item->description) . '</p>';
+        echo '<p>Price: $' . esc_html($item->price) . '</p>';
+        echo '<p>RRP: $' . esc_html($item->rrp) . '</p>';
+        echo '<p>SKU: ' . esc_html($item->sku) . '</p>';
+        echo '<p>Barcode: ' . esc_html($item->barcode) . '</p>';
+        echo '<p>In Stock: ' . esc_html($item->stock) . '</p>';
+        echo '<form method="post" action="' . esc_url(home_url('/')) . '?add-to-cart=' . $item->id . '">';
+        echo '<input type="hidden" name="item_id" value="' . $item->id . '">';
+        echo '<button type="submit">Add to Cart</button>';
+        echo '</form>';
+        echo '</div>'; // .software-store-item-description
+        echo '</div>'; // .software-store-item
+    }
+    echo '</div>'; // .software-store-items
+    echo '<div class="subscribe-button"><button id="subscribe-button">Subscribe for offers and news</button></div>';
+    echo '<div id="subscribe-form" style="display:none;">
+            <form method="post" action="">
+                <label for="full-name">Full Name*</label>
+                <input type="text" id="full-name" name="full_name" required>
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" required>
+                <label for="phone-number">Phone Number</label>
+                <input type="text" id="phone-number" name="phone_number">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address">
+                <label for="newsletter">Subscribe to Newsletter</label>
+                <input type="checkbox" id="newsletter" name="newsletter">
+                <button type="submit">Subscribe</button>
+            </form>
+          </div>';
+    return ob_get_clean();
+}
+add_shortcode('smartmail_display_items', 'smartmail_display_items');
+   
         $subscription_page_title = 'SmartMail Subscription';
         $subscription_page_content = '[smartmail_subscription_form]';
         $subscription_page = array(
