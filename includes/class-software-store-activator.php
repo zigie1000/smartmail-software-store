@@ -1,7 +1,7 @@
 <?php
 
-class Smartmail_Software_Store_Activator {
-
+class SmartMail_Software_Store_Activator {
+    
     public static function activate() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'smartmail_ebooks';
