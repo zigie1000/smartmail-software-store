@@ -299,24 +299,6 @@ add_action('wp_footer', 'smartmail_store_script');
             echo '<p class="software-store-item-sku">SKU: ' . esc_html($ebook->sku) . '</p>';
             echo '<p class="software-store-item-barcode">Barcode: ' . esc_html($ebook->barcode) . '</p>';
             echo '<p class="software-store-item-quantity">In Stock: ' . esc_html($ebook->quantity) . '</p>';
-            echo '<form action="' . esc_url(wc_get_cart_url()) . '" method="post" class="subscribe-form">';
-            echo '<div class="subscribe-fields">';
-            echo '<label for="full_name">Full Name<span class="required">*</span></label>';
-            echo '<input type="text" name="full_name" required>';
-            echo '<label for="email">Email<span class="required">*</span></label>';
-            echo '<input type="email" name="email" required>';
-            echo '<label for="phone">Phone Number</label>';
-            echo '<input type="tel" name="phone">';
-            echo '<label for="address">Address</label>';
-            echo '<textarea name="address"></textarea>';
-            echo '<label for="newsletter">Subscribe to Newsletter</label>';
-            echo '<input type="checkbox" name="newsletter">';
-            echo '</div>';
-            echo '<input type="hidden" name="add-to-cart" value="'
-
- . esc_attr($ebook->wc_product_id) . '">';
-            echo '<button type="submit" class="button">Add to Cart</button>';
-            echo '</form>';
             echo '<a href="' . get_permalink(get_page_by_title('SmartMail Subscription')) . '" class="subscribe-link">Subscribe to our newsletter</a>';
             echo '</div>';
         }
