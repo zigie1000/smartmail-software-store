@@ -191,9 +191,7 @@ function smartmail_admin_page() {
                     echo '<td>' . esc_html($product->description) . '</td>';
                     echo '<td>$' . esc_html($product->price) . '</td>';
                     echo '<td>$' . esc_html($product->rrp) . '</td>';
-                    if (!empty($product->image_url
-
-                  )) {
+                    if (!empty($product->image_url)) {
 echo ‘’;
 } else {
 echo ‘No image’;
