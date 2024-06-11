@@ -1,23 +1,26 @@
-.smartmail-ebooks {
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+/* Product Display Styles */
+.software-store-items {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    gap: 20px;
+    justify-content: center;
 }
 
 .software-store-item {
     border: 1px solid #ddd;
     padding: 20px;
-    margin: 15px;
-    width: 30%;
+    margin: 10px;
+    width: 300px;
     box-sizing: border-box;
-    background: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.software-store-item:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+    border-radius: 10px;
 }
 
 .software-store-item-title {
@@ -30,19 +33,52 @@
 .software-store-item-description {
     display: none;
     font-size: 1em;
-    margin-top: 10px;
-    color: #555;
+    margin-bottom: 10px;
 }
 
-.software-store-item-price,
-.software-store-item-rrp {
+.software-store-item-price {
     font-size: 1.2em;
-    color: #0073aa;
+    color: #00f;
     margin-top: 10px;
 }
 
-.software-store-item-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 15px;
+/* Button Styles */
+button, .button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover, .button:hover {
+    background-color: #218838;
+}
+
+/* Subscription Form Styles */
+#subscribe-section {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+#subscribe-section input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#subscribe-section .button {
+    background-color: #007bff;
+}
+
+#subscribe-section .button:hover {
+    background-color: #0056b3;
 }
