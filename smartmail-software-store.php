@@ -58,9 +58,9 @@ function smartmail_display_ebooks() {
     echo '<div class="smartmail-ebooks">';
     foreach ($ebooks as $ebook) {
         echo '<div class="ebook">';
-        echo '<h2>' . esc_html($ebook->title) . '</h2>';
-        echo '<p>' . esc_html($ebook->description) . '</p>';
-        echo '<p>Price: ' . esc_html($ebook->price) . '</p>';
+        echo '<h2 class="software-store-item-title">' . esc_html($ebook->title) . '</h2>';
+        echo '<div class="software-store-item-description">' . esc_html($ebook->description) . '</div>';
+        echo '<p class="software-store-item-price">Price: ' . esc_html($ebook->price) . '</p>';
         echo '</div>';
     }
     echo '</div>';
@@ -84,12 +84,38 @@ add_action('admin_menu', 'smartmail_register_admin_menu');
 
 // Admin page callback
 function smartmail_admin_page() {
-    echo '<div class="wrap">';
-    echo '<h1>SmartMail Software Store</h1>';
-    echo '<form method="post" action="options.php">';
-    settings_fields('smartmail-settings-group');
-    do_settings_sections('smartmail-software-store');
-    submit_button();
-    echo '</form>';
-    echo '</div>';
-}
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'smartmail_ebooks';
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['smartmail_ebook'])) {
+        $title = sanitize_text_field($_POST['title']);
+        $description = sanitize_textarea_field($_POST['description']);
+        $price = floatval($_POST['price']);
+
+        $wpdb->insert(
+            $table_name,
+            array(
+                'title' => $title,
+                'description' => $description,
+                'price' => $price
+            )
+        );
+        echo '<div class="notice notice-success is-dismissible"><p>Product added successfully.</p></div>';
+    }
+
+    ?>
+    <div class="wrap">
+        <h1>SmartMail Software Store</h1>
+        <form method="post" action="">
+            <h2>Add New Product</h2>
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Title</th>
+                    <td><input type="text" name="title" required /></td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Description</th>
+                    <td><textarea name="description" required></textarea></td>
+                </tr>
+                <tr valign="top">
+                    <th scope="
