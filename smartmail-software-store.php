@@ -57,10 +57,10 @@ function smartmail_display_ebooks() {
     ob_start();
     echo '<div class="smartmail-ebooks">';
     foreach ($ebooks as $ebook) {
-        echo '<div class="ebook">';
+        echo '<div class="software-store-item">';
         echo '<h2 class="software-store-item-title">' . esc_html($ebook->title) . '</h2>';
         echo '<div class="software-store-item-description">' . esc_html($ebook->description) . '</div>';
-        echo '<p class="software-store-item-price">Price: ' . esc_html($ebook->price) . '</p>';
+        echo '<p class="software-store-item-price">Price: $' . esc_html($ebook->price) . '</p>';
         echo '</div>';
     }
     echo '</div>';
@@ -125,6 +125,30 @@ function smartmail_admin_page() {
             <input type="hidden" name="smartmail_ebook" value="1" />
             <?php submit_button('Add Product'); ?>
         </form>
+        <h2>Existing Products</h2>
+        <table class="widefat fixed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $products = $wpdb->get_results("SELECT * FROM $table_name");
+                foreach ($products as $product) {
+                    echo '<tr>';
+                    echo '<td>' . $product->id . '</td>';
+                    echo '<td>' . $product->title . '</td>';
+                    echo '<td>' . $product->description . '</td>';
+                    echo '<td>$' . $product->price . '</td>';
+                    echo '</tr>';
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
     <?php
 }
