@@ -1,29 +1,39 @@
 .software-store-items {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .software-store-item {
     border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px;
-    width: calc(33.333% - 20px);
+    padding: 20px;
+    margin: 15px;
+    width: 30%;
     box-sizing: border-box;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.software-store-item:hover {
+    transform: scale(1.05);
 }
 
 .software-store-item-title {
-    font-size: 1.2em;
-    margin-bottom: 5px;
+    font-size: 1.5em;
+    margin-bottom: 10px;
     cursor: pointer;
+    color: #333;
 }
 
 .software-store-item-description {
     display: none;
     font-size: 1em;
+    margin-bottom: 10px;
 }
 
 .software-store-item-price {
-    font-size: 1em;
+    font-size: 1.2em;
     color: #00f;
     margin-top: 10px;
 }
