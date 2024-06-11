@@ -118,4 +118,14 @@ function smartmail_admin_page() {
                     <td><textarea name="description" required></textarea></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="
+                    <th scope="row">Price</th>
+                    <td><input type="number" step="0.01" name="price" required /></td>
+                </tr>
+            </table>
+            <input type="hidden" name="smartmail_ebook" value="1" />
+            <?php submit_button('Add Product'); ?>
+        </form>
+    </div>
+    <?php
+}
+?>
