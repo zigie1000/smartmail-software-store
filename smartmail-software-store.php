@@ -106,7 +106,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         }
     }
     register_activation_hook(__FILE__, 'smartmail_create_tables');
-        // Enqueue styles and scripts
+
+    // Enqueue styles and scripts
     function smartmail_enqueue_assets() {
         wp_enqueue_style('smartmail-store-style', plugins_url('css/style.css', __FILE__));
         wp_enqueue_script('smartmail-store-script', plugins_url('js/script.js', __FILE__), array('jquery'), null, true);
@@ -180,7 +181,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
         return false;
     }
-        // Shortcode to display eBooks
+
+    // Shortcode to display eBooks
     function smartmail_display_ebooks() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'smartmail_ebooks';
@@ -210,10 +212,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             echo '<input type="tel" name="phone">';
             echo '<label for="address">Address</label>';
             echo '<textarea name="address"></textarea>';
-                        echo '<label for="newsletter">Subscribe to Newsletter</label>';
+            echo '<label for="newsletter">Subscribe to Newsletter</label>';
             echo '<input type="checkbox" name="newsletter">';
             echo '</div>';
-            echo '<input type="hidden" name="add-to-cart" value="' . esc_attr($ebook->wc_product_id) . '">';
+            echo '<input type="hidden" name="add-to-cart" value="'
+
+ . esc_attr($ebook->wc_product_id) . '">';
             echo '<button type="submit" class="button">Add to Cart</button>';
             echo '</form>';
             echo '<a href="' . get_permalink(get_page_by_title('SmartMail Subscription')) . '" class="subscribe-link">Subscribe to our newsletter</a>';
@@ -267,7 +271,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         return ob_get_clean();
     }
     add_shortcode('smartmail_software_display', 'smartmail_display_software');
-        // Shortcode to display subscription form
+
+    // Shortcode to display subscription form
     function smartmail_display_subscription_form() {
         ob_start();
         ?>
@@ -410,7 +415,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             </form>
             <h2>Existing eBooks</h2>
             <?php smartmail_admin_page_content('ebook'); ?>
-                </div>
+        </div>
         <?php
     }
 
@@ -423,7 +428,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                 <input type="hidden" name="action" value="add_software">
                 <table class="form-table">
                     <tr valign="top">
-                        <th scope="row">Title</th>
+                        <th scope
+
+="row">Title</th>
                         <td><input type="text" name="title" required></td>
                     </tr>
                     <tr valign="top">
@@ -508,7 +515,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         </table>
         <?php
     }
-        // Handle adding eBook
+
+    // Handle adding eBook
     function smartmail_handle_add_ebook() {
         if (isset($_POST['add_ebook'])) {
             $title = sanitize_text_field($_POST['title']);
@@ -600,8 +608,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             exit;
         }
     }
-    add_action('admin_post_delete_ebook', 'smartmail
-                    add_action('admin_post_delete_ebook', 'smartmail_delete_ebook');
+    add_action('admin_post_delete_ebook', 'smartmail_delete_ebook');
 
     // Handle software deletion
     function smartmail_delete_software() {
@@ -617,7 +624,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
     // Handle eBook editing
     function smartmail_edit_ebook() {
-        if (isset($_GET['page']) && $_GET['page'] == 'smartmail-software-store' && isset($_GET['edit_ebook'])) {
+        if (isset($_GET
+
+['page']) && $_GET['page'] == 'smartmail-software-store' && isset($_GET['edit_ebook'])) {
             global $wpdb;
             $table_name = $wpdb->prefix . 'smartmail_ebooks';
             $ebook = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", intval($_GET['edit_ebook'])));
@@ -732,7 +741,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         }
     }
     add_action('admin_init', 'smartmail_edit_software');
-        // Handle eBook update
+
+    // Handle eBook update
     function smartmail_update_ebook() {
         if (isset($_POST['update_ebook'])) {
             $id = intval($_POST['id']);
@@ -781,7 +791,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             );
             smartmail_create_or_update_wc_product($product_data, $wpdb->get_var($wpdb->prepare("SELECT wc_product_id FROM $table_name WHERE id = %d", $id)));
 
-                        wp_redirect(admin_url('admin.php?page=smartmail-manage-ebooks'));
+            wp_redirect(admin_url('admin.php?page=smartmail-manage-ebooks'));
             exit;
         }
     }
@@ -802,7 +812,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             $sku = sanitize_text_field($_POST['sku']);
             $barcode = sanitize_text_field($_POST['barcode']);
             $quantity = intval($_POST['quantity']);
-            $file_url = !empty($_FILES['file']['name']) ? smartmail_handle_file_upload($_FILES['file']) : '';
+            $file_url = !empty($_FILES['
+
+file']['name']) ? smartmail_handle_file_upload($_FILES['file']) : '';
 
             global $wpdb;
             $table_name = $wpdb->prefix . 'smartmail_software';
@@ -843,5 +855,3 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     add_action('admin_post_update_software', 'smartmail_update_software');
 }
 ?>
-        
-        
