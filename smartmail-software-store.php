@@ -197,7 +197,20 @@ add_shortcode('smartmail_display_items', 'smartmail_display_items');
 
         return $wc_product_id;
     }
-
+// JavaScript to handle subscribe button click
+function smartmail_store_script() {
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $('#subscribe-button').click(function() {
+                $('#subscribe-form').toggle();
+            });
+        });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'smartmail_store_script');
+    
     // Get image ID from URL
     function smartmail_get_image_id($image_url) {
         global $wpdb;
