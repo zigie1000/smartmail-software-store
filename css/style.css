@@ -1,84 +1,50 @@
-/* General Page Styles */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-}
-
-/* Product Display Styles */
-.software-store-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.software-store-item {
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 10px;
-    width: 300px;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-}
-
-.software-store-item-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    cursor: pointer;
-    color: #333;
-}
-
-.software-store-item-description {
-    display: none;
-    font-size: 1em;
-    margin-bottom: 10px;
-}
-
-.software-store-item-price {
-    font-size: 1.2em;
-    color: #00f;
-    margin-top: 10px;
-}
-
-/* Button Styles */
-button, .button {
-    background-color: #28a745;
+/* Button Style */
+.subscribe-button {
+    background-color: #4CAF50;
     color: white;
+    padding: 15px 20px;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
 }
 
-button:hover, .button:hover {
-    background-color: #218838;
-}
-
-/* Subscription Form Styles */
-#subscribe-section {
+/* Modal Styles */
+.modal {
     display: none;
-    margin-top: 20px;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
     border-radius: 10px;
-    background-color: #f9f9f9;
 }
 
-#subscribe-section input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-#subscribe-section .button {
-    background-color: #007bff;
-}
-
-#subscribe-section .button:hover {
-    background-color: #0056b3;
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
