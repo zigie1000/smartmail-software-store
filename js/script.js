@@ -3,4 +3,9 @@ jQuery(document).ready(function($) {
     $('.software-store-item-title').on('click', function() {
         $(this).next('.software-store-item-description').slideToggle();
     });
+
+    // Show subscription form
+    $('#subscribe-button').on('click', function() {
+        $('#subscribe-section').slideToggle();
+    });
 });
