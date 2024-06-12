@@ -405,6 +405,45 @@ add_action('wp_footer', 'smartmail_store_script');
     }
     add_action('init', 'smartmail_handle_subscription');
 
+// Handle form submission for adding eBooks and Software
+function smartmail_store_handle_form() {
+    if (!isset($_POST['smartmail_form_nonce']) || !wp_verify_nonce($_POST['smartmail_form_nonce'], 'smartmail_form_action')) {
+        return;
+    }
+
+    global $wpdb;
+
+    if (isset($_POST['add_ebook'])) {
+        $table_name = $wpdb->prefix . 'smartmail_ebooks';
+        $wpdb->insert($table_name, array(
+            'title' => sanitize_text_field($_POST['title']),
+            'description' => sanitize_textarea_field($_POST['description']),
+            'price' => floatval($_POST['price']),
+            'rrp' => floatval($_POST['rrp']),
+            'sku' => sanitize_text_field($_POST['sku']),
+            'barcode' => sanitize_text_field($_POST['barcode']),
+            'quantity' => intval($_POST['quantity']),
+            'image_url' => esc_url_raw($_POST['image_url'])
+        ));
+    }
+
+    if (isset($_POST['add_software'])) {
+        $table_name = $wpdb->prefix . 'smartmail_software';
+        $wpdb->insert($table_name, array(
+            'title' => sanitize_text_field($_POST['title']),
+            'description' => sanitize_textarea_field($_POST['description']),
+            'price' => floatval($_POST['price']),
+            'rrp' => floatval($_POST['rrp']),
+            'sku' => sanitize_text_field($_POST['sku']),
+            'barcode' => sanitize_text_field($_POST['barcode']),
+            'quantity' => intval($_POST['quantity']),
+            'image_url' => esc_url_raw($_POST['image_url'])
+        ));
+    }
+}
+add_action('admin_post_nopriv_smartmail_store_handle_form', 'smartmail_store_handle_form');
+add_action('admin_post_smartmail_store_handle_form', 'smartmail_store_handle_form');
+    
     // Register admin menu
     function smartmail_register_admin_menu() {
         add_menu_page(
