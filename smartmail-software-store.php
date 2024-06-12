@@ -94,7 +94,8 @@ function smartmail_create_tables() {
     foreach ($tables as $table) {
         dbDelta($table);
     }
-}
+}register_activation_hook(__FILE__, 'smartmail_create_tables');
+ 
     // Create pages for eBooks and software
     $ebook_page_title = 'SmartMail Ebooks';
     $ebook_page_content = '[smartmail_ebooks_display]';
