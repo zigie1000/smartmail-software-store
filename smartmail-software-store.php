@@ -49,6 +49,34 @@ add_action('wp_footer', 'display_subscription_button');
 // Check if WooCommerce is active
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
+// Handle file upload
+function smartmail_handle_file_upload($file) {
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    $uploaded_file = wp_handle_upload($file, array('test_form' => false));
+
+    if (isset($uploaded_file['file'])) {
+        $file_loc = $uploaded_file['file'];
+        $file_name = basename($file_loc);
+        $file_type = wp_check_filetype($file_name);
+
+        $attachment = array(
+            'post_mime_type' => $file_type['type'],
+            'post_title' => sanitize_file_name($file_name),
+            'post_content' => '',
+            'post_status' => 'inherit'
+        );
+
+        $attach_id = wp_insert_attachment($attachment, $file_loc);
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attach_data = wp_generate_attachment_metadata($attach_id, $file_loc);
+        wp_update_attachment_metadata($attach_id, $attach_data);
+
+        return wp_get_attachment_url($attach_id);
+    }
+
+    return false;
+}
+    
     // Create custom database tables on plugin activation
     function smartmail_create_tables() {
         global $wpdb;
@@ -130,7 +158,41 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         if (!get_page_by_title($software_page_title)) {
             wp_insert_post($software_page);
         }
-// Shortcode function to display software and ebooks
+
+// Create or update WooCommerce product
+function smartmail_create_or_update_wc_product($product_data, $wc_product_id = 0) {
+    if ($wc_product_id) {
+        $product = new WC_Product_Downloadable($wc_product_id);
+    } else {
+        $product = new WC_Product_Downloadable();
+    }
+
+    $product->set_name($product_data['title']);
+    $product->set_description($product_data['description']);
+    $product->set_regular_price($product_data['price']);
+    $product->set_catalog_visibility('visible');
+    $product->set_image_id(smartmail_get_image_id($product_data['image_url']));
+    $product->set_status('publish');
+    $product->set_sku($product_data['sku']);
+    $product->set_manage_stock(true);
+    $product->set_stock_quantity($product_data['quantity']);
+    $product->set_downloadable(true);
+
+    if (!empty($product_data['file_url'])) {
+        $product->set_downloads(array(
+            array(
+                'name' => $product_data['title'],
+                'file' => $product_data['file_url']
+            )
+        ));
+    }
+
+    $product->save();
+
+    return $product->get_id();
+}
+        
+     // Shortcode function to display software and ebooks
 function smartmail_display_items() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'smartmail_items';
