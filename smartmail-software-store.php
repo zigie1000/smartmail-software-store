@@ -58,7 +58,7 @@ function smartmail_create_tables() {
     $ebooks_table_name = $wpdb->prefix . 'smartmail_ebooks';
     $sql = "CREATE TABLE $ebooks_table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        title tinytext NOT NULL,
+        title text NOT NULL,
         description text NOT NULL,
         price float NOT NULL,
         rrp float NOT NULL,
@@ -66,8 +66,6 @@ function smartmail_create_tables() {
         sku varchar(50) DEFAULT '',
         barcode varchar(50) DEFAULT '',
         quantity int DEFAULT 0,
-        file_url varchar(255) NOT NULL,
-        wc_product_id bigint(20) NOT NULL,
         PRIMARY KEY  (id)
     ) $charset_collate;";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -77,7 +75,7 @@ function smartmail_create_tables() {
     $software_table_name = $wpdb->prefix . 'smartmail_software';
     $sql = "CREATE TABLE $software_table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        title tinytext NOT NULL,
+        title text NOT NULL,
         description text NOT NULL,
         price float NOT NULL,
         rrp float NOT NULL,
@@ -85,8 +83,6 @@ function smartmail_create_tables() {
         sku varchar(50) DEFAULT '',
         barcode varchar(50) DEFAULT '',
         quantity int DEFAULT 0,
-        file_url varchar(255) NOT NULL,
-        wc_product_id bigint(20) NOT NULL,
         PRIMARY KEY  (id)
     ) $charset_collate;";
     dbDelta($sql);
@@ -95,7 +91,7 @@ function smartmail_create_tables() {
     $subscription_table_name = $wpdb->prefix . 'smartmail_subscriptions';
     $sql = "CREATE TABLE $subscription_table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
-        full_name tinytext NOT NULL,
+        full_name text NOT NULL,
         email varchar(100) NOT NULL,
         phone varchar(20) DEFAULT '',
         address text DEFAULT '',
@@ -132,6 +128,8 @@ function smartmail_create_tables() {
     }
 }
 
+register_activation_hook(__FILE__, 'smartmail_create_tables');
+    
         // Create pages for eBooks and software
         $ebook_page_title = 'SmartMail Ebooks';
         $ebook_page_content = '[smartmail_ebooks_display]';
