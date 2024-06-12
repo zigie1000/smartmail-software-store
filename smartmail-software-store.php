@@ -50,53 +50,51 @@ add_action('wp_footer', 'display_subscription_button');
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
     // Create custom database tables on plugin activation
-    function smartmail_create_tables() {
-        global $wpdb;
-        $charset_collate = $wpdb->get_charset_collate();
+function smartmail_create_tables() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
 
-        $tables = [
-            "CREATE TABLE {$wpdb->prefix}smartmail_ebooks (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                title text NOT NULL,
-                description text NOT NULL,
-                price float NOT NULL,
-                rrp float NOT NULL,
-                sku text NOT NULL,
-                barcode text NOT NULL,
-                quantity int NOT NULL,
-                image_url text NOT NULL,
-                PRIMARY KEY (id)
-            ) $charset_collate;",
+    $tables = [
+        "CREATE TABLE {$wpdb->prefix}smartmail_ebooks (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            title text NOT NULL,
+            description text NOT NULL,
+            price float NOT NULL,
+            rrp float NOT NULL,
+            sku text NOT NULL,
+            barcode text NOT NULL,
+            quantity int NOT NULL,
+            image_url text NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;",
+        "CREATE TABLE {$wpdb->prefix}smartmail_software (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            title text NOT NULL,
+            description text NOT NULL,
+            price float NOT NULL,
+            rrp float NOT NULL,
+            sku text NOT NULL,
+            barcode text NOT NULL,
+            quantity int NOT NULL,
+            image_url text NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;",
+        "CREATE TABLE {$wpdb->prefix}smartmail_subscriptions (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            full_name text NOT NULL,
+            email text NOT NULL,
+            phone text NOT NULL,
+            address text NOT NULL,
+            newsletter boolean DEFAULT false,
+            PRIMARY KEY (id)
+        ) $charset_collate;",
+    ];
 
-            "CREATE TABLE {$wpdb->prefix}smartmail_software (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                title text NOT NULL,
-                description text NOT NULL,
-                price float NOT NULL,
-                rrp float NOT NULL,
-                sku text NOT NULL,
-                barcode text NOT NULL,
-                quantity int NOT NULL,
-                image_url text NOT NULL,
-                PRIMARY KEY (id)
-            ) $charset_collate;",
-
-            "CREATE TABLE {$wpdb->prefix}smartmail_subscriptions (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                full_name text NOT NULL,
-                email text NOT NULL,
-                phone text NOT NULL,
-                address text NOT NULL,
-                newsletter boolean DEFAULT false,
-                PRIMARY KEY (id)
-            ) $charset_collate;"
-        ];
-
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        foreach ($tables as $table) {
-            dbDelta($table);
-        }
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    foreach ($tables as $table) {
+        dbDelta($table);
     }
+}
 
     // Create pages for eBooks and software
     $ebook_page_title = 'SmartMail Ebooks';
