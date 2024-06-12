@@ -85,9 +85,9 @@ function smartmail_create_tables() {
             email text NOT NULL,
             phone text NOT NULL,
             address text NOT NULL,
-            newsletter boolean DEFAULT false,
+            newsletter boolean DEFAULT 0,
             PRIMARY KEY (id)
-        ) $charset_collate;",
+        ) $charset_collate;"
     ];
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -95,7 +95,6 @@ function smartmail_create_tables() {
         dbDelta($table);
     }
 }
-
     // Create pages for eBooks and software
     $ebook_page_title = 'SmartMail Ebooks';
     $ebook_page_content = '[smartmail_ebooks_display]';
