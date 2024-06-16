@@ -74,4 +74,50 @@ function smartmail_create_tables() {
     dbDelta($sql);
 }
 register_activation_hook(__FILE__, 'smartmail_create_tables');
+
+// Create necessary pages on plugin activation
+function smartmail_create_pages() {
+    // Create eBook page
+    $ebook_page_title = 'eBooks';
+    $ebook_page_content = '[smartmail_display_ebooks]';
+    $ebook_page_check = get_page_by_title($ebook_page_title);
+    $ebook_page = array(
+        'post_title' => $ebook_page_title,
+        'post_content' => $ebook_page_content,
+        'post_status' => 'publish',
+        'post_type' => 'page'
+    );
+    if (!isset($ebook_page_check->ID)) {
+        wp_insert_post($ebook_page);
+    }
+
+    // Create Software page
+    $software_page_title = 'Software';
+    $software_page_content = '[smartmail_display_software]';
+    $software_page_check = get_page_by_title($software_page_title);
+    $software_page = array(
+        'post_title' => $software_page_title,
+        'post_content' => $software_page_content,
+        'post_status' => 'publish',
+        'post_type' => 'page'
+    );
+    if (!isset($software_page_check->ID)) {
+        wp_insert_post($software_page);
+    }
+
+    // Create Subscription page
+    $subscription_page_title = 'Subscribe';
+    $subscription_page_content = '[subscription_form]';
+    $subscription_page_check = get_page_by_title($subscription_page_title);
+    $subscription_page = array(
+        'post_title' => $subscription_page_title,
+        'post_content' => $subscription_page_content,
+        'post_status' => 'publish',
+        'post_type' => 'page'
+    );
+    if (!isset($subscription_page_check->ID)) {
+        wp_insert_post($subscription_page);
+    }
+}
+register_activation_hook(__FILE__, 'smartmail_create_pages');
 ?>
