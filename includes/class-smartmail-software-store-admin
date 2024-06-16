@@ -1,8 +1,8 @@
 <?php
 
-class Smartmail_Software_Store_Admin {
-
-    public function register_hooks() {
+class SmartMail_Software_Store_Admin {
+    
+    public function __construct() {
         add_action('admin_menu', array($this, 'register_admin_menu'));
         add_action('admin_post_add_product', array($this, 'handle_form_submission'));
         add_action('admin_post_edit_product', array($this, 'handle_form_submission'));
@@ -67,17 +67,6 @@ class Smartmail_Software_Store_Admin {
         $quantity = intval($_POST['quantity']);
         $file_url = sanitize_text_field($_POST['file_url']);
 
-        $wc_product_id = smartmail_create_or_update_wc_product(array(
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'image_url' => $image_url,
-            'sku' => $sku,
-            'quantity' => $quantity,
-            'file_url' => $file_url,
-            'rrp' => $rrp
-        ));
-
         $wpdb->insert($table_name, array(
             'title' => $title,
             'description' => $description,
@@ -87,8 +76,7 @@ class Smartmail_Software_Store_Admin {
             'sku' => $sku,
             'barcode' => $barcode,
             'quantity' => $quantity,
-            'file_url' => $file_url,
-            'wc_product_id' => $wc_product_id
+            'file_url' => $file_url
         ));
     }
 
@@ -107,34 +95,9 @@ class Smartmail_Software_Store_Admin {
         $quantity = intval($_POST['quantity']);
         $file_url = sanitize_text_field($_POST['file_url']);
 
-        $product_data = array(
+        $wpdb->update($table_name, array(
             'title' => $title,
             'description' => $description,
             'price' => $price,
             'rrp' => $rrp,
-            'image_url' => $image_url,
-            'sku' => $sku,
-            'barcode' => $barcode,
-            'quantity' => $quantity,
-            'file_url' => $file_url
-        );
-
-        $product = $wpdb->get_row($wpdb->prepare("SELECT wc_product_id FROM $table_name WHERE id = %d", $product_id));
-        smartmail_create_or_update_wc_product($product_data, $product->wc_product_id);
-
-        $wpdb->update($table_name, $product_data, array('id' => $product_id));
-    }
-
-    private function delete_product($ebooks_table_name, $software_table_name) {
-        global $wpdb;
-        $product_type = sanitize_text_field($_POST['product_type']);
-        $table_name = $product_type == 'ebook' ? $ebooks_table_name : $software_table_name;
-        $product_id = intval($_POST['product_id']);
-
-        $product = $wpdb->get_row($wpdb->prepare("SELECT wc_product_id FROM $table_name WHERE id = %d", $product_id));
-        wp_delete_post($product->wc_product_id, true);
-
-        $wpdb->delete($table_name, array('id' => $product_id));
-    }
-}
-?>
+            'image_url
