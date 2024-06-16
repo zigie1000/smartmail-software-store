@@ -6,21 +6,17 @@ Version: 1.0
 Author: Your Name
 */
 
-// Ensure WordPress environment
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-// Include necessary files
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-software-store-activator.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-admin.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-public.php';
 
-// Register activation and deactivation hooks
-register_activation_hook( __FILE__, array( 'SmartMail_Software_Store_Activator', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'SmartMail_Software_Store_Activator', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'Software_Store_Activator', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'Software_Store_Activator', 'deactivate' ) );
 
-// Initialize admin and public classes
 if ( is_admin() ) {
     new SmartMail_Software_Store_Admin();
 } else {
@@ -33,7 +29,6 @@ class SmartMail_Software_Store {
     }
 
     public function register_post_types() {
-        // Register custom post types for eBooks and software
         register_post_type( 'ebook', array(
             'labels' => array(
                 'name' => __( 'eBooks' ),
