@@ -90,9 +90,7 @@ function handle_subscription_form() {
     $email = sanitize_email($_POST['email']);
     $phone = sanitize_text_field($_POST['phone_number']);
     $address = sanitize_text_field($_POST['address']);
-    $newsletter_optin = isset($_POST['
-
-newsletter_optin']) ? 1 : 0;
+    $newsletter_optin = isset($_POST['newsletter_optin']) ? 1 : 0;
 
     $result = $wpdb->insert(
         $table_name,
