@@ -100,4 +100,23 @@ class SmartMail_Software_Store_Admin {
             'description' => $description,
             'price' => $price,
             'rrp' => $rrp,
-            'image_url
+            'image_url' => $image_url,
+            'sku' => $sku,
+            'barcode' => $barcode,
+            'quantity' => $quantity,
+            'file_url' => $file_url
+        ), array('id' => $product_id));
+    }
+
+    private function delete_product($ebooks_table_name, $software_table_name) {
+        global $wpdb;
+        $product_type = sanitize_text_field($_POST['product_type']);
+        $table_name = $product_type == 'ebook' ? $ebooks_table_name : $software_table_name;
+        $product_id = intval($_POST['product_id']);
+
+        $wpdb->delete($table_name, array('id' => $product_id));
+    }
+}
+
+new SmartMail_Software_Store_Admin();
+?>
