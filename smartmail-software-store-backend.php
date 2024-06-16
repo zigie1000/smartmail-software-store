@@ -122,7 +122,6 @@ function smartmail_admin_page() {
         echo '<label for="quantity">Quantity:</label>';
         echo '<input type="text" name="quantity" value="' . esc_attr($item->quantity) . '"><br>';
         echo '<label for="file_url">File URL:</label>';
-        echo '<input type="text" name="file_url" value="' . esc_attr($item->file_url) . |oai:code-citation|
         echo '<input type="text" name="file_url" value="' . esc_attr($item->file_url) . '"><br>';
         echo '<input type="submit" value="Update">';
         echo '</form>';
@@ -153,6 +152,7 @@ function smartmail_handle_form_submission() {
         $product_type = sanitize_text_field($_POST['product_type']);
         $table_name = $product_type == 'ebook' ? $ebooks_table_name : $software_table_name;
         $title = sanitize_text_field($_POST['title']);
+        $description = sanitize
         $description = sanitize_textarea_field($_POST['description']);
         $price = floatval($_POST['price']);
         $rrp = floatval($_POST['rrp']);
