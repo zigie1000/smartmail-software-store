@@ -51,7 +51,8 @@ add_shortcode('smartmail_display_software', 'smartmail_display_software');
 // Display subscription button and form
 function display_subscription_button() {
     ?>
-    <button id="subscribeButton" class="subscribe-button">Subscribe for Offers</button>
+    <button id="subscribeButton" class="subscribe-button"> |oai:code-citation|
+        <button id="subscribeButton" class="subscribe-button">Subscribe for Offers</button>
     <div id="subscribeModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
