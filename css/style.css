@@ -1,21 +1,61 @@
-/* Button Style */
-.subscribe-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px 20px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
-    margin: 10px 0;
+.smartmail-ebooks, .smartmail-software {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-/* Modal Styles */
+.software-store-item {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 16px;
+    width: calc(33.333% - 32px);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.software-store-item-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.software-store-item-title {
+    font-size: 1.5em;
+    margin: 8px 0;
+}
+
+.software-store-item-description {
+    font-size: 1em;
+    margin: 8px 0;
+}
+
+.software-store-item-price {
+    font-size: 1.2em;
+    margin: 8px 0;
+    color: #f00;
+}
+
+.software-store-item-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #0073aa;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 8px;
+}
+
+.subscribe-button {
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .modal {
     display: none;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
     left: 0;
     top: 0;
     width: 100%;
@@ -26,18 +66,18 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
+    background-color: #fff;
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
 }
 
 .close {
     color: #aaa;
     float: right;
+    font-size
+        float: right;
     font-size: 28px;
     font-weight: bold;
 }
