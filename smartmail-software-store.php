@@ -1,36 +1,59 @@
 <?php
 /*
-* Plugin Name: SmartMail Software Store
-* Description: A WordPress plugin to manage and sell eBooks and software.
-* Version: 1.5
-* Author: Marco Zagato
-* Author URI: https://smartmail.store
+Plugin Name: SmartMail Software Store
+Description: A plugin to manage and sell eBooks and software.
+Version: 1.0
+Author: Your Name
 */
 
-// Include the necessary files
-include_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-include_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-include_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
-include_once plugin_dir_path(__FILE__) . 'smartmail-software-store-frontend.php';
-include_once plugin_dir_path(__FILE__) . 'smartmail-software-store-backend.php';
-
-// Register activation hook
-register_activation_hook(__FILE__, array('Software_Store_Activator', 'activate'));
-
-// Enqueue scripts and styles
-function smartmail_enqueue_scripts() {
-    wp_enqueue_style('smartmail-store-style', plugins_url('/css/style.css', __FILE__));
-    wp_enqueue_script('smartmail-store-script', plugins_url('/js/script.js', __FILE__), array('jquery'), null, true);
+// Ensure WordPress environment
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
 }
-add_action('wp_enqueue_scripts', 'smartmail_enqueue_scripts');
 
-// Initialize the admin and public classes
-function run_smartmail_software_store() {
-    $plugin_admin = new Smartmail_Software_Store_Admin();
-    $plugin_public = new Smartmail_Software_Store_Public();
+// Include necessary files
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-software-store-activator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-admin.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-public.php';
 
-    $plugin_admin->register_hooks();
-    $plugin_public->register_hooks();
+// Register activation and deactivation hooks
+register_activation_hook( __FILE__, array( 'SmartMail_Software_Store_Activator', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'SmartMail_Software_Store_Activator', 'deactivate' ) );
+
+// Initialize admin and public classes
+if ( is_admin() ) {
+    new SmartMail_Software_Store_Admin();
+} else {
+    new SmartMail_Software_Store_Public();
 }
-add_action('plugins_loaded', 'run_smartmail_software_store');
-?>
+
+class SmartMail_Software_Store {
+    public function __construct() {
+        add_action( 'init', array( $this, 'register_post_types' ) );
+    }
+
+    public function register_post_types() {
+        // Register custom post types for eBooks and software
+        register_post_type( 'ebook', array(
+            'labels' => array(
+                'name' => __( 'eBooks' ),
+                'singular_name' => __( 'eBook' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'supports' => array( 'title', 'editor', 'thumbnail', 'custom-fields' )
+        ));
+
+        register_post_type( 'software', array(
+            'labels' => array(
+                'name' => __( 'Software' ),
+                'singular_name' => __( 'Software' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'supports' => array( 'title', 'editor', 'thumbnail', 'custom-fields' )
+        ));
+    }
+}
+
+new SmartMail_Software_Store();
