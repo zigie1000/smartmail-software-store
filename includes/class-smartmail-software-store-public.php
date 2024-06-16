@@ -40,8 +40,7 @@ class SmartMail_Software_Store_Public {
         foreach ($software as $item) {
             echo '<div class="software-store-item">';
             if (!empty($item->image_url)) {
-                echo '<img class="software-store-item-image" src="' . esc_url($                                    
-'image_url) . '" alt="' . esc_html($item->title) . '">';
+                echo '<img class="software-store-item-image" src="' . esc_url($item->image_url) . '" alt="' . esc_html($item->title) . '">';
             }
             echo '<h2 class="software-store-item-title">' . esc_html($item->title) . '</h2>';
             echo '<p class="software-store-item-description">' . esc_html($item->description) . '</p>';
