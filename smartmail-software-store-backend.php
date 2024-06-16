@@ -101,6 +101,7 @@ function smartmail_admin_page() {
     foreach ($software as $item) {
         echo '<div>';
         echo '<h4>' . esc_html($item->title) . '</h4>';
+        echo '<form action="' . esc_url(admin_url('admin-post.php')) .
         echo '<form action="' . esc_url(admin_url('admin-post.php')) . '" method="post">';
         echo '<input type="hidden" name="action" value="edit_product">';
         echo '<input type="hidden" name="product_id" value="' . esc_attr($item->id) . '">';
@@ -152,7 +153,6 @@ function smartmail_handle_form_submission() {
         $product_type = sanitize_text_field($_POST['product_type']);
         $table_name = $product_type == 'ebook' ? $ebooks_table_name : $software_table_name;
         $title = sanitize_text_field($_POST['title']);
-        $description = sanitize
         $description = sanitize_textarea_field($_POST['description']);
         $price = floatval($_POST['price']);
         $rrp = floatval($_POST['rrp']);
