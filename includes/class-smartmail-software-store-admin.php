@@ -1,75 +1,82 @@
 <?php
-
-/**
- * SmartMail Software Store Admin Class
- *
- * @package SmartMail Software Store
- * @author Marco Zagato
- * @author URI https://smartmail.store
- */
-
 class SmartMail_Software_Store_Admin {
-    public function __construct() {
-        add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_init', array($this, 'settings_init'));
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
     }
 
-    public function add_admin_menu() {
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-admin.js', array('jquery'), $this->version, false);
+    }
+
+    public function add_plugin_admin_menu() {
         add_menu_page(
             'SmartMail Software Store',
             'SmartMail Store',
             'manage_options',
-            'smartmail_software_store',
-            array($this, 'admin_page'),
+            $this->plugin_name,
+            array($this, 'display_plugin_setup_page'),
             'dashicons-store',
-            6
+            2
+        );
+        add_submenu_page(
+            $this->plugin_name,
+            'Settings',
+            'Settings',
+            'manage_options',
+            $this->plugin_name . '_settings',
+            array($this, 'display_plugin_settings_page')
         );
     }
 
-    public function settings_init() {
-        register_setting('smartmail_software_store_settings', 'smartmail_software_store_settings');
+    public function display_plugin_setup_page() {
+        include_once 'templates/admin-software-page.php';
+    }
 
+    public function display_plugin_settings_page() {
+        include_once 'templates/admin-settings-page.php';
+    }
+
+    public function register_admin_settings() {
+        register_setting(
+            'smartmail_software_store_settings',
+            'smartmail_software_store_settings',
+            array($this, 'sanitize')
+        );
         add_settings_section(
-            'smartmail_software_store_section',
-            __('SmartMail Software Store Settings', 'smartmail-software-store'),
-            array($this, 'settings_section_callback'),
+            'smartmail_software_store_setting_section',
+            'SmartMail Software Store Settings',
+            array($this, 'section_info'),
             'smartmail_software_store_settings'
         );
-
         add_settings_field(
-            'smartmail_software_store_text_field_0',
-            __('Settings field description', 'smartmail-software-store'),
-            array($this, 'settings_field_0_render'),
+            'setting_field_description',
+            'Settings field description',
+            array($this, 'setting_field_callback'),
             'smartmail_software_store_settings',
-            'smartmail_software_store_section'
+            'smartmail_software_store_setting_section'
         );
     }
 
-    public function settings_field_0_render() {
-        $options = get_option('smartmail_software_store_settings');
-        ?>
-        <input type='text' name='smartmail_software_store_settings[smartmail_software_store_text_field_0]' value='<?php echo $options['smartmail_software_store_text_field_0']; ?>'>
-        <?php
+    public function sanitize($input) {
+        return $input;
     }
 
-    public function settings_section_callback() {
-        echo __('This section description', 'smartmail-software-store');
+    public function section_info() {
+        echo 'This section description';
     }
 
-    public function admin_page() {
-        ?>
-        <form action='options.php' method='post'>
-            <h2>SmartMail Software Store</h2>
-            <?php
-            settings_fields('smartmail_software_store_settings');
-            do_settings_sections('smartmail_software_store_settings');
-            submit_button();
-            ?>
-        </form>
-        <?php
+    public function setting_field_callback() {
+        printf(
+            '<input type="text" id="setting_field_description" name="smartmail_software_store_settings[setting_field_description]" value="%s" />',
+            isset($this->options['setting_field_description']) ? esc_attr($this->options['setting_field_description']) : ''
+        );
     }
-}
-
-if (is_admin()) {
-    new SmartMail_Software_Store_Admin();
 }
