@@ -10,17 +10,32 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+try {
+    require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+} catch (Exception $e) {
+    error_log('Error including required files: ' . $e->getMessage());
+    wp_die('There was an error initializing the plugin. Please check the error logs for more details.');
+}
 
 register_activation_hook(__FILE__, array('Software_Store_Activator', 'activate'));
 register_deactivation_hook(__FILE__, array('Software_Store_Activator', 'deactivate'));
 
 if (is_admin()) {
-    new SmartMail_Software_Store_Admin();
+    try {
+        new SmartMail_Software_Store_Admin();
+    } catch (Exception $e) {
+        error_log('Error initializing admin functionalities: ' . $e->getMessage());
+        wp_die('There was an error initializing the admin functionalities. Please check the error logs for more details.');
+    }
 } else {
-    new SmartMail_Software_Store_Public();
+    try {
+        new SmartMail_Software_Store_Public();
+    } catch (Exception $e) {
+        error_log('Error initializing public functionalities: ' . $e->getMessage());
+        wp_die('There was an error initializing the public functionalities. Please check the error logs for more details.');
+    }
 }
 
 class SmartMail_Software_Store {
@@ -51,5 +66,10 @@ class SmartMail_Software_Store {
     }
 }
 
-new SmartMail_Software_Store();
+try {
+    new SmartMail_Software_Store();
+} catch (Exception $e) {
+    error_log('Error initializing post types: ' . $e->getMessage());
+    wp_die('There was an error initializing the post types. Please check the error logs for more details.');
+}
 ?>
