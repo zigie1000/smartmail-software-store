@@ -1,4 +1,12 @@
 <?php
+/**
+ * Class Name: SmartMail_Software_Store_Public
+ * Description: Public-facing functionality of the plugin.
+ * Author: Marco
+ * Author URI: https://smartmail.store
+ * Version: 1.0.0
+ */
+
 if (!class_exists('SmartMail_Software_Store_Public')) {
     class SmartMail_Software_Store_Public {
         public function __construct() {
@@ -23,3 +31,4 @@ if (!class_exists('SmartMail_Software_Store_Public')) {
         }
     }
 }
+?>
