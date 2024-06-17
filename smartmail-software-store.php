@@ -52,4 +52,3 @@ class SmartMail_Software_Store {
 }
 
 new SmartMail_Software_Store();
-?>
