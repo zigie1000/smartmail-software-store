@@ -1,44 +1,46 @@
+/**
+ * SmartMail Software Store Styles
+ * 
+ * @package SmartMail_Software_Store
+ * Author: Marco Zagato
+ * Author URI: https://smartmail.store
+ */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
 .wrap {
     margin: 20px;
 }
 
-.form-table {
+h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input, select, textarea {
     width: 100%;
-    margin: 20px 0;
-}
-
-.form-table th {
-    text-align: left;
     padding: 10px;
-    background: #f9f9f9;
-}
-
-.form-table td {
-    padding: 10px;
-}
-
-.widefat {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.widefat th, .widefat td {
-    border: 1px solid #ddd;
-    padding: 10px;
-}
-
-.widefat th {
-    background: #f1f1f1;
-}
-
-.button-primary {
-    background: #0073aa;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.submit {
-    margin-top: 20px;
+button {
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    border-radius: 4px;
 }
