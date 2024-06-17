@@ -1,52 +1,70 @@
 <?php
 /**
  * Plugin Name: SmartMail Software Store
- * Description: A plugin to manage and sell software.
- * Version: 1.0
+ * Description: A plugin to manage and display eBooks and Software.
+ * Version: 1.0.0
  * Author: Marco Zagato
- * Author URI: mailto:info@smartmail.store
+ * Author URI: https://smartmail.store
  */
 
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly
 }
 
-// Activation Hook
-register_activation_hook(__FILE__, 'smartmail_software_store_activate');
+class SmartMail_Software_Store {
+    protected $plugin_name;
+    protected $version;
 
-function smartmail_software_store_activate() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'smartmail_software_store';
-    $charset_collate = $wpdb->get_charset_collate();
-    $sql = "CREATE TABLE $table_name (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        name tinytext NOT NULL,
-        description text NOT NULL,
-        price float NOT NULL,
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+    public function __construct() {
+        $this->plugin_name = 'smartmail-software-store';
+        $this->version = '1.0.0';
+        $this->load_dependencies();
+        $this->define_admin_hooks();
+        $this->define_public_hooks();
+        $this->define_backend_hooks();
+        $this->define_frontend_hooks();
+    }
+
+    private function load_dependencies() {
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-backend.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-frontend.php';
+    }
+
+    private function define_admin_hooks() {
+        $plugin_admin = new SmartMail_Software_Store_Admin($this->plugin_name, $this->version);
+        add_action('admin_menu', array($plugin_admin, 'add_plugin_admin_menu'));
+    }
+
+    private function define_public_hooks() {
+        $plugin_public = new SmartMail_Software_Store_Public($this->plugin_name, $this->version);
+        add_action('wp_enqueue_scripts', array($plugin_public, 'enqueue_styles'));
+        add_action('wp_enqueue_scripts', array($plugin_public, 'enqueue_scripts'));
+    }
+
+    private function define_backend_hooks() {
+        $plugin_backend = new SmartMail_Software_Store_Backend($this->plugin_name, $this->version);
+        add_action('admin_menu', array($plugin_backend, 'add_plugin_backend_menu'));
+    }
+
+    private function define_frontend_hooks() {
+        $plugin_frontend = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
+        add_action('wp_enqueue_scripts', array($plugin_frontend, 'enqueue_styles'));
+        add_action('wp_enqueue_scripts', array($plugin_frontend, 'enqueue_scripts'));
+    }
+
+    public static function activate() {
+        SmartMail_Software_Store_Activator::activate();
+    }
+
+    public static function deactivate() {
+        // Deactivation code here
+    }
 }
 
-// Deactivation Hook
-register_deactivation_hook(__FILE__, 'smartmail_software_store_deactivate');
+register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'activate'));
+register_deactivation_hook(__FILE__, array('SmartMail_Software_Store', 'deactivate'));
 
-function smartmail_software_store_deactivate() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'smartmail_software_store';
-    $wpdb->query("DROP TABLE IF EXISTS $table_name");
-}
-
-// Include necessary files
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-
-// Enqueue Scripts and Styles
-function smartmail_software_store_enqueue_scripts() {
-    wp_enqueue_style('smartmail-software-store-style', plugin_dir_url(__FILE__) . 'css/style.css');
-    wp_enqueue_script('smartmail-software-store-script', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), null, true);
-}
-
-add_action('wp_enqueue_scripts', 'smartmail_software_store_enqueue_scripts');
-?>
+$plugin = new SmartMail_Software_Store();
