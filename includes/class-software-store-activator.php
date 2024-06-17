@@ -1,109 +1,80 @@
 <?php
 
-class Software_Store_Activator {
-
+class SmartMail_Software_Store_Activator {
     public static function activate() {
-        self::create_tables();
-        self::create_pages();
+        // Create custom post types for eBooks and Software
+        self::create_custom_post_types();
     }
 
-    private static function create_tables() {
-        global $wpdb;
-        $charset_collate = $wpdb->get_charset_collate();
-
-        // eBooks table
-        $ebooks_table_name = $wpdb->prefix . 'smartmail_ebooks';
-        $sql = "CREATE TABLE $ebooks_table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            title tinytext NOT NULL,
-            description text NOT NULL,
-            price float NOT NULL,
-            rrp float NOT NULL,
-            image_url varchar(255) NOT NULL,
-            sku varchar(50) DEFAULT '',
-            barcode varchar(50) DEFAULT '',
-            quantity int DEFAULT 0,
-            file_url varchar(255) NOT NULL,
-            wc_product_id bigint(20) NOT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-
-        // Software table
-        $software_table_name = $wpdb->prefix . 'smartmail_software';
-        $sql = "CREATE TABLE $software_table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            title tinytext NOT NULL,
-            description text NOT NULL,
-            price float NOT NULL,
-            rrp float NOT NULL,
-            image_url varchar(255) NOT NULL,
-            sku varchar(50) DEFAULT '',
-            barcode varchar(50) DEFAULT '',
-            quantity int DEFAULT 0,
-            file_url varchar(255) NOT NULL,
-            wc_product_id bigint(20) NOT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-        dbDelta($sql);
-
-        // Subscription table
-        $subscription_table_name = $wpdb->prefix . 'smartmail_subscriptions';
-        $sql = "CREATE TABLE $subscription_table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            full_name tinytext NOT NULL,
-            email varchar(100) NOT NULL,
-            phone varchar(15),
-            address text DEFAULT '',
-            newsletter_optin boolean DEFAULT false,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-        dbDelta($sql);
-    }
-
-    private static function create_pages() {
-        // Create eBook page
-        $ebook_page_title = 'eBooks';
-        $ebook_page_content = '[smartmail_display_ebooks]';
-        $ebook_page_check = get_page_by_title($ebook_page_title);
-        $ebook_page = array(
-            'post_title' => $ebook_page_title,
-            'post_content' => $ebook_page_content,
-            'post_status' => 'publish',
-            'post_type' => 'page'
+    private static function create_custom_post_types() {
+        // Register eBook post type
+        $ebook_labels = array(
+            'name'               => _x('eBooks', 'post type general name', 'smartmail-software-store'),
+            'singular_name'      => _x('eBook', 'post type singular name', 'smartmail-software-store'),
+            'menu_name'          => _x('eBooks', 'admin menu', 'smartmail-software-store'),
+            'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail-software-store'),
+            'add_new'            => _x('Add New', 'eBook', 'smartmail-software-store'),
+            'add_new_item'       => __('Add New eBook', 'smartmail-software-store'),
+            'new_item'           => __('New eBook', 'smartmail-software-store'),
+            'edit_item'          => __('Edit eBook', 'smartmail-software-store'),
+            'view_item'          => __('View eBook', 'smartmail-software-store'),
+            'all_items'          => __('All eBooks', 'smartmail-software-store'),
+            'search_items'       => __('Search eBooks', 'smartmail-software-store'),
+            'parent_item_colon'  => __('Parent eBooks:', 'smartmail-software-store'),
+            'not_found'          => __('No eBooks found.', 'smartmail-software-store'),
+            'not_found_in_trash' => __('No eBooks found in Trash.', 'smartmail-software-store')
         );
-        if (!isset($ebook_page_check->ID)) {
-            wp_insert_post($ebook_page);
-        }
 
-        // Create Software page
-        $software_page_title = 'Software';
-        $software_page_content = '[smartmail_display_software]';
-        $software_page_check = get_page_by_title($software_page_title);
-        $software_page = array(
-            'post_title' => $software_page_title,
-            'post_content' => $software_page_content,
-            'post_status' => 'publish',
-            'post_type' => 'page'
+        $ebook_args = array(
+            'labels'             => $ebook_labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'ebook'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
         );
-        if (!isset($software_page_check->ID)) {
-            wp_insert_post($software_page);
-        }
 
-        // Create Subscription page
-        $subscription_page_title = 'Subscribe';
-        $subscription_page_content = '[subscription_form]';
-        $subscription_page_check = get_page_by_title($subscription_page_title);
-        $subscription_page = array(
-            'post_title' => $subscription_page_title,
-            'post_content' => $subscription_page_content,
-            'post_status' => 'publish',
-            'post_type' => 'page'
+        register_post_type('ebook', $ebook_args);
+
+        // Register Software post type
+        $software_labels = array(
+            'name'               => _x('Software', 'post type general name', 'smartmail-software-store'),
+            'singular_name'      => _x('Software', 'post type singular name', 'smartmail-software-store'),
+            'menu_name'          => _x('Software', 'admin menu', 'smartmail-software-store'),
+            'name_admin_bar'     => _x('Software', 'add new on admin bar', 'smartmail-software-store'),
+            'add_new'            => _x('Add New', 'Software', 'smartmail-software-store'),
+            'add_new_item'       => __('Add New Software', 'smartmail-software-store'),
+            'new_item'           => __('New Software', 'smartmail-software-store'),
+            'edit_item'          => __('Edit Software', 'smartmail-software-store'),
+            'view_item'          => __('View Software', 'smartmail-software-store'),
+            'all_items'          => __('All Software', 'smartmail-software-store'),
+            'search_items'       => __('Search Software', 'smartmail-software-store'),
+            'parent_item_colon'  => __('Parent Software:', 'smartmail-software-store'),
+            'not_found'          => __('No Software found.', 'smartmail-software-store'),
+            'not_found_in_trash' => __('No Software found in Trash.', 'smartmail-software-store')
         );
-        if (!isset($subscription_page_check->ID)) {
-            wp_insert_post($subscription_page);
-        }
+
+        $software_args = array(
+            'labels'             => $software_labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'software'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
+        );
+
+        register_post_type('software', $software_args);
     }
 }
-?>
