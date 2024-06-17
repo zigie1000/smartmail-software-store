@@ -26,7 +26,7 @@ class SmartMail_Software_Store_Admin {
             'eBooks',
             'eBooks',
             'manage_options',
-            'smartmail-software-store',
+            'smartmail-software-store-ebooks',
             array($this, 'admin_ebooks_page')
         );
 
@@ -150,4 +150,3 @@ class SmartMail_Software_Store_Admin {
 }
 
 new SmartMail_Software_Store_Admin();
-?>
