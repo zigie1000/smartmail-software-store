@@ -1,26 +1,27 @@
 <?php
-
 /**
- * SmartMail Software Store Public Class
+ * SmartMail Software Store Public
  *
- * @package SmartMail Software Store
- * @author Marco Zagato
+ * @package    SmartMail_Software_Store
+ * @subpackage SmartMail_Software_Store/public
+ * @author     Marco Zagato
  * @author URI https://smartmail.store
  */
 
 class SmartMail_Software_Store_Public {
-    public function __construct() {
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
     }
 
     public function enqueue_styles() {
-        wp_enqueue_style('smartmail-software-store', plugin_dir_url(__FILE__) . 'css/style.css', array(), '1.0.0', 'all');
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_script('smartmail-software-store', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
     }
 }
-
-new SmartMail_Software_Store_Public();
