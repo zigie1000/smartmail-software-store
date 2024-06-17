@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The admin-specific functionality of the plugin.
+ *
+ * @link       https://smartmail.store
+ * @since      1.0.0
+ *
+ * @package    SmartMail_Software_Store
+ * @subpackage SmartMail_Software_Store/admin
+ */
 class SmartMail_Software_Store_Admin {
     private $plugin_name;
     private $version;
@@ -7,6 +16,14 @@ class SmartMail_Software_Store_Admin {
     public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-admin.js', array('jquery'), $this->version, false);
     }
 
     public function add_plugin_admin_menu() {
@@ -37,3 +54,4 @@ class SmartMail_Software_Store_Admin {
         include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
     }
 }
+?>
