@@ -1,67 +1,62 @@
 <?php
 /**
- * SmartMail Software Store
+ * Admin functionality of the plugin.
  *
  * @package    SmartMail_Software_Store
- * @subpackage SmartMail_Software_Store/includes
- * @author     Marco Zagato
- * @author URI https://smartmail.store
+ * @subpackage SmartMail_Software_Store/admin
  */
+class SmartMail_Software_Store_Admin {
+    private $plugin_name;
+    private $version;
 
-class SmartMail_Software_Store {
-    protected $loader;
-    protected $plugin_name;
-    protected $version;
-
-    public function __construct() {
-        $this->plugin_name = 'smartmail-software-store';
-        $this->version = '1.0.0';
-        $this->load_dependencies();
-        $this->set_locale();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
     }
 
-    private function load_dependencies() {
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-smartmail-software-store-loader.php';
-        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-smartmail-software-store-admin.php';
-        require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-smartmail-software-store-public.php';
-
-        $this->loader = new SmartMail_Software_Store_Loader();
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all');
     }
 
-    private function set_locale() {
-        $plugin_i18n = new SmartMail_Software_Store_i18n();
-        $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-admin.js', array('jquery'), $this->version, false);
     }
 
-    private function define_admin_hooks() {
-        $plugin_admin = new SmartMail_Software_Store_Admin($this->plugin_name, $this->version);
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-        $this->loader->add_action('admin_menu', $plugin_admin, 'add_plugin_admin_menu');
-        $this->loader->add_action('admin_menu', $plugin_admin, 'add_submenu_pages');
+    public function add_plugin_admin_menu() {
+        add_menu_page(
+            'SmartMail Software Store',
+            'SmartMail Store',
+            'manage_options',
+            $this->plugin_name,
+            array($this, 'display_plugin_setup_page'),
+            'dashicons-store',
+            26
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'SmartMail Software Store Settings',
+            'Settings',
+            'manage_options',
+            $this->plugin_name . '-settings',
+            array($this, 'display_plugin_settings_page')
+        );
     }
 
-    private function define_public_hooks() {
-        $plugin_public = new SmartMail_Software_Store_Public($this->plugin_name, $this->version);
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+    public function display_plugin_setup_page() {
+        include_once 'templates/admin-page.php';
     }
 
-    public function run() {
-        $this->loader->run();
+    public function display_plugin_settings_page() {
+        include_once 'templates/admin-settings-page.php';
     }
 
-    public function get_plugin_name() {
-        return $this->plugin_name;
+    public function register_settings() {
+        register_setting($this->plugin_name, $this->plugin_name, array($this, 'validate'));
     }
 
-    public function get_loader() {
-        return $this->loader;
-    }
-
-    public function get_version() {
-        return $this->version;
+    public function validate($input) {
+        // Validation logic
+        return $input;
     }
 }
