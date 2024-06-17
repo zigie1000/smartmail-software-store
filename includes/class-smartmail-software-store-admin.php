@@ -1,21 +1,12 @@
 <?php
 
 class SmartMail_Software_Store_Admin {
-
     private $plugin_name;
     private $version;
 
-    public function __construct( $plugin_name, $version ) {
+    public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-    }
-
-    public function enqueue_styles() {
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all' );
-    }
-
-    public function enqueue_scripts() {
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/smartmail-software-store-admin.js', array( 'jquery' ), $this->version, false );
     }
 
     public function add_plugin_admin_menu() {
@@ -24,24 +15,25 @@ class SmartMail_Software_Store_Admin {
             'SmartMail Store',
             'manage_options',
             $this->plugin_name,
-            array( $this, 'display_plugin_admin_page' ),
-            'dashicons-store',
+            array($this, 'display_plugin_admin_page'),
+            'dashicons-admin-generic',
             26
+        );
+        add_submenu_page(
+            $this->plugin_name,
+            'SmartMail Store Settings',
+            'Settings',
+            'manage_options',
+            $this->plugin_name . '-settings',
+            array($this, 'display_plugin_settings_page')
         );
     }
 
     public function display_plugin_admin_page() {
-        include_once 'partials/smartmail-software-store-admin-display.php';
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-page.php';
+    }
+
+    public function display_plugin_settings_page() {
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
     }
 }
-
-// Initialize the admin class and hook it into WordPress
-function initialize_smartmail_software_store_admin() {
-    $plugin_admin = new SmartMail_Software_Store_Admin('smartmail-software-store', '1.0.0');
-    add_action('admin_menu', array($plugin_admin, 'add_plugin_admin_menu'));
-    add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_styles'));
-    add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_scripts'));
-}
-initialize_smartmail_software_store_admin();
-
-?>
