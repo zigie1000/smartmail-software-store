@@ -1,68 +1,64 @@
 <?php
+/**
+ * The admin-specific functionality of the plugin.
+ */
+class SmartMail_Software_Store_Admin
+{
+    private $plugin_name;
+    private $version;
 
-class SmartMail_Software_Store_Public {
+    public function __construct()
+    {
+        $this->plugin_name = 'smartmail-software-store';
+        $this->version = '1.0';
 
-    public function __construct() {
-        add_shortcode('smartmail_store', array($this, 'display_store'));
+        add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
     }
 
-    public function display_store($atts) {
-        $atts = shortcode_atts(array(
-            'type' => 'ebook',
-        ), $atts, 'smartmail_store');
-
-        ob_start();
-
-        if ($atts['type'] == 'ebook') {
-            $this->display_ebooks();
-        } else {
-            $this->display_software();
-        }
-
-        return ob_get_clean();
-    }
-
-    private function display_ebooks() {
-        $args = array(
-            'post_type' => 'ebook',
-            'posts_per_page' => -1,
+    public function add_plugin_admin_menu()
+    {
+        add_menu_page(
+            'SmartMail Store',
+            'SmartMail Store',
+            'manage_options',
+            $this->plugin_name,
+            array($this, 'display_plugin_admin_page'),
+            'dashicons-store',
+            6
         );
-        $ebooks = get_posts($args);
-        ?>
-        <div class="smartmail-store">
-            <h2>eBooks</h2>
-            <?php foreach ($ebooks as $ebook): ?>
-            <div class="ebook">
-                <h3><?php echo esc_html($ebook->post_title); ?></h3>
-                <p><?php echo esc_html($ebook->post_content); ?></p>
-                <p>Price: <?php echo esc_html(get_post_meta($ebook->ID, 'price', true)); ?></p>
-                <p>Quantity: <?php echo esc_html(get_post_meta($ebook->ID, 'quantity', true)); ?></p>
-                <a href="<?php echo esc_url(get_post_meta($ebook->ID, 'file_url', true)); ?>">Download</a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php
+
+        add_submenu_page(
+            $this->plugin_name,
+            'eBooks',
+            'eBooks',
+            'manage_options',
+            'ebooks',
+            array($this, 'display_ebooks_page')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'Software',
+            'Software',
+            'manage_options',
+            'software',
+            array($this, 'display_software_page')
+        );
     }
 
-    private function display_software() {
-        $args = array(
-            'post_type' => 'software',
-            'posts_per_page' => -1,
-        );
-        $software = get_posts($args);
-        ?>
-        <div class="smartmail-store">
-            <h2>Software</h2>
-            <?php foreach ($software as $item): ?>
-            <div class="software">
-                <h3><?php echo esc_html($item->post_title); ?></h3>
-                <p><?php echo esc_html($item->post_content); ?></p>
-                <p>Price: <?php echo esc_html(get_post_meta($item->ID, 'price', true)); ?></p>
-                <p>Quantity: <?php echo esc_html(get_post_meta($item->ID, 'quantity', true)); ?></p>
-                <a href="<?php echo esc_url(get_post_meta($item->ID, 'file_url', true)); ?>">Download</a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php
+    public function display_plugin_admin_page()
+    {
+        include_once 'templates/admin-page.php';
+    }
+
+    public function display_ebooks_page()
+    {
+        include_once 'templates/admin-ebooks-page.php';
+    }
+
+    public function display_software_page()
+    {
+        include_once 'templates/admin-software-page.php';
     }
 }
+?>
