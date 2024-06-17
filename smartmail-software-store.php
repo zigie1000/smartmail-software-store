@@ -1,36 +1,51 @@
 <?php
 /**
  * Plugin Name: SmartMail Software Store
- * Plugin URI: https://smartmail.store
  * Description: A plugin to manage and sell software and eBooks.
- * Version: 1.0.0
+ * Version: 1.0
  * Author: Marco Zagato
  * Author URI: https://smartmail.store
- * License: GPL2
  */
 
-if ( ! defined( 'WPINC' ) ) {
+// If this file is called directly, abort.
+if (!defined('WPINC')) {
     die;
 }
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-activator.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-deactivator.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store.php';
+// Include the required files.
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
 
-function activate_smartmail_software_store() {
-    Smartmail_Software_Store_Activator::activate();
+// Activation and deactivation hooks.
+register_activation_hook(__FILE__, 'activate_smartmail_software_store');
+register_deactivation_hook(__FILE__, 'deactivate_smartmail_software_store');
+
+/**
+ * The code that runs during plugin activation.
+ */
+function activate_smartmail_software_store()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
+    Software_Store_Activator::activate();
 }
 
-function deactivate_smartmail_software_store() {
-    Smartmail_Software_Store_Deactivator::deactivate();
+/**
+ * The code that runs during plugin deactivation.
+ */
+function deactivate_smartmail_software_store()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
+    Software_Store_Activator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_smartmail_software_store' );
-register_deactivation_hook( __FILE__, 'deactivate_smartmail_software_store' );
-
-function run_smartmail_software_store() {
-    $plugin = new Smartmail_Software_Store();
-    $plugin->run();
+// Initialize the admin functionality of the plugin.
+if (is_admin()) {
+    $admin_plugin = new SmartMail_Software_Store_Admin();
+    $admin_plugin->run();
 }
-run_smartmail_software_store();
+
+// Initialize the public-facing functionality of the plugin.
+$public_plugin = new SmartMail_Software_Store_Public();
+$public_plugin->run();
 ?>
