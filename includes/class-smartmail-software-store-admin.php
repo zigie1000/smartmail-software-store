@@ -31,7 +31,17 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function display_plugin_admin_page() {
-        include_once plugin_dir_path(__FILE__) . 'partials/smartmail-software-store-admin-display.php';
+        include_once 'partials/smartmail-software-store-admin-display.php';
     }
 }
+
+// Initialize the admin class and hook it into WordPress
+function initialize_smartmail_software_store_admin() {
+    $plugin_admin = new SmartMail_Software_Store_Admin('smartmail-software-store', '1.0.0');
+    add_action('admin_menu', array($plugin_admin, 'add_plugin_admin_menu'));
+    add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_styles'));
+    add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_scripts'));
+}
+initialize_smartmail_software_store_admin();
+
 ?>
