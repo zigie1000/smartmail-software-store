@@ -1,9 +1,19 @@
 <?php
 
+/**
+ * Fired during plugin activation.
+ *
+ * @link       https://smartmail.store
+ * @since      1.0.0
+ *
+ * @package    SmartMail_Software_Store
+ * @subpackage SmartMail_Software_Store/includes
+ */
 class SmartMail_Software_Store_Activator {
+
     public static function activate() {
-        // Create custom post types for eBooks and Software
         self::create_custom_post_types();
+        flush_rewrite_rules();
     }
 
     private static function create_custom_post_types() {
@@ -78,3 +88,4 @@ class SmartMail_Software_Store_Activator {
         register_post_type('software', $software_args);
     }
 }
+?>
