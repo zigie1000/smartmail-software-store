@@ -23,13 +23,18 @@ class SmartMail_Software_Store_Admin {
 
     public function admin_page() {
         global $wpdb;
-        $ebooks_table_name = $wpdb->prefix . 'smartmail_ebooks';
-        $software_table_name = $wpdb->prefix . 'smartmail_software';
+        try {
+            $ebooks_table_name = $wpdb->prefix . 'smartmail_ebooks';
+            $software_table_name = $wpdb->prefix . 'smartmail_software';
 
-        $ebooks = $wpdb->get_results("SELECT * FROM $ebooks_table_name");
-        $software = $wpdb->get_results("SELECT * FROM $software_table_name");
+            $ebooks = $wpdb->get_results("SELECT * FROM $ebooks_table_name");
+            $software = $wpdb->get_results("SELECT * FROM $software_table_name");
 
-        include plugin_dir_path(__FILE__) . '../templates/admin-page.php';
+            include plugin_dir_path(__FILE__) . '../templates/admin-page.php';
+        } catch (Exception $e) {
+            error_log('Error displaying admin page: ' . $e->getMessage());
+            echo 'There was an error displaying the admin page. Please check the error logs for more details.';
+        }
     }
 
     public function handle_form_submission() {
@@ -41,16 +46,21 @@ class SmartMail_Software_Store_Admin {
         $ebooks_table_name = $wpdb->prefix . 'smartmail_ebooks';
         $software_table_name = $wpdb->prefix . 'smartmail_software';
 
-        if (isset($_POST['action']) && $_POST['action'] == 'add_product') {
-            $this->add_product($ebooks_table_name, $software_table_name);
-        } elseif (isset($_POST['action']) && $_POST['action'] == 'edit_product') {
-            $this->edit_product($ebooks_table_name, $software_table_name);
-        } elseif (isset($_POST['action']) && $_POST['action'] == 'delete_product') {
-            $this->delete_product($ebooks_table_name, $software_table_name);
-        }
+        try {
+            if (isset($_POST['action']) && $_POST['action'] == 'add_product') {
+                $this->add_product($ebooks_table_name, $software_table_name);
+            } elseif (isset($_POST['action']) && $_POST['action'] == 'edit_product') {
+                $this->edit_product($ebooks_table_name, $software_table_name);
+            } elseif (isset($_POST['action']) && $_POST['action'] == 'delete_product') {
+                $this->delete_product($ebooks_table_name, $software_table_name);
+            }
 
-        wp_redirect(admin_url('admin.php?page=smartmail-software-store'));
-        exit;
+            wp_redirect(admin_url('admin.php?page=smartmail-software-store'));
+            exit;
+        } catch (Exception $e) {
+            error_log('Error handling form submission: ' . $e->getMessage());
+            wp_die('There was an error processing your request. Please check the error logs for more details.');
+        }
     }
 
     private function add_product($ebooks_table_name, $software_table_name) {
@@ -67,17 +77,22 @@ class SmartMail_Software_Store_Admin {
         $quantity = intval($_POST['quantity']);
         $file_url = sanitize_text_field($_POST['file_url']);
 
-        $wpdb->insert($table_name, array(
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'rrp' => $rrp,
-            'image_url' => $image_url,
-            'sku' => $sku,
-            'barcode' => $barcode,
-            'quantity' => $quantity,
-            'file_url' => $file_url
-        ));
+        try {
+            $wpdb->insert($table_name, array(
+                'title' => $title,
+                'description' => $description,
+                'price' => $price,
+                'rrp' => $rrp,
+                'image_url' => $image_url,
+                'sku' => $sku,
+                'barcode' => $barcode,
+                'quantity' => $quantity,
+                'file_url' => $file_url
+            ));
+        } catch (Exception $e) {
+            error_log('Error adding product: ' . $e->getMessage());
+            wp_die('There was an error adding the product. Please check the error logs for more details.');
+        }
     }
 
     private function edit_product($ebooks_table_name, $software_table_name) {
@@ -95,17 +110,22 @@ class SmartMail_Software_Store_Admin {
         $quantity = intval($_POST['quantity']);
         $file_url = sanitize_text_field($_POST['file_url']);
 
-        $wpdb->update($table_name, array(
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'rrp' => $rrp,
-            'image_url' => $image_url,
-            'sku' => $sku,
-            'barcode' => $barcode,
-            'quantity' => $quantity,
-            'file_url' => $file_url
-        ), array('id' => $product_id));
+        try {
+            $wpdb->update($table_name, array(
+                'title' => $title,
+                'description' => $description,
+                'price' => $price,
+                'rrp' => $rrp,
+                'image_url' => $image_url,
+                'sku' => $sku,
+                'barcode' => $barcode,
+                'quantity' => $quantity,
+                'file_url' => $file_url
+            ), array('id' => $product_id));
+        } catch (Exception $e) {
+            error_log('Error editing product: ' . $e->getMessage());
+            wp_die('There was an error editing the product. Please check the error logs for more details.');
+        }
     }
 
     private function delete_product($ebooks_table_name, $software_table_name) {
@@ -114,7 +134,12 @@ class SmartMail_Software_Store_Admin {
         $table_name = $product_type == 'ebook' ? $ebooks_table_name : $software_table_name;
         $product_id = intval($_POST['product_id']);
 
-        $wpdb->delete($table_name, array('id' => $product_id));
+        try {
+            $wpdb->delete($table_name, array('id' => $product_id));
+        } catch (Exception $e) {
+            error_log('Error deleting product: ' . $e->getMessage());
+            wp_die('There was an error deleting the product. Please check the error logs for more details.');
+        }
     }
 }
 
