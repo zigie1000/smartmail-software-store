@@ -1,25 +1,4 @@
-<?php
-/**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://smartmail.store
- * @since      1.0.0
- *
- * @package    SmartMail_Software_Store
- * @subpackage SmartMail_Software_Store/admin
- */
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples of hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
- * @package    SmartMail_Software_Store
- * @subpackage SmartMail_Software_Store/admin
- * @author     Marco Zagato <info@smartmail.store>
- */
-class SmartMail_Software_Store_Admin {
+class SmartMail_Software_Store_Public {
     private $plugin_name;
     private $version;
 
@@ -29,27 +8,88 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function enqueue_styles() {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-admin.js', array('jquery'), $this->version, false);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
     }
 
-    public function add_plugin_admin_menu() {
-        add_menu_page(
-            __('SmartMail Software Store', 'smartmail-software-store'),
-            __('SmartMail Store', 'smartmail-software-store'),
-            'manage_options',
-            $this->plugin_name,
-            array($this, 'display_plugin_setup_page'),
-            'dashicons-store',
-            2
+    public function register_custom_post_types() {
+        $this->register_ebook_post_type();
+        $this->register_software_post_type();
+    }
+
+    private function register_ebook_post_type() {
+        $labels = array(
+            'name'               => _x('eBooks', 'post type general name', 'smartmail-software-store'),
+            'singular_name'      => _x('eBook', 'post type singular name', 'smartmail-software-store'),
+            'menu_name'          => _x('eBooks', 'admin menu', 'smartmail-software-store'),
+            'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail-software-store'),
+            'add_new'            => _x('Add New', 'eBook', 'smartmail-software-store'),
+            'add_new_item'       => __('Add New eBook', 'smartmail-software-store'),
+            'new_item'           => __('New eBook', 'smartmail-software-store'),
+            'edit_item'          => __('Edit eBook', 'smartmail-software-store'),
+            'view_item'          => __('View eBook', 'smartmail-software-store'),
+            'all_items'          => __('All eBooks', 'smartmail-software-store'),
+            'search_items'       => __('Search eBooks', 'smartmail-software-store'),
+            'parent_item_colon'  => __('Parent eBooks:', 'smartmail-software-store'),
+            'not_found'          => __('No eBooks found.', 'smartmail-software-store'),
+            'not_found_in_trash' => __('No eBooks found in Trash.', 'smartmail-software-store')
         );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'ebook'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
+        );
+
+        register_post_type('ebook', $args);
     }
 
-    public function display_plugin_setup_page() {
-        include_once 'templates/admin-page.php';
+    private function register_software_post_type() {
+        $labels = array(
+            'name'               => _x('Software', 'post type general name', 'smartmail-software-store'),
+            'singular_name'      => _x('Software', 'post type singular name', 'smartmail-software-store'),
+            'menu_name'          => _x('Software', 'admin menu', 'smartmail-software-store'),
+            'name_admin_bar'     => _x('Software', 'add new on admin bar', 'smartmail-software-store'),
+            'add_new'            => _x('Add New', 'Software', 'smartmail-software-store'),
+            'add_new_item'       => __('Add New Software', 'smartmail-software-store'),
+            'new_item'           => __('New Software', 'smartmail-software-store'),
+            'edit_item'          => __('Edit Software', 'smartmail-software-store'),
+            'view_item'          => __('View Software', 'smartmail-software-store'),
+            'all_items'          => __('All Software', 'smartmail-software-store'),
+            'search_items'       => __('Search Software', 'smartmail-software-store'),
+            'parent_item_colon'  => __('Parent Software:', 'smartmail-software-store'),
+            'not_found'          => __('No Software found.', 'smartmail-software-store'),
+            'not_found_in_trash' => __('No Software found in Trash.', 'smartmail-software-store')
+        );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'software'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
+        );
+
+        register_post_type('software', $args);
     }
 }
 ?>
