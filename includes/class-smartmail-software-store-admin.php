@@ -30,6 +30,8 @@ class SmartMail_Software_Store_Admin {
     public function add_plugin_admin_menu() {
         add_menu_page('SmartMail Software Store', 'SmartMail Store', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page'), 'dashicons-admin-generic', 26);
         add_submenu_page($this->plugin_name, 'Settings', 'Settings', 'manage_options', $this->plugin_name . '-settings', array($this, 'display_plugin_admin_settings'));
+        add_submenu_page($this->plugin_name, 'eBooks', 'eBooks', 'manage_options', $this->plugin_name . '-ebooks', array($this, 'display_ebooks_page'));
+        add_submenu_page($this->plugin_name, 'Software', 'Software', 'manage_options', $this->plugin_name . '-software', array($this, 'display_software_page'));
     }
 
     public function display_plugin_setup_page() {
@@ -38,6 +40,14 @@ class SmartMail_Software_Store_Admin {
 
     public function display_plugin_admin_settings() {
         include_once('templates/admin-settings-page.php');
+    }
+
+    public function display_ebooks_page() {
+        include_once('templates/admin-ebooks-page.php');
+    }
+
+    public function display_software_page() {
+        include_once('templates/admin-software-page.php');
     }
 
     public function add_action_links($links) {
