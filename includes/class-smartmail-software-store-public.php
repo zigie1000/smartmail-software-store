@@ -1,34 +1,29 @@
 <?php
 /**
- * Class Name: SmartMail_Software_Store_Public
- * Description: Public-facing functionality of the plugin.
- * Author: Marco
- * Author URI: https://smartmail.store
- * Version: 1.0.0
+ * SmartMail Software Store Public Class
+ * 
+ * @package SmartMail_Software_Store
+ * @author Marco Zagato
+ * @author URI: https://smartmail.store
  */
 
-if (!class_exists('SmartMail_Software_Store_Public')) {
-    class SmartMail_Software_Store_Public {
-        public function __construct() {
-            add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
-            add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        }
+class SmartMail_Software_Store_Public {
 
-        public function enqueue_styles() {
-            wp_enqueue_style('smartmail-software-store-public', plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), '1.0.0', 'all');
-        }
+    public function __construct() {
+        // Hook into WordPress
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+    }
 
-        public function enqueue_scripts() {
-            wp_enqueue_script('smartmail-software-store-public', plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), '1.0.0', false);
-        }
+    public function enqueue_styles() {
+        wp_enqueue_style('smartmail-software-store-public-css', plugin_dir_url(__FILE__) . 'css/style.css');
+    }
 
-        public function display_ebooks_page() {
-            include plugin_dir_path(__FILE__) . 'templates/ebooks-page.php';
-        }
-
-        public function display_software_page() {
-            include plugin_dir_path(__FILE__) . 'templates/software-page.php';
-        }
+    public function enqueue_scripts() {
+        wp_enqueue_script('smartmail-software-store-public-js', plugin_dir_url(__FILE__) . 'js/script.js');
     }
 }
-?>
+
+if (class_exists('SmartMail_Software_Store_Public')) {
+    $smartmail_software_store_public = new SmartMail_Software_Store_Public();
+}
