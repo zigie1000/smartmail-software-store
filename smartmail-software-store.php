@@ -10,32 +10,17 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-try {
-    require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-    require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-} catch (Exception $e) {
-    error_log('Error including required files: ' . $e->getMessage());
-    wp_die('There was an error initializing the plugin. Please check the error logs for more details.');
-}
+require_once plugin_dir_path(__FILE__) . 'includes/class-software-store-activator.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
 
 register_activation_hook(__FILE__, array('Software_Store_Activator', 'activate'));
 register_deactivation_hook(__FILE__, array('Software_Store_Activator', 'deactivate'));
 
 if (is_admin()) {
-    try {
-        new SmartMail_Software_Store_Admin();
-    } catch (Exception $e) {
-        error_log('Error initializing admin functionalities: ' . $e->getMessage());
-        wp_die('There was an error initializing the admin functionalities. Please check the error logs for more details.');
-    }
+    new SmartMail_Software_Store_Admin();
 } else {
-    try {
-        new SmartMail_Software_Store_Public();
-    } catch (Exception $e) {
-        error_log('Error initializing public functionalities: ' . $e->getMessage());
-        wp_die('There was an error initializing the public functionalities. Please check the error logs for more details.');
-    }
+    new SmartMail_Software_Store_Public();
 }
 
 class SmartMail_Software_Store {
@@ -66,10 +51,5 @@ class SmartMail_Software_Store {
     }
 }
 
-try {
-    new SmartMail_Software_Store();
-} catch (Exception $e) {
-    error_log('Error initializing post types: ' . $e->getMessage());
-    wp_die('There was an error initializing the post types. Please check the error logs for more details.');
-}
+new SmartMail_Software_Store();
 ?>
