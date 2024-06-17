@@ -10,17 +10,19 @@ class SmartMail_Software_Store_Backend {
     }
 
     public function add_plugin_backend_menu() {
-        add_submenu_page(
-            'smartmail-software-store',
-            'Backend Settings',
-            'Backend',
+        add_menu_page(
+            'SmartMail Software Store Backend',
+            'SmartMail Backend',
             'manage_options',
-            'smartmail-software-store-backend',
-            array($this, 'display_plugin_backend_page')
+            $this->plugin_name . '-backend',
+            array($this, 'display_plugin_backend_page'),
+            'dashicons-admin-generic',
+            27
         );
     }
 
     public function display_plugin_backend_page() {
-        include_once 'templates/admin-backend-page.php';
+        include_once 'partials/smartmail-software-store-backend-display.php';
     }
 }
+?>
