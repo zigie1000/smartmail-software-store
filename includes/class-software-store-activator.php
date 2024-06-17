@@ -1,4 +1,11 @@
 <?php
+/**
+ * SmartMail Software Store Activator Class
+ * 
+ * @package SmartMail_Software_Store
+ * Author: Marco Zagato
+ * Author URI: https://smartmail.store
+ */
 
 class SmartMail_Software_Store_Activator {
     public static function activate() {
@@ -78,3 +85,4 @@ class SmartMail_Software_Store_Activator {
         register_post_type('software', $software_args);
     }
 }
+?>
