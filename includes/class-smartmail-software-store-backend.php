@@ -21,6 +21,6 @@ class SmartMail_Software_Store_Backend {
     }
 
     public function display_plugin_backend_page() {
-        include_once plugin_dir_path(__FILE__) . '../templates/admin-backend-page.php';
+        include_once 'templates/admin-backend-page.php';
     }
 }
