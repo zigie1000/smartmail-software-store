@@ -1,6 +1,6 @@
 <?php
 /**
- * Fired during plugin activation.
+ * Fired during plugin activation
  *
  * @link       https://smartmail.store
  * @since      1.0.0
@@ -9,19 +9,8 @@
  * @subpackage SmartMail_Software_Store/includes
  */
 
-/**
- * Fired during plugin activation.
- *
- * This class defines all code necessary to run during the plugin's activation.
- *
- * @since      1.0.0
- * @package    SmartMail_Software_Store
- * @subpackage SmartMail_Software_Store/includes
- * @author     Marco Zagato <info@smartmail.store>
- */
 class SmartMail_Software_Store_Activator {
     public static function activate() {
-        // Create custom post types for eBooks and Software
         self::create_custom_post_types();
     }
 
