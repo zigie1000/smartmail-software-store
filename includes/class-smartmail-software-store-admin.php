@@ -1,69 +1,75 @@
 <?php
+
 /**
  * SmartMail Software Store Admin Class
- * 
- * @package SmartMail_Software_Store
- * Author: Marco Zagato
- * Author URI: https://smartmail.store
+ *
+ * @package SmartMail Software Store
+ * @author Marco Zagato
+ * @author URI https://smartmail.store
  */
 
 class SmartMail_Software_Store_Admin {
-    private $plugin_name;
-    private $version;
-
-    public function __construct($plugin_name, $version) {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
+    public function __construct() {
+        add_action('admin_menu', array($this, 'add_admin_menu'));
+        add_action('admin_init', array($this, 'settings_init'));
     }
 
-    public function enqueue_styles() {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-admin.css', array(), $this->version, 'all');
-    }
-
-    public function enqueue_scripts() {
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-admin.js', array('jquery'), $this->version, false);
-    }
-
-    public function add_menu() {
+    public function add_admin_menu() {
         add_menu_page(
-            'SmartMail Store',
+            'SmartMail Software Store',
             'SmartMail Store',
             'manage_options',
-            'smartmail-software-store',
-            array($this, 'display_plugin_admin_page'),
+            'smartmail_software_store',
+            array($this, 'admin_page'),
             'dashicons-store',
             6
         );
+    }
 
-        add_submenu_page(
-            'smartmail-software-store',
-            'eBooks',
-            'eBooks',
-            'manage_options',
-            'smartmail-ebooks',
-            array($this, 'display_ebooks_admin_page')
+    public function settings_init() {
+        register_setting('smartmail_software_store_settings', 'smartmail_software_store_settings');
+
+        add_settings_section(
+            'smartmail_software_store_section',
+            __('SmartMail Software Store Settings', 'smartmail-software-store'),
+            array($this, 'settings_section_callback'),
+            'smartmail_software_store_settings'
         );
 
-        add_submenu_page(
-            'smartmail-software-store',
-            'Software',
-            'Software',
-            'manage_options',
-            'smartmail-software',
-            array($this, 'display_software_admin_page')
+        add_settings_field(
+            'smartmail_software_store_text_field_0',
+            __('Settings field description', 'smartmail-software-store'),
+            array($this, 'settings_field_0_render'),
+            'smartmail_software_store_settings',
+            'smartmail_software_store_section'
         );
     }
 
-    public function display_plugin_admin_page() {
-        include_once 'templates/admin-page.php';
+    public function settings_field_0_render() {
+        $options = get_option('smartmail_software_store_settings');
+        ?>
+        <input type='text' name='smartmail_software_store_settings[smartmail_software_store_text_field_0]' value='<?php echo $options['smartmail_software_store_text_field_0']; ?>'>
+        <?php
     }
 
-    public function display_ebooks_admin_page() {
-        include_once 'templates/admin-ebooks-page.php';
+    public function settings_section_callback() {
+        echo __('This section description', 'smartmail-software-store');
     }
 
-    public function display_software_admin_page() {
-        include_once 'templates/admin-software-page.php';
+    public function admin_page() {
+        ?>
+        <form action='options.php' method='post'>
+            <h2>SmartMail Software Store</h2>
+            <?php
+            settings_fields('smartmail_software_store_settings');
+            do_settings_sections('smartmail_software_store_settings');
+            submit_button();
+            ?>
+        </form>
+        <?php
     }
 }
-?>
+
+if (is_admin()) {
+    new SmartMail_Software_Store_Admin();
+}
