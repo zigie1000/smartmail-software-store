@@ -14,26 +14,14 @@ class SmartMail_Software_Store_Admin {
             'SmartMail Software Store',
             'SmartMail Store',
             'manage_options',
-            $this->plugin_name,
+            'smartmail-software-store',
             array($this, 'display_plugin_admin_page'),
-            'dashicons-admin-generic',
+            'dashicons-store',
             26
-        );
-        add_submenu_page(
-            $this->plugin_name,
-            'SmartMail Store Settings',
-            'Settings',
-            'manage_options',
-            $this->plugin_name . '-settings',
-            array($this, 'display_plugin_settings_page')
         );
     }
 
     public function display_plugin_admin_page() {
-        include_once plugin_dir_path(__FILE__) . '../templates/admin-page.php';
-    }
-
-    public function display_plugin_settings_page() {
-        include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
+        include_once 'templates/admin-page.php';
     }
 }
