@@ -2,52 +2,35 @@
 /**
  * Plugin Name: SmartMail Software Store
  * Plugin URI: https://smartmail.store
- * Description: A plugin to manage software and ebook sales.
+ * Description: A plugin to manage and sell software and eBooks.
  * Version: 1.0.0
  * Author: Marco Zagato
  * Author URI: https://smartmail.store
+ * License: GPL2
  */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+if ( ! defined( 'WPINC' ) ) {
+    die;
 }
 
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-deactivator.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-activator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store-deactivator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-smartmail-software-store.php';
 
-register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', 'activate'));
-register_deactivation_hook(__FILE__, array('SmartMail_Software_Store_Deactivator', 'deactivate'));
-
-class SmartMail_Software_Store {
-    public function __construct() {
-        add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_init', array($this, 'register_settings'));
-    }
-
-    public function add_admin_menu() {
-        add_menu_page('SmartMail Store', 'SmartMail Store', 'manage_options', 'smartmail_store', array($this, 'create_admin_page'), 'dashicons-store', 6);
-        add_submenu_page('smartmail_store', 'eBooks', 'eBooks', 'manage_options', 'smartmail_store_ebooks', array($this, 'create_ebooks_page'));
-        add_submenu_page('smartmail_store', 'Software', 'Software', 'manage_options', 'smartmail_store_software', array($this, 'create_software_page'));
-    }
-
-    public function create_admin_page() {
-        include plugin_dir_path(__FILE__) . 'templates/admin-page.php';
-    }
-
-    public function create_ebooks_page() {
-        include plugin_dir_path(__FILE__) . 'templates/admin-ebooks-page.php';
-    }
-
-    public function create_software_page() {
-        include plugin_dir_path(__FILE__) . 'templates/admin-software-page.php';
-    }
-
-    public function register_settings() {
-        // Register settings here
-    }
+function activate_smartmail_software_store() {
+    Smartmail_Software_Store_Activator::activate();
 }
 
-new SmartMail_Software_Store();
+function deactivate_smartmail_software_store() {
+    Smartmail_Software_Store_Deactivator::deactivate();
+}
+
+register_activation_hook( __FILE__, 'activate_smartmail_software_store' );
+register_deactivation_hook( __FILE__, 'deactivate_smartmail_software_store' );
+
+function run_smartmail_software_store() {
+    $plugin = new Smartmail_Software_Store();
+    $plugin->run();
+}
+run_smartmail_software_store();
 ?>
