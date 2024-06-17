@@ -1,16 +1,14 @@
 <?php
 /**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://smartmail.store
- * @since      1.0.0
+ * SmartMail Software Store Admin
  *
  * @package    SmartMail_Software_Store
  * @subpackage SmartMail_Software_Store/admin
+ * @author     Marco Zagato
+ * @author URI https://smartmail.store
  */
 
 class SmartMail_Software_Store_Admin {
-
     private $plugin_name;
     private $version;
 
@@ -28,66 +26,45 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function add_plugin_admin_menu() {
-        add_menu_page('SmartMail Software Store', 'SmartMail Store', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page'), 'dashicons-admin-generic', 26);
-        add_submenu_page($this->plugin_name, 'Settings', 'Settings', 'manage_options', $this->plugin_name . '-settings', array($this, 'display_plugin_admin_settings'));
-        add_submenu_page($this->plugin_name, 'eBooks', 'eBooks', 'manage_options', $this->plugin_name . '-ebooks', array($this, 'display_ebooks_page'));
-        add_submenu_page($this->plugin_name, 'Software', 'Software', 'manage_options', $this->plugin_name . '-software', array($this, 'display_software_page'));
-    }
-
-    public function display_plugin_setup_page() {
-        include_once('templates/admin-page.php');
-    }
-
-    public function display_plugin_admin_settings() {
-        include_once('templates/admin-settings-page.php');
-    }
-
-    public function display_ebooks_page() {
-        include_once('templates/admin-ebooks-page.php');
-    }
-
-    public function display_software_page() {
-        include_once('templates/admin-software-page.php');
-    }
-
-    public function add_action_links($links) {
-        $settings_link = array('<a href="' . admin_url('admin.php?page=' . $this->plugin_name . '-settings') . '">' . __('Settings', 'smartmail-software-store') . '</a>',);
-        return array_merge($settings_link, $links);
-    }
-
-    public function settings_init() {
-        register_setting('smartmailSoftwareStore', 'smartmail_software_store_settings');
-
-        add_settings_section(
-            'smartmail_software_store_section',
-            __('Settings', 'smartmail-software-store'),
-            array($this, 'settings_section_callback'),
-            'smartmailSoftwareStore'
-        );
-
-        add_settings_field(
-            'smartmail_software_store_text_field',
-            __('Settings field description', 'smartmail-software-store'),
-            array($this, 'settings_field_callback'),
-            'smartmailSoftwareStore',
-            'smartmail_software_store_section'
+        add_menu_page(
+            'SmartMail Software Store',
+            'SmartMail Store',
+            'manage_options',
+            $this->plugin_name,
+            array($this, 'display_plugin_admin_page'),
+            'dashicons-store',
+            26
         );
     }
 
-    public function settings_section_callback() {
-        echo __('This section description', 'smartmail-software-store');
+    public function display_plugin_admin_page() {
+        include_once 'templates/admin-page.php';
     }
 
-    public function settings_field_callback() {
-        $options = get_option('smartmail_software_store_settings');
-        echo '<input type="text" name="smartmail_software_store_settings[smartmail_software_store_text_field]" value="' . $options['smartmail_software_store_text_field'] . '">';
+    public function add_submenu_pages() {
+        add_submenu_page(
+            $this->plugin_name,
+            'eBooks',
+            'eBooks',
+            'manage_options',
+            $this->plugin_name . '-ebooks',
+            array($this, 'display_ebooks_admin_page')
+        );
+        add_submenu_page(
+            $this->plugin_name,
+            'Software',
+            'Software',
+            'manage_options',
+            $this->plugin_name . '-software',
+            array($this, 'display_software_admin_page')
+        );
     }
 
-    public function run() {
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_styles'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_action_links'));
-        add_action('admin_init', array($this, 'settings_init'));
+    public function display_ebooks_admin_page() {
+        include_once 'templates/admin-ebooks-page.php';
+    }
+
+    public function display_software_admin_page() {
+        include_once 'templates/admin-software-page.php';
     }
 }
