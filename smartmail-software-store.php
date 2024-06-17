@@ -27,9 +27,10 @@ class SmartMail_Software_Store {
 
     private function load_dependencies() {
         require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
+        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
         require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-backend.php';
         require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-frontend.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
     }
 
     private function define_admin_hooks() {
@@ -38,13 +39,18 @@ class SmartMail_Software_Store {
     }
 
     private function define_public_hooks() {
-        $plugin_public = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
+        $plugin_public = new SmartMail_Software_Store_Public($this->plugin_name, $this->version);
         // Add public hooks if necessary
     }
 
     private function define_backend_hooks() {
         $plugin_backend = new SmartMail_Software_Store_Backend($this->plugin_name, $this->version);
         add_action('admin_menu', array($plugin_backend, 'add_plugin_backend_menu'));
+    }
+
+    private function define_frontend_hooks() {
+        $plugin_frontend = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
+        // Add frontend hooks if necessary
     }
 
     public static function activate() {
@@ -60,3 +66,4 @@ register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'activate')
 register_deactivation_hook(__FILE__, array('SmartMail_Software_Store', 'deactivate'));
 
 $plugin = new SmartMail_Software_Store();
+?>
