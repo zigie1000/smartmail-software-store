@@ -1,68 +1,25 @@
 <?php
-
-class SmartMail_Software_Store_Public {
-
-    public function __construct() {
-        add_shortcode('smartmail_store', array($this, 'display_store'));
-    }
-
-    public function display_store($atts) {
-        $atts = shortcode_atts(array(
-            'type' => 'ebook',
-        ), $atts, 'smartmail_store');
-
-        ob_start();
-
-        if ($atts['type'] == 'ebook') {
-            $this->display_ebooks();
-        } else {
-            $this->display_software();
+if (!class_exists('SmartMail_Software_Store_Public')) {
+    class SmartMail_Software_Store_Public {
+        public function __construct() {
+            add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
+            add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         }
 
-        return ob_get_clean();
-    }
+        public function enqueue_styles() {
+            wp_enqueue_style('smartmail-software-store-public', plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), '1.0.0', 'all');
+        }
 
-    private function display_ebooks() {
-        $args = array(
-            'post_type' => 'ebook',
-            'posts_per_page' => -1,
-        );
-        $ebooks = get_posts($args);
-        ?>
-        <div class="smartmail-store">
-            <h2>eBooks</h2>
-            <?php foreach ($ebooks as $ebook): ?>
-            <div class="ebook">
-                <h3><?php echo esc_html($ebook->post_title); ?></h3>
-                <p><?php echo esc_html($ebook->post_content); ?></p>
-                <p>Price: <?php echo esc_html(get_post_meta($ebook->ID, 'price', true)); ?></p>
-                <p>Quantity: <?php echo esc_html(get_post_meta($ebook->ID, 'quantity', true)); ?></p>
-                <a href="<?php echo esc_url(get_post_meta($ebook->ID, 'file_url', true)); ?>">Download</a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php
-    }
+        public function enqueue_scripts() {
+            wp_enqueue_script('smartmail-software-store-public', plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), '1.0.0', false);
+        }
 
-    private function display_software() {
-        $args = array(
-            'post_type' => 'software',
-            'posts_per_page' => -1,
-        );
-        $software = get_posts($args);
-        ?>
-        <div class="smartmail-store">
-            <h2>Software</h2>
-            <?php foreach ($software as $item): ?>
-            <div class="software">
-                <h3><?php echo esc_html($item->post_title); ?></h3>
-                <p><?php echo esc_html($item->post_content); ?></p>
-                <p>Price: <?php echo esc_html(get_post_meta($item->ID, 'price', true)); ?></p>
-                <p>Quantity: <?php echo esc_html(get_post_meta($item->ID, 'quantity', true)); ?></p>
-                <a href="<?php echo esc_url(get_post_meta($item->ID, 'file_url', true)); ?>">Download</a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <?php
+        public function display_ebooks_page() {
+            include plugin_dir_path(__FILE__) . 'templates/ebooks-page.php';
+        }
+
+        public function display_software_page() {
+            include plugin_dir_path(__FILE__) . 'templates/software-page.php';
+        }
     }
 }
