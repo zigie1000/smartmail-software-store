@@ -1,11 +1,12 @@
 <?php
 /**
- * SmartMail Software Store Public
+ * The public-facing functionality of the plugin.
+ *
+ * @link       https://smartmail.store
+ * @since      1.0.0
  *
  * @package    SmartMail_Software_Store
  * @subpackage SmartMail_Software_Store/public
- * @author     Marco Zagato
- * @author URI https://smartmail.store
  */
 
 class SmartMail_Software_Store_Public {
@@ -25,3 +26,4 @@ class SmartMail_Software_Store_Public {
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
     }
 }
+?>
