@@ -1,4 +1,4 @@
 <div class="wrap">
-    <h1>Manage eBooks</h1>
-    <p>Manage eBooks for the SmartMail Software Store.</p>
+    <h1><?php _e('eBooks', 'smartmail-software-store'); ?></h1>
+    <p><?php _e('Manage eBooks for the SmartMail Software Store.', 'smartmail-software-store'); ?></p>
 </div>
