@@ -1,66 +1,27 @@
 <?php
 
 class SmartMail_Software_Store_Backend {
-    
-    public function __construct() {
-        add_action('admin_menu', array($this, 'add_plugin_backend_menu'));
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
     }
 
-    public function add_plugin_backend_menu() {
-        add_menu_page(
-            __('SmartMail Store', 'smartmail-software-store'),
-            __('SmartMail Store', 'smartmail-software-store'),
-            'manage_options',
-            'smartmail-store',
-            array($this, 'display_admin_page'),
-            'dashicons-store'
-        );
-
-        add_submenu_page(
-            'smartmail-store',
-            __('Settings', 'smartmail-software-store'),
-            __('Settings', 'smartmail-software-store'),
-            'manage_options',
-            'smartmail-store-settings',
-            array($this, 'display_settings_page')
-        );
-
-        add_submenu_page(
-            'smartmail-store',
-            __('eBooks', 'smartmail-software-store'),
-            __('eBooks', 'smartmail-software-store'),
-            'manage_options',
-            'smartmail-store-ebooks',
-            array($this, 'display_ebooks_page')
-        );
-
-        add_submenu_page(
-            'smartmail-store',
-            __('Software', 'smartmail-software-store'),
-            __('Software', 'smartmail-software-store'),
-            'manage_options',
-            'smartmail-store-software',
-            array($this, 'display_software_page')
-        );
+    public function add_settings_link($links) {
+        $settings_link = '<a href="options-general.php?page=' . $this->plugin_name . '">Settings</a>';
+        array_push($links, $settings_link);
+        return $links;
     }
 
-    public function display_admin_page() {
-        include plugin_dir_path(__FILE__) . '../templates/admin-page.php';
-    }
+    public function define_admin_hooks() {
+        $plugin_admin = new SmartMail_Software_Store_Admin($this->plugin_name, $this->version);
 
-    public function display_settings_page() {
-        include plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
-    }
+        add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_styles'));
+        add_action('admin_enqueue_scripts', array($plugin_admin, 'enqueue_scripts'));
 
-    public function display_ebooks_page() {
-        include plugin_dir_path(__FILE__) . '../templates/admin-ebooks-page.php';
-    }
-
-    public function display_software_page() {
-        include plugin_dir_path(__FILE__) . '../templates/admin-software-page.php';
+        add_action('admin_menu', array($plugin_admin, 'add_plugin_admin_menu'));
     }
 }
-
-new SmartMail_Software_Store_Backend();
-
 ?>
