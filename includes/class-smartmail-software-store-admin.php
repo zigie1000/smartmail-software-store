@@ -14,57 +14,41 @@ class SmartMail_Software_Store_Admin {
             'SmartMail Software Store',
             'SmartMail Store',
             'manage_options',
-            $this->plugin_name,
+            'smartmail-software-store',
             array($this, 'display_plugin_admin_page'),
             'dashicons-store',
             26
         );
+
         add_submenu_page(
-            $this->plugin_name,
-            'SmartMail Software Store Settings',
+            'smartmail-software-store',
+            'Settings',
             'Settings',
             'manage_options',
-            $this->plugin_name . '-settings',
-            array($this, 'display_plugin_admin_settings_page')
+            'smartmail-software-store-settings',
+            array($this, 'display_plugin_settings_page')
+        );
+
+        add_submenu_page(
+            'smartmail-software-store',
+            'Backend',
+            'Backend',
+            'manage_options',
+            'smartmail-software-store-backend',
+            array($this, 'display_plugin_backend_page')
         );
     }
 
     public function display_plugin_admin_page() {
-        ?>
-        <div class="wrap">
-            <h1>SmartMail Software Store</h1>
-            <form method="post" action="options.php">
-                <?php settings_fields('smartmail-software-store-settings-group'); ?>
-                <?php do_settings_sections('smartmail-software-store-settings-group'); ?>
-                <table class="form-table">
-                    <tr valign="top">
-                    <th scope="row">Settings field description</th>
-                    <td><input type="text" name="smartmail_software_store_settings_field" value="<?php echo esc_attr(get_option('smartmail_software_store_settings_field')); ?>" /></td>
-                    </tr>
-                </table>
-                <?php submit_button(); ?>
-            </form>
-        </div>
-        <?php
+        include_once('templates/admin-page.php');
     }
 
-    public function display_plugin_admin_settings_page() {
-        ?>
-        <div class="wrap">
-            <h1>SmartMail Software Store Settings</h1>
-            <form method="post" action="options.php">
-                <?php settings_fields('smartmail-software-store-settings-group'); ?>
-                <?php do_settings_sections('smartmail-software-store-settings-group'); ?>
-                <table class="form-table">
-                    <tr valign="top">
-                    <th scope="row">Settings field description</th>
-                    <td><input type="text" name="smartmail_software_store_settings_field" value="<?php echo esc_attr(get_option('smartmail_software_store_settings_field')); ?>" /></td>
-                    </tr>
-                </table>
-                <?php submit_button(); ?>
-            </form>
-        </div>
-        <?php
+    public function display_plugin_settings_page() {
+        include_once('templates/admin-settings-page.php');
+    }
+
+    public function display_plugin_backend_page() {
+        include_once('templates/admin-backend-page.php');
     }
 }
 ?>
