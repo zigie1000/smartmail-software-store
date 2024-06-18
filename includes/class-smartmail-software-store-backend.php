@@ -14,15 +14,16 @@ class SmartMail_Software_Store_Backend {
             'SmartMail Software Store Backend',
             'SmartMail Store Backend',
             'manage_options',
-            'smartmail-software-store-backend',
-            array($this, 'display_plugin_backend_page'),
-            'dashicons-store',
-            26
+            $this->plugin_name . '-backend',
+            array($this, 'display_backend_page'),
+            'dashicons-admin-generic',
+            27
         );
     }
 
-    public function display_plugin_backend_page() {
+    public function display_backend_page() {
         include_once plugin_dir_path(__FILE__) . '../templates/admin-backend-page.php';
     }
 }
+
 ?>
