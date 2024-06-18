@@ -5,8 +5,8 @@ echo '<p>' . esc_html__('Manage backend functionalities for the SmartMail Softwa
 
 // Add form for backend settings if needed
 echo '<form method="post" action="options.php">';
-settings_fields('smartmail-software-store-backend-group');
-do_settings_sections('smartmail-software-store-backend-group');
+settings_fields('smartmail_software_store_backend_group');
+do_settings_sections('smartmail_software_store_backend_group');
 submit_button();
 echo '</form>';
 
