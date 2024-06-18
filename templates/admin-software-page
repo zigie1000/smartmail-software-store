@@ -1,14 +1,32 @@
-<div class="wrap">
-    <h1>Manage Software</h1>
-    <form method="post" action="options.php">
-        <?php settings_fields('smartmail-software-store-software-group'); ?>
-        <?php do_settings_sections('smartmail-software-store-software-group'); ?>
-        <table class="form-table">
-            <tr valign="top">
-                <th scope="row">Software Field Description</th>
-                <td><input type="text" name="smartmail_software_store_software_field" value="<?php echo esc_attr(get_option('smartmail_software_store_software_field')); ?>" /></td>
-            </tr>
-        </table>
-        <?php submit_button(); ?>
-    </form>
-</div>
+<?php
+echo '<div class="wrap">';
+echo '<h1>' . esc_html__('Manage Software', 'smartmail-software-store') . '</h1>';
+echo '<p>' . esc_html__('Manage Software for the SmartMail Software Store.', 'smartmail-software-store') . '</p>';
+
+// Add form for Software management
+echo '<form method="post" action="edit.php?post_type=software">';
+echo '<a href="' . admin_url('post-new.php?post_type=software') . '" class="button button-primary">' . __('Add New Software', 'smartmail-software-store') . '</a>';
+echo '</form>';
+
+// Display list of Software
+$args = array(
+    'post_type' => 'software',
+    'posts_per_page' => -1
+);
+$software = new WP_Query($args);
+
+if ($software->have_posts()) {
+    echo '<ul>';
+    while ($software->have_posts()) {
+        $software->the_post();
+        echo '<li><a href="' . get_edit_post_link() . '">' . get_the_title() . '</a></li>';
+    }
+    echo '</ul>';
+} else {
+    echo '<p>' . __('No Software found.', 'smartmail-software-store') . '</p>';
+}
+
+wp_reset_postdata();
+
+echo '</div>';
+?>
