@@ -1,8 +1,2 @@
-<?php
-// Ensure the Software page is correctly implemented
-?>
-
-<div class="wrap">
-    <h1>Manage Software</h1>
-    <p>Here you can add, edit, and delete software.</p>
-</div>
+<h1>SmartMail Store Software</h1>
+<p>Manage software products available in your SmartMail Store.</p>
