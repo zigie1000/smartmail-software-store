@@ -1,3 +1,7 @@
+<?php
+// Ensure the settings page is correctly implemented
+?>
+
 <div class="wrap">
     <h1>SmartMail Store Settings</h1>
     <form method="post" action="options.php">
@@ -7,16 +11,12 @@
         ?>
         <table class="form-table">
             <tr valign="top">
-                <th scope="row">Logo URL</th>
-                <td><input type="text" name="smartmail_store_logo" value="<?php echo esc_attr(get_option('smartmail_store_logo')); ?>" /></td>
+                <th scope="row">Setting 1</th>
+                <td><input type="text" name="smartmail_store_setting1" value="<?php echo esc_attr(get_option('smartmail_store_setting1')); ?>" /></td>
             </tr>
             <tr valign="top">
-                <th scope="row">Allowed eBook Types</th>
-                <td><input type="text" name="smartmail_store_ebook_types" value="<?php echo esc_attr(get_option('smartmail_store_ebook_types')); ?>" /></td>
-            </tr>
-            <tr valign="top">
-                <th scope="row">Allowed Software Types</th>
-                <td><input type="text" name="smartmail_store_software_types" value="<?php echo esc_attr(get_option('smartmail_store_software_types')); ?>" /></td>
+                <th scope="row">Setting 2</th>
+                <td><input type="text" name="smartmail_store_setting2" value="<?php echo esc_attr(get_option('smartmail_store_setting2')); ?>" /></td>
             </tr>
         </table>
         <?php submit_button(); ?>
