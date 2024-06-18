@@ -66,3 +66,4 @@ register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'activate')
 register_deactivation_hook(__FILE__, array('SmartMail_Software_Store', 'deactivate'));
 
 $plugin = new SmartMail_Software_Store();
+?>
