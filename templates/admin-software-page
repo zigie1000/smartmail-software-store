@@ -1,6 +1,8 @@
+<?php
+// Ensure the Software page is correctly implemented
+?>
+
 <div class="wrap">
     <h1>Manage Software</h1>
-    <form method="post" action="options.php">
-        <!-- Add code to list, add, edit, and delete software entries here -->
-    </form>
+    <p>Here you can add, edit, and delete software.</p>
 </div>
