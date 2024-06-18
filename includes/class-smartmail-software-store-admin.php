@@ -86,7 +86,8 @@ class SmartMail_Software_Store_Admin {
 
     public static function render_setting_field($args) {
         $options = get_option('smartmail_software_store_settings');
-        echo '<input type="text" id="' . esc_attr($args[0]) . '" name="smartmail_software_store_settings[' . esc_attr($args[0]) . ']" value="' . esc_attr($options[$args[0]]) . '" />';
+        $value = isset($options[$args[0]]) ? esc_attr($options[$args[0]]) : '';
+        echo '<input type="text" id="' . esc_attr($args[0]) . '" name="smartmail_software_store_settings[' . esc_attr($args[0]) . ']" value="' . $value . '" />';
     }
 }
 
