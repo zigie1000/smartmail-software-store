@@ -54,6 +54,43 @@ class SmartMail_Software_Store_Admin {
     public static function render_settings_page() {
         include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
     }
+
+    public static function init_settings() {
+        register_setting('smartmail_software_store_settings', 'smartmail_software_store_settings');
+        
+        add_settings_section(
+            'smartmail_software_store_main_section',
+            __('Main Settings', 'smartmail-software-store'),
+            null,
+            'smartmail_software_store_settings'
+        );
+
+        add_settings_field(
+            'setting_1',
+            __('Setting 1', 'smartmail-software-store'),
+            array(self::class, 'render_setting_field'),
+            'smartmail_software_store_settings',
+            'smartmail_software_store_main_section',
+            array('setting_1')
+        );
+
+        add_settings_field(
+            'setting_2',
+            __('Setting 2', 'smartmail-software-store'),
+            array(self::class, 'render_setting_field'),
+            'smartmail_software_store_settings',
+            'smartmail_software_store_main_section',
+            array('setting_2')
+        );
+    }
+
+    public static function render_setting_field($args) {
+        $options = get_option('smartmail_software_store_settings');
+        echo '<input type="text" id="' . esc_attr($args[0]) . '" name="smartmail_software_store_settings[' . esc_attr($args[0]) . ']" value="' . esc_attr($options[$args[0]]) . '" />';
+    }
 }
+
+add_action('admin_menu', array('SmartMail_Software_Store_Admin', 'add_plugin_admin_menu'));
+add_action('admin_init', array('SmartMail_Software_Store_Admin', 'init_settings'));
 
 ?>
