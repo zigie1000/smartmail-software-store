@@ -9,6 +9,6 @@ class SmartMail_Software_Store_Public {
         $this->version = $version;
     }
 
-    // Add public methods and hooks if necessary
+    // Define public hooks here if necessary
 }
 ?>
