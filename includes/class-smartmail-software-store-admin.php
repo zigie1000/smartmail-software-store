@@ -1,65 +1,67 @@
 <?php
-/**
- * Plugin Name: SmartMail Software Store
- * Plugin URI: https://smartmail.store
- * Description: A plugin to manage and sell eBooks and Software.
- * Version: 1.0.0
- * Author: Marco Zagato
- * Author URI: https://smartmail.store
- */
 
-if (!defined('WPINC')) {
-    die;
+class SmartMail_Software_Store_Admin {
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
+
+    public function add_plugin_admin_menu() {
+        add_menu_page(
+            'SmartMail Software Store',
+            'SmartMail Store',
+            'manage_options',
+            $this->plugin_name,
+            array($this, 'display_plugin_admin_dashboard'),
+            'dashicons-store',
+            25
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'Settings',
+            'Settings',
+            'manage_options',
+            $this->plugin_name . '-settings',
+            array($this, 'display_plugin_settings_page')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'eBooks',
+            'eBooks',
+            'manage_options',
+            $this->plugin_name . '-ebooks',
+            array($this, 'display_plugin_ebooks_page')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'Software',
+            'Software',
+            'manage_options',
+            $this->plugin_name . '-software',
+            array($this, 'display_plugin_software_page')
+        );
+    }
+
+    public function display_plugin_admin_dashboard() {
+        include_once 'templates/admin-page.php';
+    }
+
+    public function display_plugin_settings_page() {
+        include_once 'templates/admin-settings-page.php';
+    }
+
+    public function display_plugin_ebooks_page() {
+        include_once 'templates/admin-ebooks-page.php';
+    }
+
+    public function display_plugin_software_page() {
+        include_once 'templates/admin-software-page.php';
+    }
 }
-
-require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
-require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-backend.php';
-require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-frontend.php';
-require plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-
-function activate_smartmail_software_store() {
-    SmartMail_Software_Store_Activator::activate();
-}
-register_activation_hook(__FILE__, 'activate_smartmail_software_store');
-
-function run_smartmail_software_store() {
-    $plugin = new SmartMail_Software_Store();
-    $plugin->run();
-}
-
-class SmartMail_Software_Store {
-    protected $plugin_name;
-    protected $version;
-
-    public function __construct() {
-        $this->plugin_name = 'smartmail-software-store';
-        $this->version = '1.0.0';
-
-        $this->load_dependencies();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
-    }
-
-    private function load_dependencies() {
-        $this->admin = new SmartMail_Software_Store_Admin($this->plugin_name, $this->version);
-        $this->backend = new SmartMail_Software_Store_Backend($this->plugin_name, $this->version);
-        $this->frontend = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
-    }
-
-    private function define_admin_hooks() {
-        add_action('admin_menu', array($this->admin, 'add_plugin_admin_menu'));
-        add_action('admin_menu', array($this->backend, 'add_plugin_backend_menu'));
-    }
-
-    private function define_public_hooks() {
-        // Add public hooks if necessary
-    }
-
-    public function run() {
-        // Run the plugin
-    }
-}
-
-run_smartmail_software_store();
 ?>
