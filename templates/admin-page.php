@@ -1,4 +1,2 @@
-<div class="wrap">
-    <h1><?php _e('SmartMail Software Store', 'smartmail-software-store'); ?></h1>
-    <p><?php _e('Welcome to the SmartMail Software Store admin page.', 'smartmail-software-store'); ?></p>
-</div>
+<h1>Welcome to SmartMail Software Store</h1>
+<p>Manage your store settings, eBooks, and software downloads here.</p>
