@@ -1,4 +1,2 @@
-<div class="wrap">
-    <h1><?php _e('Software', 'smartmail-software-store'); ?></h1>
-    <p><?php _e('Manage Software for the SmartMail Software Store.', 'smartmail-software-store'); ?></p>
-</div>
+<h1>Manage Software</h1>
+<p>Here you can manage your software listings and settings.</p>
