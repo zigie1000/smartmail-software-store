@@ -1,6 +1,8 @@
 <?php
 /**
- * Admin settings for the SmartMail Software Store plugin.
+ * Admin class for SmartMail Software Store Plugin
+ * 
+ * Handles the admin area functionalities.
  */
 class SmartMail_Software_Store_Admin {
     private $plugin_name;
@@ -13,82 +15,57 @@ class SmartMail_Software_Store_Admin {
 
     public function add_plugin_admin_menu() {
         add_menu_page(
-            'SmartMail Software Store',
-            'SmartMail Store',
+            __('SmartMail Software Store', 'smartmail-software-store'),
+            __('SmartMail Store', 'smartmail-software-store'),
             'manage_options',
             $this->plugin_name,
-            array($this, 'display_plugin_admin_page'),
+            array($this, 'display_plugin_admin_dashboard'),
             'dashicons-store',
             26
         );
+
         add_submenu_page(
             $this->plugin_name,
-            'Settings',
-            'Settings',
+            __('Settings', 'smartmail-software-store'),
+            __('Settings', 'smartmail-software-store'),
             'manage_options',
             $this->plugin_name . '-settings',
-            array($this, 'display_plugin_admin_settings_page')
+            array($this, 'display_plugin_admin_settings')
         );
+
         add_submenu_page(
             $this->plugin_name,
-            'Backend',
-            'Backend',
-            'manage_options',
-            $this->plugin_name . '-backend',
-            array($this, 'display_plugin_admin_backend_page')
-        );
-        add_submenu_page(
-            $this->plugin_name,
-            'Ebooks',
-            'Ebooks',
+            __('Ebooks', 'smartmail-software-store'),
+            __('Ebooks', 'smartmail-software-store'),
             'manage_options',
             $this->plugin_name . '-ebooks',
-            array($this, 'display_plugin_admin_ebooks_page')
+            array($this, 'display_plugin_admin_ebooks')
         );
+
         add_submenu_page(
             $this->plugin_name,
-            'Software',
-            'Software',
+            __('Software', 'smartmail-software-store'),
+            __('Software', 'smartmail-software-store'),
             'manage_options',
             $this->plugin_name . '-software',
-            array($this, 'display_plugin_admin_software_page')
+            array($this, 'display_plugin_admin_software')
         );
     }
 
-    public function display_plugin_admin_page() {
-        echo '<h1>SmartMail Software Store</h1>';
-        echo '<p>Welcome to the SmartMail Software Store admin page.</p>';
+    public function display_plugin_admin_dashboard() {
+        include_once 'templates/admin-page.php';
     }
 
-    public function display_plugin_admin_settings_page() {
-        echo '<h1>Settings</h1>';
-        echo '<p>Settings for the SmartMail Software Store.</p>';
-        echo '<form method="post" action="options.php">';
-        settings_fields('smartmail_store_settings_group');
-        do_settings_sections('smartmail_store_settings_group');
-        echo '<table class="form-table">';
-        echo '<tr valign="top"><th scope="row">Setting 1</th><td><input type="text" name="setting_1" value="' . esc_attr(get_option('setting_1')) . '" /></td></tr>';
-        echo '<tr valign="top"><th scope="row">Setting 2</th><td><input type="text" name="setting_2" value="' . esc_attr(get_option('setting_2')) . '" /></td></tr>';
-        echo '</table>';
-        submit_button();
-        echo '</form>';
+    public function display_plugin_admin_settings() {
+        include_once 'templates/admin-settings-page.php';
     }
 
-    public function display_plugin_admin_backend_page() {
-        echo '<h1>Backend</h1>';
-        echo '<p>Manage backend settings for SmartMail Software Store.</p>';
-        // Backend management functionalities
+    public function display_plugin_admin_ebooks() {
+        include_once 'templates/admin-ebooks-page.php';
     }
 
-    public function display_plugin_admin_ebooks_page() {
-        echo '<h1>Ebooks</h1>';
-        echo '<p>Manage ebooks for the SmartMail Software Store.</p>';
-        // Ebooks management functionalities
-    }
-
-    public function display_plugin_admin_software_page() {
-        echo '<h1>Software</h1>';
-        echo '<p>Manage software for the SmartMail Software Store.</p>';
-        // Software management functionalities
+    public function display_plugin_admin_software() {
+        include_once 'templates/admin-software-page.php';
     }
 }
+?>
