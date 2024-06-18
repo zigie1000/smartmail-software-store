@@ -1,2 +1,6 @@
-<h1>Manage Software</h1>
-<p>Here you can manage your software listings and settings.</p>
+<div class="wrap">
+    <h1>Manage Software</h1>
+    <form method="post" action="options.php">
+        <!-- Add code to list, add, edit, and delete software entries here -->
+    </form>
+</div>
