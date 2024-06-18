@@ -63,7 +63,7 @@ class SmartMail_Software_Store_Activator {
         $software_args = array(
             'labels'             => $software_labels,
             'public'             => true,
-            'publicly_queryable' => true,
+            'publicly queryable' => true,
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
