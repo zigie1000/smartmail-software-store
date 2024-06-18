@@ -1,21 +1,14 @@
-<?php
-/**
- * The template for displaying the Software admin page.
- *
- * @link       https://smartmail.store
- * @since      1.0.0
- *
- * @package    SmartMail_Software_Store
- * @subpackage SmartMail_Software_Store/admin/templates
- */
-?>
 <div class="wrap">
-    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+    <h1>Manage Software</h1>
     <form method="post" action="options.php">
-        <?php
-        settings_fields('smartmailSoftwareStore');
-        do_settings_sections('smartmailSoftwareStore');
-        submit_button();
-        ?>
+        <?php settings_fields('smartmail-software-store-software-group'); ?>
+        <?php do_settings_sections('smartmail-software-store-software-group'); ?>
+        <table class="form-table">
+            <tr valign="top">
+                <th scope="row">Software Field Description</th>
+                <td><input type="text" name="smartmail_software_store_software_field" value="<?php echo esc_attr(get_option('smartmail_software_store_software_field')); ?>" /></td>
+            </tr>
+        </table>
+        <?php submit_button(); ?>
     </form>
 </div>
