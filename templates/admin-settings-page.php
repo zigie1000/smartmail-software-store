@@ -1,8 +1,10 @@
-<div class="wrap">
-    <h1>Settings</h1>
-    <form method="post" action="options.php">
-        <?php settings_fields('smartmail_software_store_settings_group'); ?>
-        <?php do_settings_sections('smartmail_software_store_settings'); ?>
-        <?php submit_button(); ?>
-    </form>
-</div>
+<?php
+echo '<div class="wrap">';
+echo '<h1>' . esc_html__('Settings', 'smartmail-software-store') . '</h1>';
+echo '<form method="post" action="options.php">';
+settings_fields('smartmail-software-store-settings-group');
+do_settings_sections('smartmail-software-store-settings-group');
+submit_button();
+echo '</form>';
+echo '</div>';
+?>
