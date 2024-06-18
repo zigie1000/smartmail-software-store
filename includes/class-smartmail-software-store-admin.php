@@ -7,7 +7,6 @@ class SmartMail_Software_Store_Admin {
     public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        add_action('admin_init', array($this, 'register_settings'));
     }
 
     public function enqueue_styles() {
@@ -57,24 +56,27 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function display_plugin_admin_page() {
-        include_once plugin_dir_path(__FILE__) . 'partials/admin-page.php';
+        include_once plugin_dir_path(__FILE__) . 'includes/partials/admin-page.php';
     }
 
     public function display_settings_page() {
-        include_once plugin_dir_path(__FILE__) . 'partials/admin-settings-page.php';
+        include_once plugin_dir_path(__FILE__) . 'includes/partials/admin-settings-page.php';
     }
 
     public function display_ebooks_page() {
-        include_once plugin_dir_path(__FILE__) . 'partials/admin-ebooks-page.php';
+        include_once plugin_dir_path(__FILE__) . 'includes/partials/admin-ebooks-page.php';
     }
 
     public function display_software_page() {
-        include_once plugin_dir_path(__FILE__) . 'partials/admin-software-page.php';
+        include_once plugin_dir_path(__FILE__) . 'includes/partials/admin-software-page.php';
     }
+}
 
-    public function register_settings() {
-        register_setting('smartmail_store_settings_group', 'smartmail_store_setting1');
-        register_setting('smartmail_store_settings_group', 'smartmail_store_setting2');
-    }
+// Hook to initialize admin settings
+add_action('admin_init', 'smartmail_store_register_settings');
+
+function smartmail_store_register_settings() {
+    register_setting('smartmail_store_settings_group', 'smartmail_store_setting1');
+    register_setting('smartmail_store_settings_group', 'smartmail_store_setting2');
 }
 ?>
