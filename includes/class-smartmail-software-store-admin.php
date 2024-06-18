@@ -19,10 +19,10 @@ class SmartMail_Software_Store_Admin {
 
     public function add_plugin_admin_menu() {
         add_menu_page(
-            'SmartMail Software Store', 
-            'SmartMail Store', 
-            'manage_options', 
-            $this->plugin_name, 
+            'SmartMail Software Store',
+            'SmartMail Store',
+            'manage_options',
+            $this->plugin_name,
             array($this, 'display_plugin_admin_page'),
             'dashicons-store'
         );
@@ -56,18 +56,32 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function display_plugin_admin_page() {
-        include_once plugin_dir_path(__FILE__) . 'admin-page.php';
+        include_once plugin_dir_path(__FILE__) . 'partials/admin-page.php';
     }
 
     public function display_settings_page() {
-        include_once plugin_dir_path(__FILE__) . 'admin-settings-page.php';
+        include_once plugin_dir_path(__FILE__) . 'partials/admin-settings-page.php';
     }
 
     public function display_ebooks_page() {
-        include_once plugin_dir_path(__FILE__) . 'admin-ebooks-page.php';
+        include_once plugin_dir_path(__FILE__) . 'partials/admin-ebooks-page.php';
     }
 
     public function display_software_page() {
-        include_once plugin_dir_path(__FILE__) . 'admin-software-page.php';
+        include_once plugin_dir_path(__FILE__) . 'partials/admin-software-page.php';
     }
+}
+
+// Add hooks for enqueueing styles and scripts
+add_action('admin_enqueue_scripts', array($admin_instance, 'enqueue_styles'));
+add_action('admin_enqueue_scripts', array($admin_instance, 'enqueue_scripts'));
+
+// Add hook for adding the admin menu
+add_action('admin_menu', array($admin_instance, 'add_plugin_admin_menu'));
+
+// Register settings
+add_action('admin_init', 'smartmail_store_register_settings');
+function smartmail_store_register_settings() {
+    register_setting('smartmail_store_settings_group', 'smartmail_store_setting1');
+    register_setting('smartmail_store_settings_group', 'smartmail_store_setting2');
 }
