@@ -1,8 +1,2 @@
-<?php
-// Ensure the eBooks page is correctly implemented
-?>
-
-<div class="wrap">
-    <h1>Manage eBooks</h1>
-    <p>Here you can add, edit, and delete eBooks.</p>
-</div>
+<h1>SmartMail Store eBooks</h1>
+<p>Manage eBooks available in your SmartMail Store.</p>
