@@ -49,4 +49,17 @@ class SmartMail_Software_Store {
 
     private function define_admin_hooks() {
         add_action('admin_menu', array($this->admin, 'add_plugin_admin_menu'));
-        add_action('admin_menu', array​⬤
+        add_action('admin_menu', array($this->backend, 'add_plugin_backend_menu'));
+    }
+
+    private function define_public_hooks() {
+        // Add public hooks if necessary
+    }
+
+    public function run() {
+        // Run the plugin
+    }
+}
+
+run_smartmail_software_store();
+?>
