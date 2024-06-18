@@ -9,6 +9,6 @@ class SmartMail_Software_Store_Frontend {
         $this->version = $version;
     }
 
-    // Add frontend methods and hooks if necessary
+    // Define public hooks here if necessary
 }
 ?>
