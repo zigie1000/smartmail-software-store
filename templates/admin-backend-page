@@ -1,10 +1,4 @@
 <div class="wrap">
-    <h1>Manage Backend Settings</h1>
-    <form method="post" action="options.php">
-        <?php
-        settings_fields('smartmail_software_store_backend_options_group');
-        do_settings_sections('smartmail_software_store_backend');
-        submit_button();
-        ?>
-    </form>
+    <h1><?php _e('Backend Management', 'smartmail-software-store'); ?></h1>
+    <p><?php _e('Manage backend settings for the SmartMail Software Store.', 'smartmail-software-store'); ?></p>
 </div>
