@@ -17,4 +17,6 @@ class SmartMail_Software_Store_Backend {
     }
 }
 
+add_action('admin_menu', array('SmartMail_Software_Store_Backend', 'add_plugin_backend_menu'));
+
 ?>
