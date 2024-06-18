@@ -1,5 +1,4 @@
-<?php
-echo '<div class="wrap">';
-echo '<h1>' . esc_html__('SmartMail Software Store', 'smartmail-software-store') . '</h1>';
-echo '<p>' . esc_html__('Welcome to the SmartMail Software Store admin page.', 'smartmail-software-store') . '</p>';
-?>
+<div class="wrap">
+    <h1><?php _e('SmartMail Software Store', 'smartmail-software-store'); ?></h1>
+    <p><?php _e('Welcome to the SmartMail Software Store admin page.', 'smartmail-software-store'); ?></p>
+</div>
