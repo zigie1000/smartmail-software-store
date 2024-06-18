@@ -48,19 +48,19 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function display_plugin_admin_page() {
-        include_once('partials/admin-page.php');
+        include_once(SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin-page.php');
     }
 
     public function display_plugin_admin_settings_page() {
-        include_once('partials/admin-settings-page.php');
+        include_once(SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin-settings-page.php');
     }
 
     public function display_plugin_admin_ebooks_page() {
-        include_once('partials/admin-ebooks-page.php');
+        include_once(SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin-ebooks-page.php');
     }
 
     public function display_plugin_admin_software_page() {
-        include_once('partials/admin-software-page.php');
+        include_once(SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin-software-page.php');
     }
 }
 
