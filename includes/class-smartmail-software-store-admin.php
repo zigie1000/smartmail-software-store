@@ -1,67 +1,59 @@
 <?php
 
 class SmartMail_Software_Store_Admin {
-    private $plugin_name;
-    private $version;
 
-    public function __construct($plugin_name, $version) {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-    }
-
-    public function add_plugin_admin_menu() {
+    public static function add_plugin_admin_menu() {
         add_menu_page(
-            'SmartMail Software Store',
-            'SmartMail Store',
+            __('SmartMail Software Store', 'smartmail-software-store'),
+            __('SmartMail Store', 'smartmail-software-store'),
             'manage_options',
-            $this->plugin_name,
-            array($this, 'display_plugin_admin_dashboard'),
-            'dashicons-store',
-            25
+            'smartmail-software-store',
+            array(self::class, 'render_admin_page')
         );
 
         add_submenu_page(
-            $this->plugin_name,
-            'Settings',
-            'Settings',
+            'smartmail-software-store',
+            __('eBooks', 'smartmail-software-store'),
+            __('eBooks', 'smartmail-software-store'),
             'manage_options',
-            $this->plugin_name . '-settings',
-            array($this, 'display_plugin_settings_page')
+            'smartmail-ebooks',
+            array(self::class, 'render_ebooks_page')
         );
 
         add_submenu_page(
-            $this->plugin_name,
-            'eBooks',
-            'eBooks',
+            'smartmail-software-store',
+            __('Software', 'smartmail-software-store'),
+            __('Software', 'smartmail-software-store'),
             'manage_options',
-            $this->plugin_name . '-ebooks',
-            array($this, 'display_plugin_ebooks_page')
+            'smartmail-software',
+            array(self::class, 'render_software_page')
         );
 
         add_submenu_page(
-            $this->plugin_name,
-            'Software',
-            'Software',
+            'smartmail-software-store',
+            __('Settings', 'smartmail-software-store'),
+            __('Settings', 'smartmail-software-store'),
             'manage_options',
-            $this->plugin_name . '-software',
-            array($this, 'display_plugin_software_page')
+            'smartmail-settings',
+            array(self::class, 'render_settings_page')
         );
     }
 
-    public function display_plugin_admin_dashboard() {
-        include_once 'templates/admin-page.php';
+    public static function render_admin_page() {
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-page.php';
     }
 
-    public function display_plugin_settings_page() {
-        include_once 'templates/admin-settings-page.php';
+    public static function render_ebooks_page() {
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-ebooks-page.php';
     }
 
-    public function display_plugin_ebooks_page() {
-        include_once 'templates/admin-ebooks-page.php';
+    public static function render_software_page() {
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-software-page.php';
     }
 
-    public function display_plugin_software_page() {
-        include_once 'templates/admin-software-page.php';
+    public static function render_settings_page() {
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
     }
 }
+
 ?>
