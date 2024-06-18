@@ -9,7 +9,12 @@ class SmartMail_Software_Store_Public {
         $this->version = $version;
     }
 
-    // Public methods can be added here
-}
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
+    }
 
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
+    }
+}
 ?>
