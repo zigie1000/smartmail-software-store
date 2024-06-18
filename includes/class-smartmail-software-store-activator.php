@@ -1,11 +1,87 @@
 <?php
-
+/**
+ * Activator class for SmartMail Software Store Plugin
+ * 
+ * Handles the activation tasks for the plugin.
+ */
 class SmartMail_Software_Store_Activator {
+
+    /**
+     * Activation hook
+     *
+     * This function runs during the plugin activation.
+     * 
+     * @since 1.0.0
+     */
     public static function activate() {
+        // Ensure the environment meets requirements
+        self::check_requirements();
+
+        // Create necessary database tables
+        self::create_database_tables();
+
         // Create custom post types for eBooks and Software
         self::create_custom_post_types();
+
+        // Set default options
+        self::set_default_options();
+
+        // Flush rewrite rules to avoid 404 errors
+        flush_rewrite_rules();
     }
 
+    /**
+     * Checks for environment requirements
+     *
+     * @since 1.0.0
+     */
+    private static function check_requirements() {
+        global $wp_version;
+
+        if (version_compare($wp_version, '5.0', '<')) {
+            deactivate_plugins(plugin_basename(__FILE__));
+            wp_die(__('This plugin requires WordPress version 5.0 or higher.', 'smartmail-software-store'));
+        }
+    }
+
+    /**
+     * Creates necessary database tables
+     *
+     * @since 1.0.0
+     */
+    private static function create_database_tables() {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE {$wpdb->prefix}smartmail_store_products (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            product_name varchar(255) NOT NULL,
+            product_description text NOT NULL,
+            product_type varchar(50) NOT NULL,
+            price float NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+
+    /**
+     * Sets default options
+     *
+     * @since 1.0.0
+     */
+    private static function set_default_options() {
+        add_option('smartmail_store_default_currency', 'USD');
+        add_option('smartmail_store_items_per_page', 10);
+    }
+
+    /**
+     * Creates custom post types for eBooks and Software
+     *
+     * @since 1.0.0
+     */
     private static function create_custom_post_types() {
         // Register eBook post type
         $ebook_labels = array(
