@@ -1,14 +1,32 @@
-<div class="wrap">
-    <h1>Manage eBooks</h1>
-    <form method="post" action="options.php">
-        <?php settings_fields('smartmail-software-store-ebooks-group'); ?>
-        <?php do_settings_sections('smartmail-software-store-ebooks-group'); ?>
-        <table class="form-table">
-            <tr valign="top">
-                <th scope="row">eBook Field Description</th>
-                <td><input type="text" name="smartmail_software_store_ebook_field" value="<?php echo esc_attr(get_option('smartmail_software_store_ebook_field')); ?>" /></td>
-            </tr>
-        </table>
-        <?php submit_button(); ?>
-    </form>
-</div>
+<?php
+echo '<div class="wrap">';
+echo '<h1>' . esc_html__('Manage eBooks', 'smartmail-software-store') . '</h1>';
+echo '<p>' . esc_html__('Manage eBooks for the SmartMail Software Store.', 'smartmail-software-store') . '</p>';
+
+// Add form for eBook management
+echo '<form method="post" action="edit.php?post_type=ebook">';
+echo '<a href="' . admin_url('post-new.php?post_type=ebook') . '" class="button button-primary">' . __('Add New eBook', 'smartmail-software-store') . '</a>';
+echo '</form>';
+
+// Display list of eBooks
+$args = array(
+    'post_type' => 'ebook',
+    'posts_per_page' => -1
+);
+$ebooks = new WP_Query($args);
+
+if ($ebooks->have_posts()) {
+    echo '<ul>';
+    while ($ebooks->have_posts()) {
+        $ebooks->the_post();
+        echo '<li><a href="' . get_edit_post_link() . '">' . get_the_title() . '</a></li>';
+    }
+    echo '</ul>';
+} else {
+    echo '<p>' . __('No eBooks found.', 'smartmail-software-store') . '</p>';
+}
+
+wp_reset_postdata();
+
+echo '</div>';
+?>
