@@ -1,2 +1,2 @@
-<h1>Welcome to SmartMail Software Store</h1>
-<p>Manage your store settings, eBooks, and software downloads here.</p>
+<h1>Welcome to SmartMail Store</h1>
+<p>Manage your SmartMail Store settings and features here.</p>
