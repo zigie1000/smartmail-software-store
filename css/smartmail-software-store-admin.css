@@ -1,55 +1,45 @@
-/* Admin CSS for SmartMail Software Store */
-body.smartmail-software-store-admin {
-    font-family: Arial, sans-serif;
-    background-color: #f1f1f1;
+/* Admin Styles for SmartMail Software Store */
+.wrap {
+    background: #fff;
     padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-.smartmail-software-store-admin h1 {
-    color: #333;
+h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.smartmail-software-store-admin table.form-table {
-    width: 100%;
-    background: #fff;
-    border-collapse: collapse;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.smartmail-software-store-admin table.form-table th {
-    text-align: left;
-    padding: 10px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #ddd;
-}
-
-.smartmail-software-store-admin table.form-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.smartmail-software-store-admin input[type="text"],
-.smartmail-software-store-admin input[type="number"],
-.smartmail-software-store-admin select {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.smartmail-software-store-admin input[type="submit"] {
+.page-title-action {
+    margin-top: -2px;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 4px 8px;
     background-color: #0073aa;
-    color: white;
-    padding: 10px 20px;
+    color: #fff;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 20px;
 }
 
-.smartmail-software-store-admin input[type="submit"]:hover {
-    background-color: #005177;
+.page-title-action:hover {
+    background-color: #006799;
+    color: #fff;
+}
+
+.wp-list-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wp-list-table th, .wp-list-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.wp-list-table th {
+    background-color: #f1f1f1;
 }
