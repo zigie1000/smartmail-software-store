@@ -17,4 +17,3 @@ class SmartMail_Software_Store_Public {
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
     }
 }
-?>
