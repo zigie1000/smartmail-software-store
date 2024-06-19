@@ -3,14 +3,12 @@ class SmartMail_Software_Store {
     private static $instance = null;
 
     private function __construct() {
-        error_log("SmartMail_Software_Store: Constructor called");
         $this->load_dependencies();
         $this->define_admin_hooks();
         add_action('init', array($this, 'register_custom_post_types')); // Use init hook for registering custom post types
     }
 
     public static function get_instance() {
-        error_log("SmartMail_Software_Store: get_instance called");
         if (self::$instance == null) {
             self::$instance = new self();
         }
@@ -18,17 +16,14 @@ class SmartMail_Software_Store {
     }
 
     private function load_dependencies() {
-        error_log("SmartMail_Software_Store: load_dependencies called");
         require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-admin.php';
     }
 
     private function define_admin_hooks() {
-        error_log("SmartMail_Software_Store: define_admin_hooks called");
         $plugin_admin = new SmartMail_Software_Store_Admin();
     }
 
     public function register_custom_post_types() {
-        error_log("SmartMail_Software_Store: register_custom_post_types called");
         // Register eBooks post type
         $labels = array(
             'name' => _x('eBooks', 'Post Type General Name', 'smartmail-software-store'),
@@ -123,9 +118,9 @@ class SmartMail_Software_Store {
             'menu_position' => 5,
             'show_in_admin_bar' => true,
             'show_in_nav_menus' => true,
-            'can_export' => true,
+            'can export' => true,
             'has_archive' => true,
-            'exclude_from_search' => false,
+            'exclude_from search' => false,
             'publicly_queryable' => true,
             'capability_type' => 'post',
         );
