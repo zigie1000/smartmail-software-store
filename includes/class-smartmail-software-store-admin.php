@@ -2,6 +2,7 @@
 class SmartMail_Software_Store_Admin {
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
+        $this->load_file_upload_dependencies();
     }
 
     public function add_admin_menu() {
@@ -54,6 +55,10 @@ class SmartMail_Software_Store_Admin {
 
     public function software_page() {
         require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin/admin-software-page.php';
+    }
+
+    private function load_file_upload_dependencies() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-file-upload.php';
     }
 }
 ?>
