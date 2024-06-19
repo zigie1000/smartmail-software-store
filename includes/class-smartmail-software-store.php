@@ -103,7 +103,7 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'uploaded_to_this_item' => __('Uploaded to this Software', 'smartmail-software-store'),
                 'items_list' => __('Software list', 'smartmail-software-store'),
                 'items_list_navigation' => __('Software list navigation', 'smartmail-software-store'),
-                'filter_items_list' => __('Filter Software list', 'smartmail-software-store'),
+                'filter_items list' => __('Filter Software list', 'smartmail-software-store'),
             );
             $args = array(
                 'label' => __('Software', 'smartmail-software-store'),
