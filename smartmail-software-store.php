@@ -51,7 +51,7 @@ class SmartMail_Software_Store {
 
     private function define_frontend_hooks() {
         $plugin_frontend = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
-        // Add frontend hooks if necessary
+        add_action('admin_menu', array($plugin_frontend, 'add_plugin_frontend_menu'));
     }
 
     public static function activate() {
