@@ -1,69 +1,64 @@
 <?php
-/**
- * Plugin Name: SmartMail Software Store
- * Description: A plugin to manage and display eBooks and Software.
- * Version: 1.0.0
- * Author: Marco Zagato
- * Author URI: https://smartmail.store
- */
-
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
-}
-
-class SmartMail_Software_Store {
-    protected $plugin_name;
-    protected $version;
-
+class SmartMail_Software_Store_Admin {
     public function __construct() {
-        $this->plugin_name = 'smartmail-software-store';
-        $this->version = '1.0.0';
-        $this->load_dependencies();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
-        $this->define_backend_hooks();
-        $this->define_frontend_hooks();
+        add_action('admin_menu', array($this, 'add_admin_menu'));
     }
 
-    private function load_dependencies() {
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-admin.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-activator.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-backend.php';
-        require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-frontend.php';
+    public function add_admin_menu() {
+        add_menu_page(
+            'SmartMail Store',
+            'SmartMail Store',
+            'manage_options',
+            'smartmail-store',
+            array($this, 'admin_index'),
+            'dashicons-store',
+            110
+        );
+
+        add_submenu_page(
+            'smartmail-store',
+            'Settings',
+            'Settings',
+            'manage_options',
+            'smartmail-store-settings',
+            array($this, 'settings_page')
+        );
+
+        add_submenu_page(
+            'smartmail-store',
+            'eBooks',
+            'eBooks',
+            'manage_options',
+            'smartmail-store-ebooks',
+            array($this, 'ebooks_page')
+        );
+
+        add_submenu_page(
+            'smartmail-store',
+            'Software',
+            'Software',
+            'manage_options',
+            'smartmail-store-software',
+            array($this, 'software_page')
+        );
+
+        add_submenu_page(
+            'smartmail-store',
+            'SmartMail Store Backend',
+            'SmartMail Store Backend',
+            'manage_options',
+            'smartmail-store-backend',
+            array($this, 'backend_page')
+        );
     }
 
-    private function define_admin_hooks() {
-        $plugin_admin = new SmartMail_Software_Store_Admin($this->plugin_name, $this->version);
-        add_action('admin_menu', array($plugin_admin, 'add_plugin_admin_menu'));
+    public function admin_index() {
+        echo '<h1>SmartMail Software Store Admin</h1>';
     }
 
-    private function define_public_hooks() {
-        $plugin_public = new SmartMail_Software_Store_Public($this->plugin_name, $this->version);
-        // Add public hooks if necessary
+    public function settings_page() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin-settings-page.php';
     }
 
-    private function define_backend_hooks() {
-        $plugin_backend = new SmartMail_Software_Store_Backend($this->plugin_name, $this->version);
-        add_action('admin_menu', array($plugin_backend, 'add_plugin_backend_menu'));
-    }
-
-    private function define_frontend_hooks() {
-        $plugin_frontend = new SmartMail_Software_Store_Frontend($this->plugin_name, $this->version);
-        // Add frontend hooks if necessary
-    }
-
-    public static function activate() {
-        SmartMail_Software_Store_Activator::activate();
-    }
-
-    public static function deactivate() {
-        // Deactivation code here
-    }
-}
-
-register_activation_hook(__FILE__, array('SmartMail_Software_Store', 'activate'));
-register_deactivation_hook(__FILE__, array('SmartMail_Software_Store', 'deactivate'));
-
-$plugin = new SmartMail_Software_Store();
-?>
+    public function ebooks_page() {
+        require_once SMARTMAIL
