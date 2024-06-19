@@ -56,19 +56,18 @@ class SmartMail_Software_Store_Admin {
     }
 
     public function display_plugin_admin_page() {
-        include_once 'templates/admin-page.php';
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-backend-page.php';
     }
 
     public function display_settings_page() {
-        include_once 'templates/admin-settings-page.php';
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-settings-page.php';
     }
 
     public function display_ebooks_page() {
-        include_once 'templates/admin-ebooks-page.php';
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-ebooks-page.php';
     }
 
     public function display_software_page() {
-        include_once 'templates/admin-software-page.php';
+        include_once plugin_dir_path(__FILE__) . '../templates/admin-software-page.php';
     }
 }
-?>
