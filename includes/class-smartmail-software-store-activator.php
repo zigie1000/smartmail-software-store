@@ -78,4 +78,3 @@ class SmartMail_Software_Store_Activator {
         register_post_type('software', $software_args);
     }
 }
-?>
