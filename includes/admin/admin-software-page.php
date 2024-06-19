@@ -1,32 +1,28 @@
-<div class="wrap">
-    <h1>Manage Software</h1>
-    <a href="<?php echo admin_url('post-new.php?post_type=software'); ?>" class="page-title-action">Add New Software</a>
-    <?php
-    $args = array(
-        'post_type' => 'software',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-    );
-    $software = new WP_Query($args);
-    if ($software->have_posts()) {
-        echo '<table class="wp-list-table widefat fixed striped">';
-        echo '<thead><tr><th>Title</th><th>Actions</th></tr></thead>';
-        echo '<tbody>';
-        while ($software->have_posts()) {
-            $software->the_post();
-            echo '<tr>';
-            echo '<td>' . get_the_title() . '</td>';
-            echo '<td>';
-            echo '<a href="' . get_edit_post_link() . '">Edit</a> | ';
-            echo '<a href="' . get_delete_post_link() . '">Delete</a>';
-            echo '</td>';
-            echo '</tr>';
-        }
-        echo '</tbody>';
-        echo '</table>';
-    } else {
-        echo '<p>No Software found.</p>';
-    }
-    wp_reset_postdata();
+<?php
+
+function smartmail_software_store_software_page() {
     ?>
-</div>
+    <div class="wrap">
+        <h1><?php esc_html_e('SmartMail Software', 'smartmail-software-store'); ?></h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('smartmail_software_store_software_options_group');
+            do_settings_sections('smartmail_software_store_software');
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+function smartmail_software_store_software_menu() {
+    add_submenu_page(
+        'smartmail_software_store_backend',
+        __('SmartMail Software', 'smartmail-software-store'),
+        __('Software', 'smartmail-software-store'),
+        'manage_options',
+        'smartmail_software_store_software',
+        'smartmail_software_store_software_page'
+    );
+}
+add_action('admin_menu', 'smartmail_software_store_software_menu');
