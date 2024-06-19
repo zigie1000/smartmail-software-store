@@ -5,7 +5,7 @@ class SmartMail_Software_Store {
     private function __construct() {
         $this->load_dependencies();
         $this->define_admin_hooks();
-        add_action('init', array($this, 'register_custom_post_types')); // Use init hook for registering custom post types
+        add_action('init', array($this, 'register_custom_post_types'));
     }
 
     public static function get_instance() {
@@ -67,9 +67,9 @@ class SmartMail_Software_Store {
             'menu_position' => 5,
             'show_in_admin_bar' => true,
             'show_in_nav_menus' => true,
-            'can_export' => true,
-            'has_archive' => true,
-            'exclude_from_search' => false,
+            'can export' => true,
+            'has archive' => true,
+            'exclude_from search' => false,
             'publicly_queryable' => true,
             'capability_type' => 'post',
         );
@@ -103,7 +103,7 @@ class SmartMail_Software_Store {
             'uploaded_to_this_item' => __('Uploaded to this Software', 'smartmail-software-store'),
             'items_list' => __('Software list', 'smartmail-software-store'),
             'items_list_navigation' => __('Software list navigation', 'smartmail-software-store'),
-            'filter_items_list' => __('Filter Software list', 'smartmail-software-store'),
+            'filter items list' => __('Filter Software list', 'smartmail-software-store'),
         );
         $args = array(
             'label' => __('Software', 'smartmail-software-store'),
@@ -116,12 +116,12 @@ class SmartMail_Software_Store {
             'show_ui' => true,
             'show_in_menu' => true,
             'menu_position' => 5,
-            'show_in_admin_bar' => true,
-            'show_in_nav_menus' => true,
+            'show in admin bar' => true,
+            'show in nav menus' => true,
             'can export' => true,
-            'has_archive' => true,
+            'has archive' => true,
             'exclude_from search' => false,
-            'publicly_queryable' => true,
+            'publicly queryable' => true,
             'capability_type' => 'post',
         );
         register_post_type('software', $args);
