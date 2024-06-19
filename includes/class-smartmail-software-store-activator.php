@@ -52,30 +52,4 @@ class SmartMail_Software_Store_Activator {
             'add_new_item'       => __('Add New Software', 'smartmail-software-store'),
             'new_item'           => __('New Software', 'smartmail-software-store'),
             'edit_item'          => __('Edit Software', 'smartmail-software-store'),
-            'view_item'          => __('View Software', 'smartmail-software-store'),
-            'all_items'          => __('All Software', 'smartmail-software-store'),
-            'search_items'       => __('Search Software', 'smartmail-software-store'),
-            'parent_item_colon'  => __('Parent Software:', 'smartmail-software-store'),
-            'not_found'          => __('No Software found.', 'smartmail-software-store'),
-            'not_found_in_trash' => __('No Software found in Trash.', 'smartmail-software-store')
-        );
-
-        $software_args = array(
-            'labels'             => $software_labels,
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'query_var'          => true,
-            'rewrite'            => array('slug' => 'software'),
-            'capability_type'    => 'post',
-            'has_archive'        => true,
-            'hierarchical'       => false,
-            'menu_position'      => null,
-            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
-        );
-
-        register_post_type('software', $software_args);
-    }
-}
-?>
+            'view_item'          => __('View
