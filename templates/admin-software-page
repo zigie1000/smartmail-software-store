@@ -1,2 +1,10 @@
-<h1>SmartMail Store Software</h1>
-<p>Manage software products available in your SmartMail Store.</p>
+<div class="wrap">
+    <h1><?php esc_html_e('SmartMail Software', 'smartmail-software-store'); ?></h1>
+    <form method="post" action="options.php">
+        <?php
+        settings_fields('smartmail_software_store_software_options_group');
+        do_settings_sections('smartmail_software_store_software');
+        submit_button();
+        ?>
+    </form>
+</div>
