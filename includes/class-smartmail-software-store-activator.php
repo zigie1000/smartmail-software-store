@@ -1,5 +1,4 @@
 <?php
-
 class SmartMail_Software_Store_Activator {
     public static function activate() {
         // Create custom post types for eBooks and Software
@@ -78,3 +77,4 @@ class SmartMail_Software_Store_Activator {
         register_post_type('software', $software_args);
     }
 }
+?>
