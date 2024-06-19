@@ -1,32 +1,28 @@
-<div class="wrap">
-    <h1>Manage eBooks</h1>
-    <a href="<?php echo admin_url('post-new.php?post_type=ebook'); ?>" class="page-title-action">Add New eBook</a>
-    <?php
-    $args = array(
-        'post_type' => 'ebook',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-    );
-    $ebooks = new WP_Query($args);
-    if ($ebooks->have_posts()) {
-        echo '<table class="wp-list-table widefat fixed striped">';
-        echo '<thead><tr><th>Title</th><th>Actions</th></tr></thead>';
-        echo '<tbody>';
-        while ($ebooks->have_posts()) {
-            $ebooks->the_post();
-            echo '<tr>';
-            echo '<td>' . get_the_title() . '</td>';
-            echo '<td>';
-            echo '<a href="' . get_edit_post_link() . '">Edit</a> | ';
-            echo '<a href="' . get_delete_post_link() . '">Delete</a>';
-            echo '</td>';
-            echo '</tr>';
-        }
-        echo '</tbody>';
-        echo '</table>';
-    } else {
-        echo '<p>No eBooks found.</p>';
-    }
-    wp_reset_postdata();
+<?php
+
+function smartmail_software_store_ebooks_page() {
     ?>
-</div>
+    <div class="wrap">
+        <h1><?php esc_html_e('SmartMail eBooks', 'smartmail-software-store'); ?></h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('smartmail_software_store_ebooks_options_group');
+            do_settings_sections('smartmail_software_store_ebooks');
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+function smartmail_software_store_ebooks_menu() {
+    add_submenu_page(
+        'smartmail_software_store_backend',
+        __('SmartMail eBooks', 'smartmail-software-store'),
+        __('eBooks', 'smartmail-software-store'),
+        'manage_options',
+        'smartmail_software_store_ebooks',
+        'smartmail_software_store_ebooks_page'
+    );
+}
+add_action('admin_menu', 'smartmail_software_store_ebooks_menu');
