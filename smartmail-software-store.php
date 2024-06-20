@@ -29,5 +29,4 @@ register_deactivation_hook( __FILE__, array( 'SmartMail_Software_Store_Deactivat
 
 // Initialize the main plugin class
 add_action( 'plugins_loaded', array( 'SmartMail_Software_Store', 'get_instance' ) );
-
 ?>
