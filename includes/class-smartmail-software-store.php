@@ -90,4 +90,17 @@ class SmartMail_Software_Store {
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
-            'rewrite'            => array( 'slug'
+            'rewrite'            => array( 'slug' => 'software' ),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+        );
+
+        register_post_type( 'software', $args );
+    }
+}
+
+new SmartMail_Software_Store();
+?>
