@@ -72,11 +72,11 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'menu_position' => 5,
                 'show_in_admin_bar' => true,
                 'show_in_nav_menus' => true,
-                'can_export' => true,
-                'has_archive' => true,
-                'exclude_from_search' => false,
-                'publicly_queryable' => true,
-                'capability_type' => 'post',
+                'can export' => true,
+                'has archive' => true,
+                'exclude from search' => false,
+                'publicly queryable' => true,
+                'capability type' => 'post',
             );
             register_post_type('ebook', $args);
         }
@@ -123,14 +123,14 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'show_in_menu' => true,
                 'menu_position' => 5,
                 'show_in_admin_bar' => true,
-                'show_in_nav_menus' => true,
+                'show in nav menus' => true,
                 'can export' => true,
                 'has archive' => true,
                 'exclude from search' => false,
                 'publicly queryable' => true,
                 'capability type' => 'post',
             );
-            register_post_type('software', $args);
+            register post type('software', $args);
         }
     }
     SmartMail_Software_Store::get_instance();
