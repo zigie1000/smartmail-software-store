@@ -43,28 +43,25 @@ class SmartMail_Software_Store_File_Upload {
     }
 
     public function save_custom_meta_boxes($post_id) {
-        if (!isset($_POST['ebook_file_nonce']) || !wp_verify_nonce($_POST['ebook_file_nonce'], 'save_ebook_file')) {
-            return $post_id;
-        }
-        if (!isset($_POST['software_file_nonce']) || !wp_verify_nonce($_POST['software_file_nonce'], 'save_software_file')) {
-            return $post_id;
-        }
-
         // Save eBook file
-        if (isset($_FILES['ebook_file']) && !empty($_FILES['ebook_file']['name'])) {
-            $uploaded_file = $_FILES['ebook_file'];
-            $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
-            if (isset($upload['url'])) {
-                update_post_meta($post_id, '_ebook_file_url', $upload['url']);
+        if (isset($_POST['ebook_file_nonce']) && wp_verify_nonce($_POST['ebook_file_nonce'], 'save_ebook_file')) {
+            if (isset($_FILES['ebook_file']) && !empty($_FILES['ebook_file']['name'])) {
+                $uploaded_file = $_FILES['ebook_file'];
+                $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
+                if (isset($upload['url'])) {
+                    update_post_meta($post_id, '_ebook_file_url', $upload['url']);
+                }
             }
         }
 
         // Save Software file
-        if (isset($_FILES['software_file']) && !empty($_FILES['software_file']['name'])) {
-            $uploaded_file = $_FILES['software_file'];
-            $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
-            if (isset($upload['url'])) {
-                update_post_meta($post_id, '_software_file_url', $upload['url']);
+        if (isset($_POST['software_file_nonce']) && wp_verify_nonce($_POST['software_file_nonce'], 'save_software_file')) {
+            if (isset($_FILES['software_file']) && !empty($_FILES['software_file']['name'])) {
+                $uploaded_file = $_FILES['software_file'];
+                $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
+                if (isset($upload['url'])) {
+                    update_post_meta($post_id, '_software_file_url', $upload['url']);
+                }
             }
         }
     }
