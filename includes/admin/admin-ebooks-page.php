@@ -1,28 +1,30 @@
-<?php
-
-function smartmail_software_store_ebooks_page() {
-    ?>
-    <div class="wrap">
-        <h1><?php esc_html_e('SmartMail eBooks', 'smartmail-software-store'); ?></h1>
-        <form method="post" action="options.php">
-            <?php
-            settings_fields('smartmail_software_store_ebooks_options_group');
-            do_settings_sections('smartmail_software_store_ebooks');
-            submit_button();
-            ?>
-        </form>
-    </div>
+<div class="wrap">
+    <h1>Manage eBooks</h1>
+    <a href="<?php echo admin_url('post-new.php?post_type=ebook'); ?>" class="page-title-action">Add New eBook</a>
+    <hr class="wp-header-end">
     <?php
-}
-
-function smartmail_software_store_ebooks_menu() {
-    add_submenu_page(
-        'smartmail_software_store_backend',
-        __('SmartMail eBooks', 'smartmail-software-store'),
-        __('eBooks', 'smartmail-software-store'),
-        'manage_options',
-        'smartmail_software_store_ebooks',
-        'smartmail_software_store_ebooks_page'
+    $args = array(
+        'post_type' => 'ebook',
+        'posts_per_page' => -1
     );
-}
-add_action('admin_menu', 'smartmail_software_store_ebooks_menu');
+    $ebooks = new WP_Query($args);
+    if ($ebooks->have_posts()) {
+        echo '<table class="widefat fixed" cellspacing="0">';
+        echo '<thead><tr><th class="manage-column column-title">Title</th><th class="manage-column column-author">Author</th><th class="manage-column column-date">Date</th></tr></thead>';
+        echo '<tbody>';
+        while ($ebooks->have_posts()) {
+            $ebooks->the_post();
+            echo '<tr>';
+            echo '<td class="column-title"><strong><a class="row-title" href="' . get_edit_post_link() . '">' . get_the_title() . '</a></strong></td>';
+            echo '<td class="column-author">' . get_the_author() . '</td>';
+            echo '<td class="column-date">' . get_the_date() . '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+    } else {
+        echo '<p>No eBooks found.</p>';
+    }
+    wp_reset_postdata();
+    ?>
+</div>
