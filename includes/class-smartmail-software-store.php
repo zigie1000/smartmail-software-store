@@ -1,3 +1,4 @@
+<?php
 if (!class_exists('SmartMail_Software_Store')) {
     class SmartMail_Software_Store {
         private static $instance = null;
@@ -24,7 +25,11 @@ if (!class_exists('SmartMail_Software_Store')) {
         }
 
         public function register_custom_post_types() {
-            // Register eBooks post type
+            $this->register_ebook_post_type();
+            $this->register_software_post_type();
+        }
+
+        private function register_ebook_post_type() {
             $labels = array(
                 'name' => _x('eBooks', 'Post Type General Name', 'smartmail-software-store'),
                 'singular_name' => _x('eBook', 'Post Type Singular Name', 'smartmail-software-store'),
@@ -67,15 +72,16 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'menu_position' => 5,
                 'show_in_admin_bar' => true,
                 'show_in_nav_menus' => true,
-                'can export' => true,
-                'has archive' => true,
-                'exclude_from search' => false,
+                'can_export' => true,
+                'has_archive' => true,
+                'exclude_from_search' => false,
                 'publicly_queryable' => true,
                 'capability_type' => 'post',
             );
             register_post_type('ebook', $args);
+        }
 
-            // Register Software post type
+        private function register_software_post_type() {
             $labels = array(
                 'name' => _x('Software', 'Post Type General Name', 'smartmail-software-store'),
                 'singular_name' => _x('Software', 'Post Type Singular Name', 'smartmail-software-store'),
@@ -103,7 +109,7 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'uploaded_to_this_item' => __('Uploaded to this Software', 'smartmail-software-store'),
                 'items_list' => __('Software list', 'smartmail-software-store'),
                 'items_list_navigation' => __('Software list navigation', 'smartmail-software-store'),
-                'filter_items list' => __('Filter Software list', 'smartmail-software-store'),
+                'filter_items_list' => __('Filter Software list', 'smartmail-software-store'),
             );
             $args = array(
                 'label' => __('Software', 'smartmail-software-store'),
@@ -116,18 +122,17 @@ if (!class_exists('SmartMail_Software_Store')) {
                 'show_ui' => true,
                 'show_in_menu' => true,
                 'menu_position' => 5,
-                'show in admin bar' => true,
-                'show in nav menus' => true,
+                'show_in_admin_bar' => true,
+                'show_in_nav_menus' => true,
                 'can export' => true,
                 'has archive' => true,
-                'exclude_from search' => false,
+                'exclude from search' => false,
                 'publicly queryable' => true,
                 'capability type' => 'post',
             );
             register_post_type('software', $args);
         }
     }
-
     SmartMail_Software_Store::get_instance();
 }
 ?>
