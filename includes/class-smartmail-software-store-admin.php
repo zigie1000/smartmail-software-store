@@ -1,62 +1,59 @@
 <?php
-class SmartMail_Software_Store {
-    private static $instance = null;
-    private $plugin_admin;
-
-    private function __construct() {
-        $this->load_dependencies();
-        $this->define_admin_hooks();
-        $this->register_custom_post_types();
+class SmartMail_Software_Store_Admin {
+    public function __construct() {
+        add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
     }
 
-    public static function get_instance() {
-        if (self::$instance == null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    private function load_dependencies() {
-        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-admin.php';
-    }
-
-    private function define_admin_hooks() {
-        $this->plugin_admin = new SmartMail_Software_Store_Admin();
-    }
-
-    private function register_custom_post_types() {
-        add_action('init', array($this, 'register_post_types'));
-    }
-
-    public function register_post_types() {
-        // Register eBook post type
-        $labels = array(
-            'name' => __('eBooks', 'smartmail-software-store'),
-            'singular_name' => __('eBook', 'smartmail-software-store'),
-            'add_new' => __('Add New', 'smartmail-software-store'),
-            'add_new_item' => __('Add New eBook', 'smartmail-software-store'),
-            'edit_item' => __('Edit eBook', 'smartmail-software-store'),
-            'new_item' => __('New eBook', 'smartmail-software-store'),
-            'view_item' => __('View eBook', 'smartmail-software-store'),
-            'search_items' => __('Search eBooks', 'smartmail-software-store'),
-            'not_found' => __('No eBooks found', 'smartmail-software-store'),
-            'not_found_in_trash' => __('No eBooks found in Trash', 'smartmail-software-store'),
+    public function add_admin_menu() {
+        add_menu_page(
+            __( 'SmartMail Store', 'smartmail-software-store' ),
+            __( 'SmartMail Store', 'smartmail-software-store' ),
+            'manage_options',
+            'smartmail-software-store',
+            array( $this, 'admin_index' ),
+            'dashicons-store',
+            110
         );
-
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
-            'has_archive' => true,
-            'supports' => array('title', 'editor', 'thumbnail'),
-            'show_in_menu' => true,
-            'menu_position' => 5,
-            'menu_icon' => 'dashicons-book',
+        add_submenu_page(
+            'smartmail-software-store',
+            __( 'Settings', 'smartmail-software-store' ),
+            __( 'Settings', 'smartmail-software-store' ),
+            'manage_options',
+            'smartmail-software-store-settings',
+            array( $this, 'settings_page' )
         );
+        add_submenu_page(
+            'smartmail-software-store',
+            __( 'eBooks', 'smartmail-software-store' ),
+            __( 'eBooks', 'smartmail-software-store' ),
+            'manage_options',
+            'smartmail-software-store-ebooks',
+            array( $this, 'ebooks_page' )
+        );
+        add_submenu_page(
+            'smartmail-software-store',
+            __( 'Software', 'smartmail-software-store' ),
+            __( 'Software', 'smartmail-software-store' ),
+            'manage_options',
+            'smartmail-software-store-software',
+            array( $this, 'software_page' )
+        );
+    }
 
-        register_post_type('ebook', $args);
+    public function admin_index() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'templates/admin-page.php';
+    }
 
-        // Register Software post type
-        $labels = array(
-            'name' => __('Software', 'smartmail-software-store'),
-            'singular_name' => __('Software', 'smartmail-software-store'),
-            'add_new' => __('Add New', 'smartmail-software-store'),
+    public function settings_page() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'templates/admin-settings-page.php';
+    }
+
+    public function ebooks_page() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'templates/admin-ebooks-page.php';
+    }
+
+    public function software_page() {
+        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'templates/admin-software-page.php';
+    }
+}
+?>
