@@ -21,6 +21,7 @@ if ( ! defined( 'SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR' ) ) {
 require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-activator.php';
 require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-deactivator.php';
 require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store.php';
+require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/admin/class-smartmail-software-store-file-upload.php';
 
 // Activation and deactivation hooks
 register_activation_hook( __FILE__, array( 'SmartMail_Software_Store_Activator', 'activate' ) );
