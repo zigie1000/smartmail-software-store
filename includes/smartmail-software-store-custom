@@ -167,8 +167,9 @@ function smartmail_software_details_callback($post): void {
             </tr>
         </table>
 
-        <h2>Custom Fields</h2>
         <?php
+        // Display custom fields section at the bottom
+        echo '<h2>Custom Fields</h2>';
         $custom_fields = get_post_custom($post->ID);
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
@@ -179,8 +180,7 @@ function smartmail_software_details_callback($post): void {
             }
         }
     } catch (Exception $e) {
-        smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
-
+     smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
             echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
         });
@@ -280,8 +280,9 @@ function smartmail_ebooks_details_callback($post): void {
             </tr>
         </table>
 
-        <h2>Custom Fields</h2>
         <?php
+        // Display custom fields section at the bottom
+        echo '<h2>Custom Fields</h2>';
         $custom_fields = get_post_custom($post->ID);
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
