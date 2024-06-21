@@ -173,17 +173,16 @@ function smartmail_software_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($key); ?></label> 
-                <input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />
-                </p>
-            <?php
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
+                echo '</p>';
             }
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
-        });
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div
+                 });
     }
 }
 
@@ -286,8 +285,8 @@ function smartmail_ebooks_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($key); ?></label> ';
-                echo '<input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -339,4 +338,4 @@ function smartmail_save_ebooks_details(int $post_id): void {
         });
     }
 }
-add_action('save_post', 'smartmail_save_ebooks_details');  
+add_action('save_post', 'smartmail_save_ebooks_details');       
