@@ -166,9 +166,21 @@ function smartmail_software_details_callback($post): void {
                 <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
             </tr>
         </table>
+
+        <h2>Custom Fields</h2>
         <?php
+        $custom_fields = get_post_custom($post->ID);
+        foreach ($custom_fields as $key => $value) {
+            if ('_' !== $key[0]) {
+                echo '<p>';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '</p>';
+            }
+        }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
+
         add_action('admin_notices', function() {
             echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
         });
@@ -202,6 +214,12 @@ function smartmail_save_software_details(int $post_id): void {
         update_post_meta($post_id, '_quantity', $quantity);
         update_post_meta($post_id, '_sku', $sku);
         update_post_meta($post_id, '_category', $category);
+
+        foreach ($_POST as $key => $value) {
+            if ('_' !== $key[0]) {
+                update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
+            }
+        }
     } catch (Exception $e) {
         smartmail_log_error("Error saving software details: " . $e->getMessage());
         add_action('admin_notices', function() {
@@ -261,7 +279,18 @@ function smartmail_ebooks_details_callback($post): void {
                 <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
             </tr>
         </table>
+
+        <h2>Custom Fields</h2>
         <?php
+        $custom_fields = get_post_custom($post->ID);
+        foreach ($custom_fields as $key => $value) {
+            if ('_' !== $key[0]) {
+                echo '<p>';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '</p>';
+            }
+        }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
@@ -297,6 +326,12 @@ function smartmail_save_ebooks_details(int $post_id): void {
         update_post_meta($post_id, '_publisher', $publisher);
         update_post_meta($post_id, '_isbn', $isbn);
         update_post_meta($post_id, '_category', $category);
+
+        foreach ($_POST as $key => $value) {
+            if ('_' !== $key[0]) {
+                update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
+            }
+        }
     } catch (Exception $e) {
         smartmail_log_error("Error saving eBook details: " . $e->getMessage());
         add_action('admin_notices', function() {
