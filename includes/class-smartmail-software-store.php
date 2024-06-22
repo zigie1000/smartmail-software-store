@@ -1,132 +1,341 @@
 <?php
-class SmartMail_Software_Store {
-    private static $instance = null;
+/*
+Plugin Name: SmartMail Software Store Customizations
+Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
+Author: Marco Zagato
+Author URI: https://smartmail.store
+Version: 1.0
+*/
 
-    private function __construct() {
-        $this->load_dependencies();
-        $this->define_admin_hooks();
-        add_action('init', array($this, 'register_custom_post_types')); // Use init hook for registering custom post types
-    }
+declare(strict_types=1);
 
-    public static function get_instance() {
-        if (self::$instance == null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
+// Ensure WooCommerce is active before proceeding
+if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    add_action('admin_notices', 'smartmail_woocommerce_inactive_notice');
+    return;
+}
 
-    private function load_dependencies() {
-        require_once SMARTMAIL_SOFTWARE_STORE_PLUGIN_DIR . 'includes/class-smartmail-software-store-admin.php';
-    }
+function smartmail_woocommerce_inactive_notice(): void {
+    echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> WooCommerce is not active. Please activate WooCommerce to use this plugin.</p></div>';
+}
 
-    private function define_admin_hooks() {
-        $plugin_admin = new SmartMail_Software_Store_Admin();
-    }
-
-    public function register_custom_post_types() {
-        // Register eBooks post type
-        $labels = array(
-            'name' => _x('eBooks', 'Post Type General Name', 'smartmail-software-store'),
-            'singular_name' => _x('eBook', 'Post Type Singular Name', 'smartmail-software-store'),
-            'menu_name' => __('eBooks', 'smartmail-software-store'),
-            'name_admin_bar' => __('eBook', 'smartmail-software-store'),
-            'archives' => __('eBook Archives', 'smartmail-software-store'),
-            'attributes' => __('eBook Attributes', 'smartmail-software-store'),
-            'parent_item_colon' => __('Parent eBook:', 'smartmail-software-store'),
-            'all_items' => __('All eBooks', 'smartmail-software-store'),
-            'add_new_item' => __('Add New eBook', 'smartmail-software-store'),
-            'add_new' => __('Add New', 'smartmail-software-store'),
-            'new_item' => __('New eBook', 'smartmail-software-store'),
-            'edit_item' => __('Edit eBook', 'smartmail-software-store'),
-            'update_item' => __('Update eBook', 'smartmail-software-store'),
-            'view_item' => __('View eBook', 'smartmail-software-store'),
-            'view_items' => __('View eBooks', 'smartmail-software-store'),
-            'search_items' => __('Search eBook', 'smartmail-software-store'),
-            'not_found' => __('Not found', 'smartmail-software-store'),
-            'not_found_in_trash' => __('Not found in Trash', 'smartmail-software-store'),
-            'featured_image' => __('Featured Image', 'smartmail-software-store'),
-            'set_featured_image' => __('Set featured image', 'smartmail-software-store'),
-            'remove_featured_image' => __('Remove featured image', 'smartmail-software-store'),
-            'use_featured_image' => __('Use as featured image', 'smartmail-software-store'),
-            'insert_into_item' => __('Insert into eBook', 'smartmail-software-store'),
-            'uploaded_to_this_item' => __('Uploaded to this eBook', 'smartmail-software-store'),
-            'items_list' => __('eBooks list', 'smartmail-software-store'),
-            'items_list_navigation' => __('eBooks list navigation', 'smartmail-software-store'),
-            'filter_items_list' => __('Filter eBooks list', 'smartmail-software-store'),
-        );
-        $args = array(
-            'label' => __('eBook', 'smartmail-software-store'),
-            'description' => __('Post Type Description', 'smartmail-software-store'),
-            'labels' => $labels,
-            'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'custom-fields'),
-            'taxonomies' => array('category', 'post_tag'),
-            'hierarchical' => false,
-            'public' => true,
-            'show_ui' => true,
-            'show_in_menu' => true,
-            'menu_position' => 5,
-            'show_in_admin_bar' => true,
-            'show_in_nav_menus' => true,
-            'can_export' => true,
-            'has_archive' => true,
-            'exclude_from_search' => false,
-            'publicly_queryable' => true,
-            'capability_type' => 'post',
-        );
-        register_post_type('ebook', $args);
-
-        // Register Software post type
-        $labels = array(
-            'name' => _x('Software', 'Post Type General Name', 'smartmail-software-store'),
-            'singular_name' => _x('Software', 'Post Type Singular Name', 'smartmail-software-store'),
-            'menu_name' => __('Software', 'smartmail-software-store'),
-            'name_admin_bar' => __('Software', 'smartmail-software-store'),
-            'archives' => __('Software Archives', 'smartmail-software-store'),
-            'attributes' => __('Software Attributes', 'smartmail-software-store'),
-            'parent_item_colon' => __('Parent Software:', 'smartmail-software-store'),
-            'all_items' => __('All Software', 'smartmail-software-store'),
-            'add_new_item' => __('Add New Software', 'smartmail-software-store'),
-            'add_new' => __('Add New', 'smartmail-software-store'),
-            'new_item' => __('New Software', 'smartmail-software-store'),
-            'edit_item' => __('Edit Software', 'smartmail-software-store'),
-            'update_item' => __('Update Software', 'smartmail-software-store'),
-            'view_item' => __('View Software', 'smartmail-software-store'),
-            'view_items' => __('View Software', 'smartmail-software-store'),
-            'search_items' => __('Search Software', 'smartmail-software-store'),
-            'not_found' => __('Not found', 'smartmail-software-store'),
-            'not_found_in_trash' => __('Not found in Trash', 'smartmail-software-store'),
-            'featured_image' => __('Featured Image', 'smartmail-software-store'),
-            'set_featured_image' => __('Set featured image', 'smartmail-software-store'),
-            'remove_featured_image' => __('Remove featured image', 'smartmail-software-store'),
-            'use_featured_image' => __('Use as featured image', 'smartmail-software-store'),
-            'insert_into_item' => __('Insert into Software', 'smartmail-software-store'),
-            'uploaded_to_this_item' => __('Uploaded to this Software', 'smartmail-software-store'),
-            'items_list' => __('Software list', 'smartmail-software-store'),
-            'items_list_navigation' => __('Software list navigation', 'smartmail-software-store'),
-            'filter_items_list' => __('Filter Software list', 'smartmail-software-store'),
-        );
-        $args = array(
-            'label' => __('Software', 'smartmail-software-store'),
-            'description' => __('Post Type Description', 'smartmail-software-store'),
-            'labels' => $labels,
-            'supports' => array('title', 'editor', 'thumbnail', 'revisions', 'custom-fields'),
-            'taxonomies' => array('category', 'post_tag'),
-            'hierarchical' => false,
-            'public' => true,
-            'show_ui' => true,
-            'show_in_menu' => true,
-            'menu_position' => 5,
-            'show_in_admin_bar' => true,
-            'show_in_nav_menus' => true,
-            'can_export' => true,
-            'has_archive' => true,
-            'exclude_from_search' => false,
-            'publicly_queryable' => true,
-            'capability_type' => 'post',
-        );
-        register_post_type('software', $args);
+// Error logging function
+function smartmail_log_error(string $message): void {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log($message);
     }
 }
 
-SmartMail_Software_Store::get_instance();
-?>
+// Register Custom Post Type for Software
+function smartmail_register_software_post_type(): void {
+    try {
+        $labels = array(
+            'name'               => _x('Software', 'post type general name', 'smartmail'),
+            'singular_name'      => _x('Software', 'post type singular name', 'smartmail'),
+            'menu_name'          => _x('Software', 'admin menu', 'smartmail'),
+            'name_admin_bar'     => _x('Software', 'add new on admin bar', 'smartmail'),
+            'add_new'            => _x('Add New', 'software', 'smartmail'),
+            'add_new_item'       => __('Add New Software', 'smartmail'),
+            'new_item'           => __('New Software', 'smartmail'),
+            'edit_item'          => __('Edit Software', 'smartmail'),
+            'view_item'          => __('View Software', 'smartmail'),
+            'all_items'          => __('All Software', 'smartmail'),
+            'search_items'       => __('Search Software', 'smartmail'),
+            'parent_item_colon'  => __('Parent Software:', 'smartmail'),
+            'not_found'          => __('No software found.', 'smartmail'),
+            'not_found_in_trash' => __('No software found in Trash.', 'smartmail')
+        );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'software'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'custom-fields', 'thumbnail'),
+        );
+
+        register_post_type('software', $args);
+    } catch (Exception $e) {
+        smartmail_log_error("Error registering software post type: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the software post type.</p></div>';
+        });
+    }
+}
+add_action('init', 'smartmail_register_software_post_type');
+
+// Register Custom Post Type for eBooks
+function smartmail_register_ebooks_post_type(): void {
+    try {
+        $labels = array(
+            'name'               => _x('eBooks', 'post type general name', 'smartmail'),
+            'singular_name'      => _x('eBook', 'post type singular name', 'smartmail'),
+            'menu_name'          => _x('eBooks', 'admin menu', 'smartmail'),
+            'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail'),
+            'add_new'            => _x('Add New', 'ebook', 'smartmail'),
+            'add_new_item'       => __('Add New eBook', 'smartmail'),
+            'new_item'           => __('New eBook', 'smartmail'),
+            'edit_item'          => __('Edit eBook', 'smartmail'),
+            'view_item'          => __('View eBook', 'smartmail'),
+            'all_items'          => __('All eBooks', 'smartmail'),
+            'search_items'       => __('Search eBooks', 'smartmail'),
+            'parent_item_colon'  => __('Parent eBooks:', 'smartmail'),
+            'not_found'          => __('No eBooks found.', 'smartmail'),
+            'not_found_in_trash' => __('No eBooks found in Trash.', 'smartmail')
+        );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => 'ebooks'),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array('title', 'editor', 'custom-fields', 'thumbnail'),
+        );
+
+        register_post_type('ebooks', $args);
+    } catch (Exception $e) {
+        smartmail_log_error("Error registering eBooks post type: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the eBooks post type.</p></div>';
+        });
+    }
+}
+add_action('init', 'smartmail_register_ebooks_post_type');
+
+// Add Meta Boxes for Software
+function smartmail_add_software_meta_boxes(): void {
+    add_meta_box(
+        'software_details',
+        'Software Details',
+        'smartmail_software_details_callback',
+        'software',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'smartmail_add_software_meta_boxes');
+
+function smartmail_software_details_callback($post): void {
+    try {
+        wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
+        $software_id = get_post_meta($post->ID, '_software_id', true);
+        $price = get_post_meta($post->ID, '_price', true);
+        $rrp = get_post_meta($post->ID, '_rrp', true);
+        $quantity = get_post_meta($post->ID, '_quantity', true);
+        $sku = get_post_meta($post->ID, '_sku', true);
+        $category = get_post_meta($post->ID, '_category', true);
+        ?>
+
+        <table class="form-table">
+            <tr>
+                <th><label for="software_id">Item ID</label></th>
+                <td><input type="text" name="software_id" id="software_id" value="<?php echo esc_attr($software_id); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="price">Price</label></th>
+                <td><input type="text" name="price" id="price" value="<?php echo esc_attr($price); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="rrp">RRP</label></th>
+                <td><input type="text" name="rrp" id="rrp" value="<?php echo esc_attr($rrp); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="quantity">Quantity</label></th>
+                <td><input type="text" name="quantity" id="quantity" value="<?php echo esc_attr($quantity); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="sku">SKU</label></th>
+                <td><input type="text" name="sku" id="sku" value="<?php echo esc_attr($sku); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="category">Category</label></th>
+                <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+
+        <h2>Custom Fields</h2>
+        <?php
+        $custom_fields = get_post_custom($post->ID);
+        foreach ($custom_fields as $key => $value) {
+            if ('_' !== $key[0]) {
+                echo '<p>';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '</p>';
+            }
+        }
+    } catch (Exception $e) {
+        smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
+        });
+    }
+}
+
+function smartmail_save_software_details(int $post_id): void {
+    try {
+        if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
+            throw new Exception('Nonce verification failed.');
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if ('software' !== $_POST['post_type'] || !current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        $software_id = isset($_POST['software_id']) ? sanitize_text_field($_POST['software_id']) : '';
+        $price = isset($_POST['price']) ? sanitize_text_field($_POST['price']) : '';
+        $rrp = isset($_POST['rrp']) ? sanitize_text_field($_POST['rrp']) : '';
+        $quantity = isset($_POST['quantity']) ? sanitize_text_field($_POST['quantity']) : '';
+        $sku = isset($_POST['sku']) ? sanitize_text_field($_POST['sku']) : '';
+        $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+        update_post_meta($post_id, '_software_id', $software_id);
+        update_post_meta($post_id, '_price', $price);
+        update_post_meta($post_id, '_rrp', $rrp);
+        update_post_meta($post_id, '_quantity', $quantity);
+        update_post_meta($post_id, '_sku', $sku);
+        update_post_meta($post_id, '_category', $category);
+
+        foreach ($_POST as $key => $value) {
+            if ('_' !== $key[0]) {
+                update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
+            }
+        }
+    } catch (Exception $e) {
+        smartmail_log_error("Error saving software details: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the software details.</p></div>';
+        });
+    }
+}
+add_action('save_post', 'smartmail_save_software_details');
+
+// Add Meta Boxes for eBooks
+function smartmail_add_ebooks_meta_boxes(): void {
+    add_meta_box(
+        'ebooks_details',
+        'eBook Details',
+        'smartmail_ebooks_details_callback',
+        'ebooks',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'smartmail_add_ebooks_meta_boxes');
+
+function smartmail_ebooks_details_callback($post): void {
+    try {
+        wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
+        $ebook_id = get_post_meta($post->ID, '_ebook_id', true);
+        $price = get_post_meta($post->ID, '_price', true);
+        $author = get_post_meta($post->ID, '_author', true);
+        $publisher = get_post_meta($post->ID, '_publisher', true);
+        $isbn = get_post_meta($post->ID, '_isbn', true);
+        $category = get_post_meta($post->ID, '_category', true);
+        ?>
+
+        <table class="form-table">
+            <tr>
+                <th><label for="ebook_id">eBook ID</label></th>
+                <td><input type="text" name="ebook_id" id="ebook_id" value="<?php echo esc_attr($ebook_id); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="price">Price</label></th>
+                <td><input type="text" name="price" id="price" value="<?php echo esc_attr($price); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="author">Author</label></th>
+                <td><input type="text" name="author" id="author" value="<?php echo esc_attr($author); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="publisher">Publisher</label></th>
+                <td><input type="text" name="publisher" id="publisher" value="<?php echo esc_attr($publisher); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="isbn">ISBN</label></th>
+                <td><input type="text" name="isbn" id="isbn" value="<?php echo esc_attr($isbn); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="category">Category</label></th>
+                <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+
+        <h2>Custom Fields</h2>
+        <?php
+        $custom_fields = get_post_custom($post->ID);
+        foreach ($custom_fields as $key => $value) {
+            if ('_' !== $key[0]) {
+                echo '<p>';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
+                echo '</p>';
+            }
+        }
+    } catch (Exception $e) {
+        smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
+        });
+    }
+}
+
+function smartmail_save_ebooks_details(int $post_id): void {
+    try {
+        if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
+            throw new Exception('Nonce verification failed.');
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if ('ebooks' !== $_POST['post_type'] || !current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        $ebook_id = isset($_POST['ebook_id']) ? sanitize_text_field($_POST['ebook_id']) : '';
+        $price = isset($_POST['price']) ? sanitize_text_field($_POST['price']) : '';
+        $author = isset($_POST['author']) ? sanitize_text_field($_POST['author']) : '';
+        $publisher = isset($_POST['publisher']) ? sanitize_text_field($_POST['publisher']) : '';
+        $isbn = isset($_POST['isbn']) ? sanitize_text_field($_POST['isbn']) : '';
+        $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+        update_post_meta($post_id, '_ebook_id', $ebook_id);
+        update_post_meta($post_id, '_price', $price);
+        update_post_meta($post_id, '_author', $author);
+        update_post_meta($post_id, '_publisher', $publisher);
+        update_post_meta($post_id, '_isbn', $isbn);
+        update_post_meta($post_id, '_category', $category);
+
+        foreach ($_POST as $key => $value) {
+            if ('_' !== $key[0]) {
+                update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
+            }
+        }
+    } catch (Exception $e) {
+        smartmail_log_error("Error saving eBook details: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the eBook details.</p></div>';
+        });
+    }
+}
+add_action('save_post', 'smartmail_save_ebooks_details');
