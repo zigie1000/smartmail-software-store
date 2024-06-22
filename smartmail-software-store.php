@@ -3,12 +3,8 @@
 Plugin Name: SmartMail Software Store
 Description: The main plugin that integrates custom functionalities.
 Author: Marco Zagato
-Author URI: https://smartmail.store
 Version: 1.0
 */
-
-// Include the custom plugin file (adjust the path if necessary)
-require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
 
 class SmartMail_Software_Store_Activator {
     public static function activate() {
@@ -88,4 +84,8 @@ class SmartMail_Software_Store_Activator {
         register_post_type('software', $software_args);
     }
 }
-?>
+
+register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', 'activate'));
+
+// Include the custom plugin file
+require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
