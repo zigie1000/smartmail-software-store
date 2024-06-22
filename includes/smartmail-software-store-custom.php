@@ -180,42 +180,46 @@ function smartmail_software_details_callback($post): void {
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
-        add_action('admin_notices', function() {
-        echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
-        });
     }
 }
 
-// Save Meta Box Data for Software
-function smartmail_save_software_meta_box_data($post_id): void {
+// Save Meta Boxes for Software
+function smartmail_save_software_meta_boxes($post_id): void {
     if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
         return;
     }
 
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
+    $fields = [
+        'software_id' => '_software_id',
+        'price' => '_price',
+        'rrp' => '_rrp',
+        'quantity' => '_quantity',
+        'sku' => '_sku',
+        'category' => '_category',
+    ];
+
+    foreach ($fields as $key => $field) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $field, sanitize_text_field($_POST[$key]));
+        }
     }
 
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-
-    $fields = array('software_id', 'price', 'rrp', 'quantity', 'sku', 'category');
-
-    foreach ($fields as $field) {
-        if (array_key_exists($field, $_POST)) {
-            update_post_meta($post_id, '_' . $field, sanitize_text_field($_POST[$field]));
+    // Save custom fields
+    $custom_fields = get_post_custom($post_id);
+    foreach ($custom_fields as $key => $value) {
+        if ('_' !== $key[0] && isset($_POST[$key])) {
+            update_post_meta($post_id, $key, sanitize_text_field($_POST[$key]));
         }
     }
 }
-add_action('save_post', 'smartmail_save_software_meta_box_data');
+add_action('save_post', 'smartmail_save_software_meta_boxes');
 
 // Add Meta Boxes for eBooks
 function smartmail_add_ebooks_meta_boxes(): void {
     add_meta_box(
         'ebook_details',
         'eBook Details',
-        'smartmail_ebooks_details_callback',
+        'smartmail_ebook_details_callback',
         'ebooks',
         'normal',
         'high'
@@ -223,7 +227,7 @@ function smartmail_add_ebooks_meta_boxes(): void {
 }
 add_action('add_meta_boxes', 'smartmail_add_ebooks_meta_boxes');
 
-function smartmail_ebooks_details_callback($post): void {
+function smartmail_ebook_details_callback($post): void {
     try {
         wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
         $ebook_id = get_post_meta($post->ID, '_ebook_id', true);
@@ -274,54 +278,58 @@ function smartmail_ebooks_details_callback($post): void {
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
-        add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
-        });
     }
 }
 
-// Save Meta Box Data for eBooks
-function smartmail_save_ebooks_meta_box_data($post_id): void {
+// Save Meta Boxes for eBooks
+function smartmail_save_ebooks_meta_boxes($post_id): void {
     if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
         return;
     }
 
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
+    $fields = [
+        'ebook_id' => '_ebook_id',
+        'price' => '_price',
+        'author' => '_author',
+        'publisher' => '_publisher',
+        'isbn' => '_isbn',
+        'category' => '_category',
+    ];
+
+    foreach ($fields as $key => $field) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $field, sanitize_text_field($_POST[$key]));
+        }
     }
 
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-
-    $fields = array('ebook_id', 'price', 'author', 'publisher', 'isbn', 'category');
-
-    foreach ($fields as $field) {
-        if (array_key_exists($field, $_POST)) {
-            update_post_meta($post_id, '_' . $field, sanitize_text_field($_POST[$field]));
+    // Save custom fields
+    $custom_fields = get_post_custom($post_id);
+    foreach ($custom_fields as $key => $value) {
+        if ('_' !== $key[0] && isset($_POST[$key])) {
+            update_post_meta($post_id, $key, sanitize_text_field($_POST[$key]));
         }
     }
 }
-add_action('save_post', 'smartmail_save_ebooks_meta_box_data');
+add_action('save_post', 'smartmail_save_ebooks_meta_boxes');
 
-// Add Settings Page
-function smartmail_add_settings_page(): void {
+// Add admin settings menu
+function smartmail_add_admin_menu(): void {
     add_menu_page(
-        'SmartMail Software Store Settings',
+        'SmartMail Settings',
         'SmartMail Settings',
         'manage_options',
         'smartmail-settings',
-        'smartmail_settings_page_callback',
+        'smartmail_settings_page',
         'dashicons-admin-generic',
-        20
+        80
     );
 }
-add_action('admin_menu', 'smartmail_add_settings_page');
+add_action('admin_menu', 'smartmail_add_admin_menu');
 
-function smartmail_settings_page_callback(): void {
+function smartmail_settings_page(): void {
     ?>
     <div class="wrap">
-        <h1>SmartMail Software Store Settings</h1>
+        <h1>SmartMail Settings</h1>
         <form method="post" action="options.php">
             <?php
             settings_fields('smartmail_settings_group');
@@ -333,34 +341,43 @@ function smartmail_settings_page_callback(): void {
     <?php
 }
 
-// Register Settings
 function smartmail_register_settings(): void {
-    register_setting('smartmail_settings_group', 'smartmail_settings');
+    register_setting('smartmail_settings_group', 'smartmail_setting_1');
+    register_setting('smartmail_settings_group', 'smartmail_setting_2');
 
     add_settings_section(
         'smartmail_settings_section',
         'General Settings',
-        'smartmail_settings_section_callback',
+        null,
         'smartmail-settings'
     );
 
     add_settings_field(
-        'smartmail_custom_setting',
-        'Custom Setting',
-        'smartmail_custom_setting_callback',
+        'smartmail_setting_1',
+        'Setting 1',
+        'smartmail_setting_1_callback',
+        'smartmail-settings',
+        'smartmail_settings_section'
+    );
+
+    add_settings_field(
+        'smartmail_setting_2',
+        'Setting 2',
+        'smartmail_setting_2_callback',
         'smartmail-settings',
         'smartmail_settings_section'
     );
 }
 add_action('admin_init', 'smartmail_register_settings');
 
-function smartmail_settings_section_callback(): void {
-    echo '<p>General settings for the SmartMail Software Store plugin.</p>';
+function smartmail_setting_1_callback(): void {
+    $setting = esc_attr(get_option('smartmail_setting_1'));
+    echo "<input type='text' name='smartmail_setting_1' value='$setting' class='regular-text'>";
 }
 
-function smartmail_custom_setting_callback(): void {
-    $setting = get_option('smartmail_custom_setting');
-    echo '<input type="text" name="smartmail_custom_setting" value="' . esc_attr($setting) . '" class="regular-text">';
+function smartmail_setting_2_callback(): void {
+    $setting = esc_attr(get_option('smartmail_setting_2'));
+    echo "<input type='text' name='smartmail_setting_2' value='$setting' class='regular-text'>";
 }
 ?>
-                
+        
