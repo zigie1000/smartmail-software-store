@@ -339,4 +339,3 @@ function smartmail_save_ebooks_details(int $post_id): void {
     }
 }
 add_action('save_post', 'smartmail_save_ebooks_details');
-                
