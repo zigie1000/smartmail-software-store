@@ -181,6 +181,8 @@ function smartmail_software_details_callback($post): void {
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</ |oai:code-citation|
+  function() {
             echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
         });
     }
@@ -338,5 +340,4 @@ function smartmail_save_ebooks_details(int $post_id): void {
         });
     }
 }
-add_action('save_post', 'smartmail_save_ebooks_details');
-?>
+add_action('save_post', 'smartmail_save_ebooks_details');              
