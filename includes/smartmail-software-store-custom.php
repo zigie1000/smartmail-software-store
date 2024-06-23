@@ -303,7 +303,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
             throw new Exception('Nonce verification failed.');
         }
-
+        
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -338,4 +338,4 @@ function smartmail_save_ebooks_details(int $post_id): void {
         });
     }
 }
-add_action('save_post', 'smartmail_save_ebooks_details');           
+add_action('save_post', 'smartmail_save_ebooks_details');         
