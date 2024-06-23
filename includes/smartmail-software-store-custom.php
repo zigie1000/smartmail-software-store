@@ -339,3 +339,55 @@ function smartmail_save_ebooks_details(int $post_id): void {
     }
 }
 add_action('save_post', 'smartmail_save_ebooks_details');
+
+// Shortcode for displaying Software
+function smartmail_display_software_shortcode($atts) {
+    ob_start();
+    $query = new WP_Query(array(
+        'post_type' => 'software',
+        'posts_per_page' => -1,
+    ));
+
+    if ($query->have_posts()) {
+        echo '<ul class="software-list">';
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<li>';
+            echo '<h2>' . get_the_title() . '</h2>';
+            echo '<div>' . get_the_content() . '</div>';
+            echo '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No software found.</p>';
+    }
+    wp_reset_postdata();
+    return ob_get_clean();
+}
+add_shortcode('smartmail_software_display', 'smartmail_display_software_shortcode');
+
+// Shortcode for displaying eBooks
+function smartmail_display_ebooks_shortcode($atts) {
+    ob_start();
+    $query = new WP_Query(array(
+        'post_type' => 'ebooks',
+        'posts_per_page' => -1,
+    ));
+
+    if ($query->have_posts()) {
+        echo '<ul class="ebooks-list">';
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<li>';
+            echo '<h2>' . get_the_title() . '</h2>';
+            echo '<div>' . get_the_content() . '</div>';
+            echo '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No ebooks found.</p>';
+    }
+    wp_reset_postdata();
+    return ob_get_clean();
+}
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
