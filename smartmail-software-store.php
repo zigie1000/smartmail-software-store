@@ -1,4 +1,3 @@
-<?php
 /*
 Plugin Name: SmartMail Software Store
 Description: A plugin to manage and sell software and ebooks.
@@ -90,4 +89,24 @@ register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', '
 
 // Include the custom plugin file
 require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
-?>
+
+class SmartMail_Software_Store_Public {
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . 'css/smartmail-ebooks-store.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . 'js/smartmail-ebooks-store.js', array('jquery'), $this->version, false);
+    }
+}
+
+add_action('wp_enqueue_scripts', array('SmartMail_Software_Store_Public', 'enqueue_styles'));
+add_action('wp_enqueue_scripts', array('SmartMail_Software_Store_Public', 'enqueue_scripts'));
