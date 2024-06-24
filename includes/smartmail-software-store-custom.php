@@ -1,4 +1,14 @@
 <?php
+/*
+Plugin Name: SmartMail Software Store Customizations
+Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
+Author: Marco Zagato
+Author URI: https://smartmail.store
+Version: 1.0
+*/
+
+declare(strict_types=1);
+
 // Ensure WooCommerce is active before proceeding
 if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
     add_action('admin_notices', 'smartmail_woocommerce_inactive_notice');
@@ -169,7 +179,7 @@ function smartmail_software_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -372,10 +382,7 @@ function smartmail_display_software_shortcode($atts) {
         echo '<ul class="software-list">';
         while ($query->have_posts()) {
             $query->the_post();
-            echo '<li class="product">';
-            if (has_post_thumbnail()) {
-                the_post_thumbnail('full');
-            }
+            echo '<li>';
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             echo '</li>';
@@ -401,10 +408,7 @@ function smartmail_display_ebooks_shortcode($atts) {
         echo '<ul class="ebooks-list">';
         while ($query->have_posts()) {
             $query->the_post();
-            echo '<li class="product">';
-            if (has_post_thumbnail()) {
-                the_post_thumbnail('full');
-            }
+            echo '<li>';
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             echo '</li>';
@@ -416,4 +420,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');            
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
