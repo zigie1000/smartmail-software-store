@@ -88,14 +88,5 @@ class SmartMail_Software_Store_Activator {
 
 register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', 'activate'));
 
-// Include the custom plugin files
+// Include the custom plugin file
 require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-smartmail-software-store-public.php';
-
-// Initialize the public-facing functionality
-function run_smartmail_software_store() {
-    $plugin = new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0');
-    add_action('wp_enqueue_scripts', array($plugin, 'enqueue_styles'));
-    add_action('wp_enqueue_scripts', array($plugin, 'enqueue_scripts'));
-}
-run_smartmail_software_store();
