@@ -1,3 +1,4 @@
+<?php
 /*
 Plugin Name: SmartMail Software Store
 Description: A plugin to manage and sell software and ebooks.
