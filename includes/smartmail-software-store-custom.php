@@ -444,4 +444,3 @@ class SmartMail_Software_Store_Public {
 
 add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_styles'));
 add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_scripts'));
-                
