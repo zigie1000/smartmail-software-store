@@ -1,14 +1,4 @@
 <?php
-/*
-Plugin Name: SmartMail Software Store Customizations
-Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
-Author: Marco Zagato
-Author URI: https://smartmail.store
-Version: 1.0
-*/
-
-declare(strict_types=1);
-
 // Ensure WooCommerce is active before proceeding
 if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
     add_action('admin_notices', 'smartmail_woocommerce_inactive_notice');
@@ -168,7 +158,7 @@ function smartmail_software_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
             </tr>
         </table>
 
@@ -295,7 +285,7 @@ function smartmail_ebooks_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
             </tr>
         </table>
 
@@ -382,7 +372,10 @@ function smartmail_display_software_shortcode($atts) {
         echo '<ul class="software-list">';
         while ($query->have_posts()) {
             $query->the_post();
-            echo '<li>';
+            echo '<li class="product">';
+            if (has_post_thumbnail()) {
+                the_post_thumbnail('full');
+            }
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             echo '</li>';
@@ -408,7 +401,10 @@ function smartmail_display_ebooks_shortcode($atts) {
         echo '<ul class="ebooks-list">';
         while ($query->have_posts()) {
             $query->the_post();
-            echo '<li>';
+            echo '<li class="product">';
+            if (has_post_thumbnail()) {
+                the_post_thumbnail('full');
+            }
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             echo '</li>';
@@ -420,27 +416,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-
-// Enqueue public styles and scripts
-class SmartMail_Software_Store_Public {
-    private $plugin_name;
-    private $version;
-
-    public function __construct($plugin_name, $version) {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-    }
-
-    public function enqueue_styles() {
-        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
-        wp_enqueue_style($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . 'css/smartmail-ebooks-store.css', array(), $this->version, 'all');
-    }
-
-    public function enqueue_scripts() {
-        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
-    }
-}
-
-add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_styles'));
-add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_scripts'));
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');            
