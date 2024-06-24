@@ -168,7 +168,7 @@ function smartmail_software_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" class="regular-text"></td>
             </tr>
         </table>
 
@@ -271,8 +271,7 @@ function smartmail_ebooks_details_callback($post): void {
         <table class="form-table">
             <tr>
                 <th><label for="ebook_id">eBook ID</label></th>
-                <td><input type="text" name="ebook_id" id="ebook_id"
-                value="<?php echo esc_attr($ebook_id); ?>" class="regular-text"></td>
+                <td><input type="text" name="ebook_id" id="ebook_id" value="<?php echo esc_attr($ebook_id); ?>" class="regular-text"></td>
             </tr>
             <tr>
                 <th><label for="price">Price</label></th>
@@ -324,7 +323,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
             throw new Exception('Nonce verification failed.');
         }
-
+        
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -347,7 +346,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         update_post_meta($post_id, '_publisher', $publisher);
         update_post_meta($post_id, '_isbn', $isbn);
         update_post_meta($post_id, '_category', $category);
-
+        
         if ($file && !empty($file['name'])) {
             $upload = wp_handle_upload($file, array('test_form' => false));
             if (isset($upload['url'])) {
@@ -421,4 +420,28 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');       
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+
+// Enqueue public styles and scripts
+class SmartMail_Software_Store_Public {
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . 'css/smartmail-ebooks-store.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
+    }
+}
+
+add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_styles'));
+add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_scripts'));
+                
