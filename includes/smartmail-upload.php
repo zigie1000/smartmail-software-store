@@ -90,7 +90,7 @@ function smartmail_digital_product_details_callback($post): void {
 }
 
 function smartmail_save_digital_product_details(int $post_id): void {
-    if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
+if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
         return;
     }
 
@@ -120,4 +120,4 @@ function smartmail_add_download_link_to_order($item_id, $item, $order_id) {
     }
 }
 add_action('woocommerce_order_item_meta_end', 'smartmail_add_download_link_to_order', 10, 3);
-?>
+?>                                                        
