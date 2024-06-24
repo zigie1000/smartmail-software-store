@@ -1,5 +1,6 @@
 /* Public CSS for SmartMail Software Store */
-.smartmail-software-store {
+.smartmail-software-store,
+.smartmail-ebooks-store {
     font-family: Arial, sans-serif;
     background-color: #fff;
     padding: 20px;
@@ -9,13 +10,16 @@
 }
 
 .smartmail-software-store h1,
-.smartmail-software-store h2 {
+.smartmail-software-store h2,
+.smartmail-ebooks-store h1,
+.smartmail-ebooks-store h2 {
     color: #333;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.smartmail-software-store .product {
+.smartmail-software-store .product,
+.smartmail-ebooks-store .product {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,30 +29,35 @@
     border-radius: 4px;
 }
 
-.smartmail-software-store .product img {
+.smartmail-software-store .product img,
+.smartmail-ebooks-store .product img {
     max-width: 100%;
     border-bottom: 1px solid #ddd;
     margin-bottom: 15px;
 }
 
-.smartmail-software-store .product h3 {
+.smartmail-software-store .product h3,
+.smartmail-ebooks-store .product h3 {
     color: #333;
     font-size: 18px;
     margin: 0;
 }
 
-.smartmail-software-store .product p {
+.smartmail-software-store .product p,
+.smartmail-ebooks-store .product p {
     color: #555;
     font-size: 14px;
 }
 
-.smartmail-software-store .product .price {
+.smartmail-software-store .product .price,
+.smartmail-ebooks-store .product .price {
     color: #0073aa;
     font-size: 16px;
     margin-top: 10px;
 }
 
-.smartmail-software-store .product .buy-button {
+.smartmail-software-store .product .buy-button,
+.smartmail-ebooks-store .product .buy-button {
     background-color: #0073aa;
     color: white;
     padding: 10px 20px;
@@ -58,6 +67,7 @@
     margin-top: 10px;
 }
 
-.smartmail-software-store .product .buy-button:hover {
+.smartmail-software-store .product .buy-button:hover,
+.smartmail-ebooks-store .product .buy-button:hover {
     background-color: #005177;
 }
