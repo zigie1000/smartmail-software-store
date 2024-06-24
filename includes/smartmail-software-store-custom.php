@@ -138,6 +138,7 @@ function smartmail_software_details_callback($post): void {
         $quantity = get_post_meta($post->ID, '_quantity', true);
         $sku = get_post_meta($post->ID, '_sku', true);
         $category = get_post_meta($post->ID, '_category', true);
+        $file = get_post_meta($post->ID, '_file', true);
         ?>
 
         <table class="form-table">
@@ -165,19 +166,16 @@ function smartmail_software_details_callback($post): void {
                 <th><label for="category">Category</label></th>
                 <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
             </tr>
+            <tr>
+                <th><label for="file">File</label></th>
+                <td><input type="file" name="file" id="file" class="regular-text">
+                    <?php if ($file) : ?>
+                        <p>Current File: <a href="<?php echo esc_url($file); ?>" target="_blank">Download</a></p>
+                    <?php endif; ?>
+                </td>
+            </tr>
         </table>
-
-        <h2>Custom Fields</h2>
         <?php
-        $custom_fields = get_post_custom($post->ID);
-        foreach ($custom_fields as $key => $value) {
-            if ('_' !== $key[0]) {
-                echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
-                echo '</p>';
-            }
-        }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
@@ -206,6 +204,16 @@ function smartmail_save_software_details(int $post_id): void {
         $quantity = isset($_POST['quantity']) ? sanitize_text_field($_POST['quantity']) : '';
         $sku = isset($_POST['sku']) ? sanitize_text_field($_POST['sku']) : '';
         $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+        // Handle file upload
+        if (!empty($_FILES['file']['name'])) {
+            $uploaded = wp_handle_upload($_FILES['file'], array('test_form' => false));
+            if (isset($uploaded['file'])) {
+                update_post_meta($post_id, '_file', $uploaded['url']);
+            } else {
+                throw new Exception('File upload failed.');
+            }
+        }
 
         update_post_meta($post_id, '_software_id', $software_id);
         update_post_meta($post_id, '_price', $price);
@@ -246,10 +254,16 @@ function smartmail_ebooks_details_callback($post): void {
         wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
         $ebook_id = get_post_meta($post->ID, '_ebook_id', true);
         $price = get_post_meta($post->ID, '_price', true);
+        function smartmail_ebooks_details_callback($post): void {
+    try {
+        wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
+        $ebook_id = get_post_meta($post->ID, '_ebook_id', true);
+        $price = get_post_meta($post->ID, '_price', true);
         $author = get_post_meta($post->ID, '_author', true);
         $publisher = get_post_meta($post->ID, '_publisher', true);
         $isbn = get_post_meta($post->ID, '_isbn', true);
         $category = get_post_meta($post->ID, '_category', true);
+        $file = get_post_meta($post->ID, '_file', true);
         ?>
 
         <table class="form-table">
@@ -277,19 +291,16 @@ function smartmail_ebooks_details_callback($post): void {
                 <th><label for="category">Category</label></th>
                 <td><input type="text" name="category" id="category" value="<?php echo esc_attr($category); ?>" class="regular-text"></td>
             </tr>
+            <tr>
+                <th><label for="file">File</label></th>
+                <td><input type="file" name="file" id="file" class="regular-text">
+                    <?php if ($file) : ?>
+                        <p>Current File: <a href="<?php echo esc_url($file); ?>" target="_blank">Download</a></p>
+                    <?php endif; ?>
+                </td>
+            </tr>
         </table>
-
-        <h2>Custom Fields</h2>
         <?php
-        $custom_fields = get_post_custom($post->ID);
-        foreach ($custom_fields as $key => $value) {
-            if ('_' !== $key[0]) {
-                echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
-                echo '</p>';
-            }
-        }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
@@ -303,7 +314,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
             throw new Exception('Nonce verification failed.');
         }
-        
+
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -318,6 +329,16 @@ function smartmail_save_ebooks_details(int $post_id): void {
         $publisher = isset($_POST['publisher']) ? sanitize_text_field($_POST['publisher']) : '';
         $isbn = isset($_POST['isbn']) ? sanitize_text_field($_POST['isbn']) : '';
         $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+        // Handle file upload
+        if (!empty($_FILES['file']['name'])) {
+            $uploaded = wp_handle_upload($_FILES['file'], array('test_form' => false));
+            if (isset($uploaded['file'])) {
+                update_post_meta($post_id, '_file', $uploaded['url']);
+            } else {
+                throw new Exception('File upload failed.');
+            }
+        }
 
         update_post_meta($post_id, '_ebook_id', $ebook_id);
         update_post_meta($post_id, '_price', $price);
