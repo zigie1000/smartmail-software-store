@@ -1,4 +1,3 @@
-/* Public CSS for SmartMail eBooks */
 .smartmail-ebooks-store {
     font-family: Arial, sans-serif;
     background-color: #fff;
@@ -15,7 +14,7 @@
     margin-bottom: 20px;
 }
 
-.smartmail-ebooks-store .ebook {
+.smartmail-ebooks-store .product {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,30 +24,30 @@
     border-radius: 4px;
 }
 
-.smartmail-ebooks-store .ebook img {
+.smartmail-ebooks-store .product img {
     max-width: 100%;
     border-bottom: 1px solid #ddd;
     margin-bottom: 15px;
 }
 
-.smartmail-ebooks-store .ebook h3 {
+.smartmail-ebooks-store .product h3 {
     color: #333;
     font-size: 18px;
     margin: 0;
 }
 
-.smartmail-ebooks-store .ebook p {
+.smartmail-ebooks-store .product p {
     color: #555;
     font-size: 14px;
 }
 
-.smartmail-ebooks-store .ebook .price {
+.smartmail-ebooks-store .product .price {
     color: #0073aa;
     font-size: 16px;
     margin-top: 10px;
 }
 
-.smartmail-ebooks-store .ebook .buy-button {
+.smartmail-ebooks-store .product .buy-button {
     background-color: #0073aa;
     color: white;
     padding: 10px 20px;
@@ -58,6 +57,6 @@
     margin-top: 10px;
 }
 
-.smartmail-ebooks-store .ebook .buy-button:hover {
+.smartmail-ebooks-store .product .buy-button:hover {
     background-color: #005177;
 }
