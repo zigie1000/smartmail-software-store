@@ -1,4 +1,3 @@
-<?php
 /*
 Plugin Name: SmartMail Software Store
 Description: A plugin to manage and sell software and ebooks.
@@ -89,4 +88,4 @@ class SmartMail_Software_Store_Activator {
 register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', 'activate'));
 
 // Include the custom plugin file
-require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';          
+require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
