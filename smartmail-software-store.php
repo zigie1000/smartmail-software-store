@@ -70,7 +70,7 @@ class SmartMail_Software_Store_Activator {
         $software_args = array(
             'labels'             => $software_labels,
             'public'             => true,
-            'publicly_queryable' => true,
+            'publicly queryable' => true,
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
@@ -90,3 +90,7 @@ register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', '
 
 // Include the custom plugin file
 require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
+
+// Include the new upload functionality
+require_once plugin_dir_path(__FILE__) . 'includes/smartmail-upload.php';
+?>
