@@ -179,7 +179,7 @@ function smartmail_software_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -323,7 +323,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
             throw new Exception('Nonce verification failed.');
         }
-        
+
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -420,4 +420,26 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');    
+
+// Enqueue styles and scripts
+class SmartMail_Software_Store_Public {
+    private $plugin_name;
+    private $version;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
+
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/smartmail-software-store-public.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . 'css/smartmail-ebooks-store.css', array(), $this->version, 'all');
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
+    }
+}
+add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_styles'));
+add_action('wp_enqueue_scripts', array(new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0'), 'enqueue_scripts'));
