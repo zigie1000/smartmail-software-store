@@ -90,7 +90,3 @@ register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', '
 
 // Include the custom plugin file
 require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
-
-// Include the new upload functionality
-require_once plugin_dir_path(__FILE__) . 'includes/smartmail-upload.php';
-?>
