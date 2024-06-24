@@ -18,13 +18,7 @@
             echo '<td class="column-title"><strong><a class="row-title" href="' . get_edit_post_link() . '">' . get_the_title() . '</a></strong></td>';
             echo '<td class="column-author">' . get_the_author() . '</td>';
             echo '<td class="column-date">' . get_the_date() . '</td>';
-            echo '<td class="column-thumbnail">';
-            if (has_post_thumbnail()) {
-                the_post_thumbnail('thumbnail');
-            } else {
-                echo 'No thumbnail';
-            }
-            echo '</td>';
+            echo '<td class="column-thumbnail">' . get_the_post_thumbnail() . '</td>';
             echo '</tr>';
         }
         echo '</tbody>';
