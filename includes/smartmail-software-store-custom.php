@@ -411,6 +411,9 @@ function smartmail_display_ebooks_shortcode($atts) {
             echo '<li>';
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
+            if (has_post_thumbnail()) {
+                echo get_the_post_thumbnail();
+            }
             echo '</li>';
         }
         echo '</ul>';
@@ -420,4 +423,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');    
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');            
