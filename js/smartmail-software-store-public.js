@@ -1,4 +1,3 @@
-/* Public JS for SmartMail Software Store */
 jQuery(document).ready(function($) {
     // Custom public scripts can be added here
     console.log("SmartMail Software Store Public JS Loaded");
