@@ -168,7 +168,7 @@ function smartmail_software_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" class="regular-text"></td>
             </tr>
         </table>
 
@@ -300,7 +300,7 @@ function smartmail_ebooks_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" class="regular-text"></td>
             </tr>
         </table>
 
@@ -311,7 +311,7 @@ function smartmail_ebooks_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -361,8 +361,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
             } else {
                 throw new Exception('File upload failed.');
             }
-        }
-
+        }           
         foreach ($_POST as $key => $value) {
             if ('_' !== $key[0]) {
                 update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
@@ -427,4 +426,5 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');           
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+?>
