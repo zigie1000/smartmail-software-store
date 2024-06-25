@@ -1,73 +1,24 @@
-/* Public CSS for SmartMail Software Store */
-.smartmail-software-store,
-.smartmail-ebooks-store {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+<?php
+class SmartMail_Software_Store_Public {
+    private $plugin_name;
+    private $version;
 
-.smartmail-software-store h1,
-.smartmail-software-store h2,
-.smartmail-ebooks-store h1,
-.smartmail-ebooks-store h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+    }
 
-.smartmail-software-store .product,
-.smartmail-ebooks-store .product {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 4px;
-}
+    public function enqueue_styles() {
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . '../css/smartmail-software-store-public.css', array(), $this->version, 'all');
+        wp_enqueue_style($this->plugin_name . '-ebooks', plugin_dir_url(__FILE__) . '../css/smartmail-ebooks-store.css', array(), $this->version, 'all');
+    }
 
-.smartmail-software-store .product img,
-.smartmail-ebooks-store .product img {
-    max-width: 100%;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 15px;
+    public function enqueue_scripts() {
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . '../js/smartmail-software-store-public.js', array('jquery'), $this->version, false);
+    }
 }
-
-.smartmail-software-store .product h3,
-.smartmail-ebooks-store .product h3 {
-    color: #333;
-    font-size: 18px;
-    margin: 0;
-}
-
-.smartmail-software-store .product p,
-.smartmail-ebooks-store .product p {
-    color: #555;
-    font-size: 14px;
-}
-
-.smartmail-software-store .product .price,
-.smartmail-ebooks-store .product .price {
-    color: #0073aa;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-.smartmail-software-store .product .buy-button,
-.smartmail-ebooks-store .product .buy-button {
-    background-color: #0073aa;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.smartmail-software-store .product .buy-button:hover,
-.smartmail-ebooks-store .product .buy-button:hover {
-    background-color: #005177;
-}
+add_action('wp_enqueue_scripts', function() {
+    $plugin_public = new SmartMail_Software_Store_Public('smartmail-software-store', '1.0');
+    $plugin_public->enqueue_styles();
+    $plugin_public->enqueue_scripts();
+});
