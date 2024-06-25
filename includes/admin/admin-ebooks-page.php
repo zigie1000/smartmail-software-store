@@ -1,6 +1,6 @@
 <div class="wrap">
     <h1>Manage eBooks</h1>
-    <a href="<?php echo admin_url('post-new.php?post_type=ebook'); ?>" class="page-title-action">Add New eBook</a>
+    <a href="<?php echo admin_url('post-new.php?post_type=ebook'); ?>" class="page-title-action">Add New</a>
     <hr class="wp-header-end">
     <?php
     $args = array(
