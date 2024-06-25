@@ -1,4 +1,13 @@
 <?php
+/**
+ * The public-specific functionality of the plugin.
+ *
+ * @link       https://smartmail.store
+ * @since      1.0.0
+ *
+ * @package    SmartMail_Software_Store
+ * @subpackage SmartMail_Software_Store/public
+ */
 
 class SmartMail_Software_Store_Public {
     private $plugin_name;
@@ -23,5 +32,7 @@ class SmartMail_Software_Store_Public {
 }
 
 // Hook the methods to the appropriate actions
-add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
-add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+$smartmail_software_store_public = new SmartMail_Software_Store_Public('smartmail-software-store', '1.0.0');
+add_action('wp_enqueue_scripts', array($smartmail_software_store_public, 'enqueue_styles'));
+add_action('wp_enqueue_scripts', array($smartmail_software_store_public, 'enqueue_scripts'));
+?>
