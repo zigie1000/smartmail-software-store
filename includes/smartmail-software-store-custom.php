@@ -179,43 +179,30 @@ function smartmail_software_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text"
                 echo '</p>';
             }
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
-        echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
+        });
     }
 }
 
-// Save Meta Box Data for Software
-function smartmail_save_software_meta_box_data($post_id): void {
+function smartmail_save_software_details(int $post_id): void {
     try {
-        // Check if nonce is set
-        if (!isset($_POST['smartmail_nonce'])) {
-            return;
+        if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
+            throw new Exception('Nonce verification failed.');
         }
 
-        // Verify nonce
-        if (!wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
-            return;
-        }
-
-        // Check autosave
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
 
-        // Check user permissions
-        if (isset($_POST['post_type']) && 'page' === $_POST['post_type']) {
-            if (!current_user_can('edit_page', $post_id)) {
-                return;
-            }
-        } else {
-            if (!current_user_can('edit_post', $post_id)) {
-                return;
-            }
+        if ('software' !== $_POST['post_type'] || !current_user_can('edit_post', $post_id)) {
+            return;
         }
 
         $software_id = isset($_POST['software_id']) ? sanitize_text_field($_POST['software_id']) : '';
@@ -249,10 +236,12 @@ function smartmail_save_software_meta_box_data($post_id): void {
         }
     } catch (Exception $e) {
         smartmail_log_error("Error saving software details: " . $e->getMessage());
-        echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the software details.</p></div>';
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the software details.</p></div>';
+        });
     }
 }
-add_action('save_post', 'smartmail_save_software_meta_box_data');
+add_action('save_post', 'smartmail_save_software_details');
 
 // Add Meta Boxes for eBooks
 function smartmail_add_ebooks_meta_boxes(): void {
@@ -322,43 +311,30 @@ function smartmail_ebooks_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]); ?>" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
-        echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
+        });
     }
 }
 
-// Save Meta Box Data for eBooks
-function smartmail_save_ebooks_meta_box_data($post_id): void {
+function smartmail_save_ebooks_details(int $post_id): void {
     try {
-        // Check if nonce is set
-        if (!isset($_POST['smartmail_nonce'])) {
-            return;
+        if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
+            throw new Exception('Nonce verification failed.');
         }
-
-        // Verify nonce
-        if (!wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
-            return;
-        }
-
-        // Check autosave
+        
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
 
-        // Check user permissions
-        if (isset($_POST['post_type']) && 'page' === $_POST['post_type']) {
-            if (!current_user_can('edit_page', $post_id)) {
-                return;
-            }
-        } else {
-            if (!current_user_can('edit_post', $post_id)) {
-                return;
-            }
+        if ('ebooks' !== $_POST['post_type'] || !current_user_can('edit_post', $post_id)) {
+            return;
         }
 
         $ebook_id = isset($_POST['ebook_id']) ? sanitize_text_field($_POST['ebook_id']) : '';
@@ -394,10 +370,12 @@ function smartmail_save_ebooks_meta_box_data($post_id): void {
         }
     } catch (Exception $e) {
         smartmail_log_error("Error saving eBook details: " . $e->getMessage());
-        echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the eBook details.</p></div>';
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the eBook details.</p></div>';
+        });
     }
 }
-add_action('save_post', 'smartmail_save_ebooks_meta_box_data');
+add_action('save_post', 'smartmail_save_ebooks_details');
 
 // Shortcode for displaying Software
 function smartmail_display_software_shortcode($atts) {
@@ -444,10 +422,9 @@ function smartmail_display_ebooks_shortcode($atts) {
         }
         echo '</ul>';
     } else {
-        echo '<p>No eBooks found.</p>';
+        echo '<p>No ebooks found.</p>';
     }
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-?>                                                                 
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');            
