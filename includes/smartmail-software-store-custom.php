@@ -178,7 +178,8 @@ function smartmail_software_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label>'; 
+                echo '<label for="' . esc_attr($key) . '">' .
+                echo esc_html($key) . '</label> ';
                 echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
@@ -311,7 +312,7 @@ function smartmail_ebooks_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="<?php echo esc_attr($value[0]) ?>" class="regular-text" />';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -428,4 +429,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-?>
+?>                                                 
