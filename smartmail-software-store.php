@@ -1,74 +1,53 @@
 <?php
 /*
-Plugin Name: SmartMail Software Store
-Description: A plugin to manage and sell software and ebooks.
-Version: 1.0.0
+Plugin Name: SmartMail Software Store Customizations
+Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
 Author: Marco Zagato
 Author URI: https://smartmail.store
+Version: 1.0
 */
 
-class SmartMail_Software_Store_Activator {
-    public static function activate() {
-        // Create custom post types for eBooks and Software
-        self::create_custom_post_types();
+declare(strict_types=1);
+
+// Ensure WooCommerce is active before proceeding
+if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    add_action('admin_notices', 'smartmail_woocommerce_inactive_notice');
+    return;
+}
+
+function smartmail_woocommerce_inactive_notice(): void {
+    echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> WooCommerce is not active. Please activate WooCommerce to use this plugin.</p></div>';
+}
+
+// Error logging function
+function smartmail_log_error(string $message): void {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log($message);
     }
+}
 
-    private static function create_custom_post_types() {
-        // Register eBook post type
-        $ebook_labels = array(
-            'name'               => _x('eBooks', 'post type general name', 'smartmail-software-store'),
-            'singular_name'      => _x('eBook', 'post type singular name', 'smartmail-software-store'),
-            'menu_name'          => _x('eBooks', 'admin menu', 'smartmail-software-store'),
-            'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail-software-store'),
-            'add_new'            => _x('Add New', 'eBook', 'smartmail-software-store'),
-            'add_new_item'       => __('Add New eBook', 'smartmail-software-store'),
-            'new_item'           => __('New eBook', 'smartmail-software-store'),
-            'edit_item'          => __('Edit eBook', 'smartmail-software-store'),
-            'view_item'          => __('View eBook', 'smartmail-software-store'),
-            'all_items'          => __('All eBooks', 'smartmail-software-store'),
-            'search_items'       => __('Search eBooks', 'smartmail-software-store'),
-            'parent_item_colon'  => __('Parent eBooks:', 'smartmail-software-store'),
-            'not_found'          => __('No eBooks found.', 'smartmail-software-store'),
-            'not_found_in_trash' => __('No eBooks found in Trash.', 'smartmail-software-store')
+// Register Custom Post Type for Software
+function smartmail_register_software_post_type(): void {
+    try {
+        $labels = array(
+            'name'               => _x('Software', 'post type general name', 'smartmail'),
+            'singular_name'      => _x('Software', 'post type singular name', 'smartmail'),
+            'menu_name'          => _x('Software', 'admin menu', 'smartmail'),
+            'name_admin_bar'     => _x('Software', 'add new on admin bar', 'smartmail'),
+            'add_new'            => _x('Add New', 'software', 'smartmail'),
+            'add_new_item'       => __('Add New Software', 'smartmail'),
+            'new_item'           => __('New Software', 'smartmail'),
+            'edit_item'          => __('Edit Software', 'smartmail'),
+            'view_item'          => __('View Software', 'smartmail'),
+            'all_items'          => __('All Software', 'smartmail'),
+            'search_items'       => __('Search Software', 'smartmail'),
+            'parent_item_colon'  => __('Parent Software:', 'smartmail'),
+            'not_found'          => __('No software found.', 'smartmail'),
+            'not_found_in_trash' => __('No software found in Trash.', 'smartmail')
         );
 
-        $ebook_args = array(
-            'labels'             => $ebook_labels,
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'query_var'          => true,
-            'rewrite'            => array('slug' => 'ebook'),
-            'capability_type'    => 'post',
-            'has_archive'        => true,
-            'hierarchical'       => false,
-            'menu_position'      => null,
-            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
-        );
-
-        register_post_type('ebook', $ebook_args);
-
-        // Register Software post type
-        $software_labels = array(
-            'name'               => _x('Software', 'post type general name', 'smartmail-software-store'),
-            'singular_name'      => _x('Software', 'post type singular name', 'smartmail-software-store'),
-            'menu_name'          => _x('Software', 'admin menu', 'smartmail-software-store'),
-            'name_admin_bar'     => _x('Software', 'add new on admin bar', 'smartmail-software-store'),
-            'add_new'            => _x('Add New', 'Software', 'smartmail-software-store'),
-            'add_new_item'       => __('Add New Software', 'smartmail-software-store'),
-            'new_item'           => __('New Software', 'smartmail-software-store'),
-            'edit_item'          => __('Edit Software', 'smartmail-software-store'),
-            'view_item'          => __('View Software', 'smartmail-software-store'),
-            'all_items'          => __('All Software', 'smartmail-software-store'),
-            'search_items'       => __('Search Software', 'smartmail-software-store'),
-            'parent_item_colon'  => __('Parent Software:', 'smartmail-software-store'),
-            'not_found'          => __('No Software found.', 'smartmail-software-store'),
-            'not_found_in_trash' => __('No Software found in Trash.', 'smartmail-software-store')
-        );
-
-        $software_args = array(
-            'labels'             => $software_labels,
+        $args = array(
+            'labels'             => $labels,
             'public'             => true,
             'publicly_queryable' => true,
             'show_ui'            => true,
@@ -79,14 +58,25 @@ class SmartMail_Software_Store_Activator {
             'has_archive'        => true,
             'hierarchical'       => false,
             'menu_position'      => null,
-            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
+            'supports'           => array('title', 'editor', 'custom-fields', 'thumbnail'),
         );
 
-        register_post_type('software', $software_args);
+        register_post_type('software', $args);
+    } catch (Exception $e) {
+        smartmail_log_error("Error registering software post type: " . $e->getMessage());
+        add_action('admin_notices', function() {
+            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the software post type.</p></div>';
+        });
     }
 }
+add_action('init', 'smartmail_register_software_post_type');
 
-register_activation_hook(__FILE__, array('SmartMail_Software_Store_Activator', 'activate'));
-
-// Include the custom plugin file
-require_once plugin_dir_path(__FILE__) . 'includes/smartmail-software-store-custom.php';
+// Register Custom Post Type for eBooks
+function smartmail_register_ebooks_post_type(): void {
+    try {
+        $labels = array(
+            'name'               => _x('eBooks', 'post type general name', 'smartmail'),
+            'singular_name'      => _x('eBook', 'post type singular name', 'smartmail'),
+            'menu_name'          => _x('eBooks', 'admin menu', 'smartmail'),
+            'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail'),
+            'add_new'            => _x('Add New', 'ebook', '
