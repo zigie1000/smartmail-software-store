@@ -107,7 +107,7 @@ function smartmail_register_ebooks_post_type(): void {
         );
 
         register_post_type('ebooks', $args);
-    } catch (Exception e) {
+    } catch (Exception $e) {
         smartmail_log_error("Error registering eBooks post type: " . $e->getMessage());
         add_action('admin_notices', function() {
             echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the eBooks post type.</p></div>';
@@ -178,7 +178,6 @@ function smartmail_software_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' . esc_html($key)
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
                 echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
@@ -242,7 +241,7 @@ function smartmail_save_software_details(int $post_id): void {
         });
     }
 }
-add_action('save_post', 'smartmail_save_software_details');
+add_action('save_post','smartmail_save_software_details');
 
 // Add Meta Boxes for eBooks
 function smartmail_add_ebooks_meta_boxes(): void {
@@ -354,8 +353,8 @@ function smartmail_save_ebooks_details(int $post_id): void {
         update_post_meta($post_id, '_publisher', $publisher);
         update_post_meta($post_id, '_isbn', $isbn);
         update_post_meta($post_id, '_category', $category);
-                
-            if ($file && !empty($file['name'])) {
+        
+        if ($file && !empty($file['name'])) {
             $upload = wp_handle_upload($file, array('test_form' => false));
             if (isset($upload['url'])) {
                 update_post_meta($post_id, '_file', $upload['url']);
@@ -394,15 +393,15 @@ function smartmail_display_software_shortcode($atts) {
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             if (has_post_thumbnail()) {
-                echo get_the_post_thumbnail(null, 'medium');
+                echo get_the_post_thumbnail(get_the_ID(), 'medium');
             }
             $price = get_post_meta(get_the_ID(), '_price', true);
             $rrp = get_post_meta(get_the_ID(), '_rrp', true);
             if ($price && $rrp) {
-                $discount = round((($rrp - $price) / $rrp) * 100);
-                echo "<p>Price: $$price</p>";
-                echo "<p>RRP: $$rrp</p>";
-                echo "<p>Discount: $discount%</p>";
+                $discount = $rrp - $price;
+                echo '<p>Price: ' . esc_html($price) . '</p>';
+                echo '<p>RRP: ' . esc_html($rrp) . '</p>';
+                echo '<p>Discount: ' . esc_html($discount) . '</p>';
             }
             echo '</li>';
         }
@@ -431,15 +430,15 @@ function smartmail_display_ebooks_shortcode($atts) {
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             if (has_post_thumbnail()) {
-                echo get_the_post_thumbnail(null, 'medium');
+                echo get_the_post_thumbnail(get_the_ID(), 'medium');
             }
             $price = get_post_meta(get_the_ID(), '_price', true);
             $rrp = get_post_meta(get_the_ID(), '_rrp', true);
             if ($price && $rrp) {
-                $discount = round((($rrp - $price) / $rrp) * 100);
-                echo "<p>Price: $$price</p>";
-                echo "<p>RRP: $$rrp</p>";
-                echo "<p>Discount: $discount%</p>";
+                $discount = $rrp - $price;
+                echo '<p>Price: ' . esc_html($price) . '</p>';
+                echo '<p>RRP: ' . esc_html($rrp) . '</p>';
+                echo '<p>Discount: ' . esc_html($discount) . '</p>';
             }
             echo '</li>';
         }
@@ -451,4 +450,3 @@ function smartmail_display_ebooks_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-?>        
