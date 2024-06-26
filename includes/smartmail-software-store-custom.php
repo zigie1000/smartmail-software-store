@@ -1,4 +1,3 @@
-<?php
 /*
 Plugin Name: SmartMail Software Store Customizations
 Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
@@ -80,7 +79,14 @@ function smartmail_register_ebooks_post_type(): void {
             'menu_name'          => _x('eBooks', 'admin menu', 'smartmail'),
             'name_admin_bar'     => _x('eBook', 'add new on admin bar', 'smartmail'),
             'add_new'            => _x('Add New', 'ebook', 'smartmail'),
-            'add_new_item'       => __('Add New eBook', 'smartmail'),
+            'add_new_item'       =>
+
+
+
+
+
+
+__('Add New eBook', 'smartmail'),
             'new_item'           => __('New eBook', 'smartmail'),
             'edit_item'          => __('Edit eBook', 'smartmail'),
             'view_item'          => __('View eBook', 'smartmail'),
@@ -168,7 +174,7 @@ function smartmail_software_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" class="regular-text"></td>
             </tr>
         </table>
 
@@ -241,7 +247,7 @@ function smartmail_save_software_details(int $post_id): void {
         });
     }
 }
-add_action('save_post','smartmail_save_software_details');
+add_action('save_post', 'smartmail_save_software_details');
 
 // Add Meta Boxes for eBooks
 function smartmail_add_ebooks_meta_boxes(): void {
@@ -300,7 +306,7 @@ function smartmail_ebooks_details_callback($post): void {
             </tr>
             <tr>
                 <th><label for="file">File</label></th>
-                <td><input type="file" name="file" id="file" value="<?php echo esc_attr($file); ?>" class="regular-text"></td>
+                <td><input type="file" name="file" id="file" class="regular-text"></td>
             </tr>
         </table>
 
@@ -393,16 +399,10 @@ function smartmail_display_software_shortcode($atts) {
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             if (has_post_thumbnail()) {
-                echo get_the_post_thumbnail(get_the_ID(), 'medium');
+                echo get_the_post_thumbnail(null, 'medium');
             }
-            $price = get_post_meta(get_the_ID(), '_price', true);
-            $rrp = get_post_meta(get_the_ID(), '_rrp', true);
-            if ($price && $rrp) {
-                $discount = $rrp - $price;
-                echo '<p>Price: ' . esc_html($price) . '</p>';
-                echo '<p>RRP: ' . esc_html($rrp) . '</p>';
-                echo '<p>Discount: ' . esc_html($discount) . '</p>';
-            }
+            echo '<p>Price: ' . get_post_meta(get_the_ID(), '_price', true) . '</p>';
+            echo '<p>RRP: ' . get_post_meta(get_the_ID(), '_rrp', true) . '</p>';
             echo '</li>';
         }
         echo '</ul>';
@@ -430,16 +430,10 @@ function smartmail_display_ebooks_shortcode($atts) {
             echo '<h2>' . get_the_title() . '</h2>';
             echo '<div>' . get_the_content() . '</div>';
             if (has_post_thumbnail()) {
-                echo get_the_post_thumbnail(get_the_ID(), 'medium');
+                echo get_the_post_thumbnail(null, 'medium');
             }
-            $price = get_post_meta(get_the_ID(), '_price', true);
-            $rrp = get_post_meta(get_the_ID(), '_rrp', true);
-            if ($price && $rrp) {
-                $discount = $rrp - $price;
-                echo '<p>Price: ' . esc_html($price) . '</p>';
-                echo '<p>RRP: ' . esc_html($rrp) . '</p>';
-                echo '<p>Discount: ' . esc_html($discount) . '</p>';
-            }
+            echo '<p>Price: ' . get_post_meta(get_the_ID(), '_price', true) . '</p>';
+            echo '<p>RRP: ' . get_post_meta(get_the_ID(), '_rrp', true) . '</p>';
             echo '</li>';
         }
         echo '</ul>';
@@ -450,3 +444,142 @@ function smartmail_display_ebooks_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+
+// Ensure media uploads are handled correctly for eBooks
+function smartmail_handle_ebook_media_upload($post_id) {
+    if (isset($_FILES['file']) && !empty($_FILES['file']['name'])) {
+        $uploaded_file = $_FILES['file'];
+        $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+        if (isset($upload['url']) && !isset($upload['error'])) {
+            update_post_meta($post_id, '_file', $upload['url']);
+        } else {
+            smartmail_log_error("Error uploading file for eBook: " . $upload['error']);
+        }
+    }
+}
+add_action('save_post_ebooks', 'smartmail_handle_ebook_media_upload');
+
+// Ensure media uploads are handled correctly for Software
+function smartmail_handle_software_media_upload($post_id) {
+    if (isset($_FILES['file']) && !empty($_FILES['file']['name'])) {
+        $uploaded_file = $_FILES['file'];
+        $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
+
+        if (isset($upload['url']) && !isset($upload['error'])) {
+            update_post_meta($post_id, '_file', $upload['url']);
+        } else {
+            smartmail_log_error("Error uploading file for Software: " . $upload['error']);
+        }
+    }
+}
+add_action('save_post_software', 'smartmail_handle_software_media_upload');
+
+// Add theme support for post thumbnails
+add_theme_support('post-thumbnails', array('software', 'ebooks'));
+
+// Add custom image size for software and ebooks
+add_image_size('software_thumbnail', 300, 300, true);
+add_image_size('ebooks_thumbnail', 300, 300, true);
+
+// Enqueue styles for front-end display
+function smartmail_enqueue_styles() {
+    wp_enqueue_style('smartmail-styles', plugins_url('/css/smartmail.css', __FILE__));
+}
+add_action('wp_enqueue_scripts', 'smartmail_enqueue_styles');
+
+// SmartMail CSS
+function smartmail_custom_css() {
+    echo "
+    <style type='text/css'>
+        .software-list, .ebooks-list {
+            list-style: none;
+            padding: 0;
+        }
+        .software-list li.product, .ebooks-list li.product {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            overflow: hidden;
+        }
+        .software-list li.product h2, .ebooks-list li.product h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .software-list li.product .price, .ebooks-list li.product .price {
+            font-size: 18px;
+            color: #333;
+        }
+        .software-list li.product .rrp, .ebooks-list li.product .rrp {
+            font-size: 16px;
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+    ";
+}
+add_action('wp_head', 'smartmail_custom_css');
+
+// Shortcode for displaying Software
+function smartmail_display_software_shortcode($atts) {
+    ob_start();
+    $query = new WP_Query(array(
+        'post_type' => 'software',
+        'posts_per_page' => -1,
+    ));
+
+    if ($query->have_posts()) {
+        echo '<ul class="software-list">';
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<li class="product">';
+            echo '<h2>' . get_the_title() . '</h2>';
+            echo '<div>' . get_the_content() . '</div>';
+            if (has_post_thumbnail()) {
+                echo '<div class="product-image">' . get_the_post_thumbnail(get_the_ID(), 'software_thumbnail') . '</div>';
+            }
+            echo '<div class="price">Price: ' . get_post_meta(get_the_ID(), '_price', true) . '</div>';
+            echo '<div class="rrp">RRP: ' . get_post_meta(get_the_ID(), '_rrp', true) . '</div>';
+            echo '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No software found.</p>';
+    }
+    wp_reset_postdata();
+    return ob_get_clean();
+}
+add_shortcode('smartmail_software_display', 'smartmail_display_software_shortcode');
+
+// Shortcode for displaying eBooks
+function smartmail_display_ebooks_shortcode($atts) {
+    ob_start();
+    $query = new WP_Query(array(
+        'post_type' => 'ebooks',
+        'posts_per_page' => -1,
+    ));
+
+    if ($query->have_posts()) {
+        echo '<ul class="ebooks-list">';
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<li class="product">';
+            echo '<h2>' . get_the_title() . '</h2>';
+            echo '<div>' . get_the_content() . '</div>';
+            if (has_post_thumbnail()) {
+                echo '<div class="product-image">' . get_the_post_thumbnail(get_the_ID(), 'ebooks_thumbnail') . '</div>';
+            }
+            echo '<div class="price">Price: ' . get_post_meta(get_the_ID(), '_price', true) . '</div>';
+            echo '<div class="rrp">RRP: ' . get_post_meta(get_the_ID(), '_rrp', true) . '</div>';
+            echo '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No ebooks found.</p>';
+    }
+    wp_reset_postdata();
+    return ob_get_clean();
+}
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+?>
