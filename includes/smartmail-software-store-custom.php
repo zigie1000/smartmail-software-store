@@ -261,6 +261,7 @@ function smartmail_ebooks_details_callback($post): void {
         wp_nonce_field(basename(__FILE__), 'smartmail_nonce');
         $ebook_id = get_post_meta($post->ID, '_ebook_id', true);
         $price = get_post_meta($post->ID, '_price', true);
+        $rrp = get_post_meta($post->ID, '_rrp', true);
         $author = get_post_meta($post->ID, '_author', true);
         $publisher = get_post_meta($post->ID, '_publisher', true);
         $isbn = get_post_meta($post->ID, '_isbn', true);
@@ -276,6 +277,10 @@ function smartmail_ebooks_details_callback($post): void {
             <tr>
                 <th><label for="price">Price</label></th>
                 <td><input type="text" name="price" id="price" value="<?php echo esc_attr($price); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label for="rrp">RRP</label></th>
+                <td><input type="text" name="rrp" id="rrp" value="<?php echo esc_attr($rrp); ?>" class="regular-text"></td>
             </tr>
             <tr>
                 <th><label for="author">Author</label></th>
@@ -334,6 +339,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
 
         $ebook_id = isset($_POST['ebook_id']) ? sanitize_text_field($_POST['ebook_id']) : '';
         $price = isset($_POST['price']) ? sanitize_text_field($_POST['price']) : '';
+        $rrp = isset($_POST['rrp']) ? sanitize_text_field($_POST['rrp']) : '';
         $author = isset($_POST['author']) ? sanitize_text_field($_POST['author']) : '';
         $publisher = isset($_POST['publisher']) ? sanitize_text_field($_POST['publisher']) : '';
         $isbn = isset($_POST['isbn']) ? sanitize_text_field($_POST['isbn']) : '';
@@ -342,6 +348,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
 
         update_post_meta($post_id, '_ebook_id', $ebook_id);
         update_post_meta($post_id, '_price', $price);
+        update_post_meta($post_id, '_rrp', $rrp);
         update_post_meta($post_id, '_author', $author);
         update_post_meta($post_id, '_publisher', $publisher);
         update_post_meta($post_id, '_isbn', $isbn);
@@ -356,7 +363,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
             }
         }
 
-        foreach ($_POST as $key => $value) {
+        foreach ($_POST as $key and $value) {
             if ('_' !== $key[0]) {
                 update_post_meta($post_id, sanitize_text_field($key), sanitize_text_field($value));
             }
