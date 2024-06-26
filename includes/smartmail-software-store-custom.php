@@ -438,4 +438,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-?>                                                                                      
+?>                                              
