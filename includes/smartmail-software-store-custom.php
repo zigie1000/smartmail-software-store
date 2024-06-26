@@ -179,7 +179,7 @@ function smartmail_software_details_callback($post): void {
             if ('_' !== $key[0]) {
                 echo '<p>';
                 echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label>';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                 echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
         }
@@ -328,7 +328,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
         if (!isset($_POST['smartmail_nonce']) || !wp_verify_nonce($_POST['smartmail_nonce'], basename(__FILE__))) {
             throw new Exception('Nonce verification failed.');
         }
-        
+
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -353,13 +353,13 @@ function smartmail_save_ebooks_details(int $post_id): void {
         update_post_meta($post_id, '_publisher', $publisher);
         update_post_meta($post_id, '_isbn', $isbn);
         update_post_meta($post_id, '_category', $category);
-        
+
         if ($file && !empty($file['name'])) {
             $upload = wp_handle_upload($file, array('test_form' => false));
             if (isset($upload['url'])) {
                 update_post_meta($post_id, '_file', $upload['url']);
             } else {
-throw new Exception('File upload failed.');
+                throw new Exception('File upload failed.');
             }
         }
 
@@ -437,4 +437,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     wp_reset_postdata();
     return ob_get_clean();
 }
-add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
+add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');                    
