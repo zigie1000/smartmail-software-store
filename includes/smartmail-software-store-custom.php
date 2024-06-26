@@ -16,7 +16,7 @@ if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get
 }
 
 function smartmail_woocommerce_inactive_notice(): void {
-    echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> WooCommerce is not active. Please activate WooCommerce to use this plugin.</p></div>';
+    echo '<div class="error"><p><strong>SmartMail Software Store:</strong> WooCommerce is not active. Please activate WooCommerce to use this plugin.</p></div>';
 }
 
 // Error logging function
@@ -65,7 +65,7 @@ function smartmail_register_software_post_type(): void {
     } catch (Exception $e) {
         smartmail_log_error("Error registering software post type: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the software post type.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while registering the software post type.</p></div>';
         });
     }
 }
@@ -110,7 +110,7 @@ function smartmail_register_ebooks_post_type(): void {
     } catch (Exception $e) {
         smartmail_log_error("Error registering eBooks post type: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while registering the eBooks post type.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while registering the eBooks post type.</p></div>';
         });
     }
 }
@@ -178,16 +178,16 @@ function smartmail_software_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' .
-                echo esc_html($key) . '</label> ';
-                echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label>';
+                echo '<input type="text" name="' . esc_attr($key) . '" value="' .
+esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
         }
     } catch (Exception $e) {
         smartmail_log_error("Error displaying software details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the software details meta box.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while displaying the software details meta box.</p></div>';
         });
     }
 }
@@ -238,7 +238,7 @@ function smartmail_save_software_details(int $post_id): void {
     } catch (Exception $e) {
         smartmail_log_error("Error saving software details: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the software details.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while saving the software details.</p></div>';
         });
     }
 }
@@ -302,7 +302,7 @@ function smartmail_ebooks_details_callback($post): void {
             <tr>
                 <th><label for="file">File</label></th>
                 <td><input type="file" name="file" id="file" class="regular-text"></td>
-            </tr>
+            </tr>   
         </table>
 
         <h2>Custom Fields</h2>
@@ -311,7 +311,7 @@ function smartmail_ebooks_details_callback($post): void {
         foreach ($custom_fields as $key => $value) {
             if ('_' !== $key[0]) {
                 echo '<p>';
-                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label> ';
+                echo '<label for="' . esc_attr($key) . '">' . esc_html($key) . '</label>';
                 echo '<input type="text" name="' . esc_attr($key) . '" value="' . esc_attr($value[0]) . '" class="regular-text" />';
                 echo '</p>';
             }
@@ -319,7 +319,7 @@ function smartmail_ebooks_details_callback($post): void {
     } catch (Exception $e) {
         smartmail_log_error("Error displaying eBook details meta box: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while displaying the eBook details meta box.</p></div>';
         });
     }
 }
@@ -359,8 +359,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
             $upload = wp_handle_upload($file, array('test_form' => false));
             if (isset($upload['url'])) {
                 update_post_meta($post_id, '_file', $upload['url']);
-            } else {
-                throw new Exception('File upload failed.');
+            } else {throw new Exception('File upload failed.');
             }
         }
 
@@ -372,7 +371,7 @@ function smartmail_save_ebooks_details(int $post_id): void {
     } catch (Exception $e) {
         smartmail_log_error("Error saving eBook details: " . $e->getMessage());
         add_action('admin_notices', function() {
-            echo '<div class="error"><p><strong>SmartMail Software Store Customizations:</strong> An error occurred while saving the eBook details.</p></div>';
+            echo '<div class="error"><p><strong>SmartMail Software Store:</strong> An error occurred while saving the eBook details.</p></div>';
         });
     }
 }
@@ -429,4 +428,4 @@ function smartmail_display_ebooks_shortcode($atts) {
     return ob_get_clean();
 }
 add_shortcode('smartmail_ebooks_display', 'smartmail_display_ebooks_shortcode');
-?>                                                 
+?>                
