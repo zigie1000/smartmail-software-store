@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: SmartMail Software Store Customizations
+Plugin Name: SmartMail Software Store
 Description: Custom post types, meta boxes, and export functionality for the SmartMail Software Store.
 Author: Marco Zagato
 Author URI: https://smartmail.store
